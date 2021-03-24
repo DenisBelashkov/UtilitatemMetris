@@ -1,11 +1,6 @@
 # Utilitatem Metris
 
-* Счетчики.
-* Надежность.
-* Не только Вода.
-* Технологии.
-* Команда.
-* Будущее...
+Постановка задачи: Сбор показаний индивидуальных приборов учёта в многоквартирных домах и выставление счетов за потреблёные услуги.
 
 * [Trello](https://trello.com/b/mcUOrpEi/utilitatem-metris)
 * [Figma](https://www.figma.com/file/mhi5Vke0fMBMlAdefDf0AT/Utilitatem-Metris)
