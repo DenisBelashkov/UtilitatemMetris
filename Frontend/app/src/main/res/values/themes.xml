@@ -25,6 +25,10 @@
         >
     </style>
 
+    <style name="TabsTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="textAllCaps">false</item>
+    </style>
+
     <style name="TextFieldBoxesExtendedEditTextStyle">
         <item name="android:singleLine">true</item>
         <item name="android:textColor">@color/dark_text</item>

@@ -22,7 +22,11 @@ class BigGeneralButton @JvmOverloads constructor(
 ) : ConstraintLayout(context, attributeSet, defStyle, defStyleRes) {
     var button: Button
     var loading_iv: ImageView
-    lateinit var buttonText: String
+    var buttonText = ""
+        set(value) {
+            field = value
+            button.text = value
+        }
     var loadingAnimation: Animation
 
     init {

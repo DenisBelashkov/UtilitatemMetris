@@ -48,11 +48,13 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
-                        android:gravity="center"
+                        android:layout_marginStart="12dp"
+                        android:gravity="start|center_vertical"
                         android:textSize="@dimen/text_default_16"
                         android:text="@string/app_name"
                         android:textAppearance="?attr/textAppearanceHeadline5"
-                        android:textColor="@color/blue_primary_text" />
+                        android:textColor="@color/blue_primary_text"
+                        />
 
                 </com.google.android.material.appbar.MaterialToolbar>
 
@@ -69,7 +71,9 @@
                 app:tabIndicatorColor="@color/white_background"
                 app:tabIndicatorGravity="stretch"
                 app:tabMaxWidth="0dp"
-                app:tabTextColor="@drawable/tab_text_color_selector" />
+                app:tabTextColor="@drawable/tab_text_color_selector"
+                app:tabTextAppearance="@style/TabsTextAppearance"
+                />
 
         </com.google.android.material.appbar.AppBarLayout>
 
