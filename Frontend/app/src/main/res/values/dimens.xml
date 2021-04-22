@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_small_12">12sp</dimen>
+    <dimen name="text_default_16">16sp</dimen>
+    <dimen name="text_big_20">20sp</dimen>
+    <dimen name="text_giant_32">32sp</dimen>
+
+    <dimen name="big_general_button_height">90dp</dimen>
+</resources>
