@@ -25,6 +25,7 @@
                 android:layout_marginStart="25dp"
                 app:alwaysShowHint="true"
                 app:panelBackgroundColor="@color/white_background"
+                app:secondaryColor="@color/dark_text"
                 >
                 <studio.carbonylgroup.textfieldboxes.ExtendedEditText
                     android:id="@+id/login_email_extendededittext"
@@ -48,6 +49,7 @@
                 android:layout_marginStart="25dp"
                 app:alwaysShowHint="true"
                 app:panelBackgroundColor="@color/white_background"
+                app:secondaryColor="@color/dark_text"
                 >
                 <studio.carbonylgroup.textfieldboxes.ExtendedEditText
                     android:id="@+id/login_password_extendededittext"
