@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Utilitatem Metris</string>
+    <string name="demo_user_tab_title">Быстрая оплата</string>
+    <string name="login_tab_title">Вход</string>
+    <string name="big_general_button_default_text">Войти</string>
+    <string name="fast_pay">Быстрая оплата</string>
+    <string name="field_data_error_maximum_n_symbols">Максимум %1$d символов</string>
+    <string name="field_data_error_minimum_n_symbols">Минимум %1$d символов</string>
+</resources>
