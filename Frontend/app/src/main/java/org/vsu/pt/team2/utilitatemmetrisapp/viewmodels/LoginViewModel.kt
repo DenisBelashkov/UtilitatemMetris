@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class LoginViewModel : ViewModel() {
-    var isInLoginMode: Boolean = false
 
-    val buttonText: String
-        get() = if (isInLoginMode) "Войти" else "Зарегистрироваться"
+    val inLoginMode: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
 }
