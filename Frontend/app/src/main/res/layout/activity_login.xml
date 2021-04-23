@@ -7,6 +7,8 @@
         android:id="@+id/nav_login"
         android:name="org.vsu.pt.team2.utilitatemmetrisapp.ui.login.LoginViewPagerFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        style="@style/RootElementStyle"
+        />
 
 </layout>

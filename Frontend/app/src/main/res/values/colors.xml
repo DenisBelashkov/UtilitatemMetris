@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="blue_primary">#2F4967</color>
+    <color name="blue_primary_variant">#50C5B7</color>
+    <color name="yellow_secondary">#F0F465</color>
     <color name="blue_primary_text">#F9F5FD</color>
     <color name="dark_text">#000000</color>
     <color name="gray">#615D5D</color>

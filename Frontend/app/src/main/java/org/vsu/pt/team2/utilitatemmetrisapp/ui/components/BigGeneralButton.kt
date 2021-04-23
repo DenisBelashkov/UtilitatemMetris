@@ -59,7 +59,7 @@ class BigGeneralButton @JvmOverloads constructor(
         val textBtn = resources.getText(
             typedArray.getResourceId(
                 R.styleable.BigGeneralButton_button_text,
-                R.string.big_general_button_default_text
+                R.string.big_button_default_text
             )
         )
         val img_src = resources.getDrawable(

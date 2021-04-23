@@ -8,7 +8,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        style="@style/RootElementStyle"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -24,15 +26,14 @@
                 android:layout_marginEnd="25dp"
                 android:layout_marginStart="25dp"
                 app:alwaysShowHint="true"
-                app:panelBackgroundColor="@color/white_background"
-                app:secondaryColor="@color/dark_text"
+                style="@style/TextFieldBoxesStyle"
                 >
                 <studio.carbonylgroup.textfieldboxes.ExtendedEditText
                     android:id="@+id/login_email_extendededittext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/TextFieldBoxesExtendedEditTextStyle"
-                    android:hint="email"
+                    android:hint="@string/auth_login_textfield_email_hint"
                     android:inputType="text"
                     android:imeOptions="actionNext"
                     >
@@ -48,15 +49,14 @@
                 android:layout_marginEnd="25dp"
                 android:layout_marginStart="25dp"
                 app:alwaysShowHint="true"
-                app:panelBackgroundColor="@color/white_background"
-                app:secondaryColor="@color/dark_text"
+                style="@style/TextFieldBoxesStyle"
                 >
                 <studio.carbonylgroup.textfieldboxes.ExtendedEditText
                     android:id="@+id/login_password_extendededittext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/TextFieldBoxesExtendedEditTextStyle"
-                    android:hint="password"
+                    android:hint="@string/auth_login_textfield_pass_hint"
                     android:inputType="text"
                     android:imeOptions="actionGo"
                     >
@@ -71,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/big_general_button_height"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:button_text="@string/login_tab_title"
+            app:button_text="@string/auth_login_tab_title"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
