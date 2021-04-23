@@ -38,8 +38,8 @@ class LoginViewPagerFragment : Fragment() {
 
     private fun getTabTitle(position: Int): String? {
         return when (position) {
-            DEMO_USER_PAGE_INDEX -> getString(R.string.demo_user_tab_title)
-            LOGIN_PAGE_INDEX -> getString(R.string.login_tab_title)
+            DEMO_USER_PAGE_INDEX -> getString(R.string.auth_demo_tab_title)
+            LOGIN_PAGE_INDEX -> getString(R.string.auth_login_tab_title)
             else -> null
         }
     }

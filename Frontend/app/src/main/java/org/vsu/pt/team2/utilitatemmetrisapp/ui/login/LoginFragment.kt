@@ -46,9 +46,9 @@ class LoginFragment : Fragment() {
         loginViewModel.inLoginMode.observe(viewLifecycleOwner, {
             activity?.invalidateOptionsMenu()
             button.buttonText = if (it == true) {
-                getString(R.string.login_button_enter)
+                getString(R.string.auth_login_button_enter)
             } else {
-                getString(R.string.login_button_register)
+                getString(R.string.auth_login_button_register)
             }
             button.invalidate()
         })
