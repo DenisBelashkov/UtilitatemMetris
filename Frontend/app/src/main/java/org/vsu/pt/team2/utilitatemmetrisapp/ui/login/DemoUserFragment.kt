@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Job
@@ -15,6 +16,8 @@ import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BigGeneralButton
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.ImeActionListener
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.EmailValidator
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.hideKeyboard
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceActivity
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText
 import studio.carbonylgroup.textfieldboxes.TextFieldBoxes
 
@@ -58,6 +61,8 @@ class DemoUserFragment : Fragment() {
 
                 //here request to server
                 delay(2000L)
+
+                (activity as? AppCompatActivity)?.replaceActivity(MainActivity::class.java)
 
                 button.setStateDefault()
             }

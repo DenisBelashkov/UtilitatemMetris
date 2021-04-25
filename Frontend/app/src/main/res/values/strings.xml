@@ -21,8 +21,10 @@
     <string name="auth_login_menu_to_login">Войти</string>
     <string name="auth_login_textfield_pass_hint">password</string>
     <string name="auth_login_textfield_email_hint">email</string>
+    <string name="settings_button_text_change_email">Изменить почту</string>
+    <string name="settings_button_text_change_password">Изменить пароль</string>
 
-<!--    Not filtered values. Need filter if exists-->
+    <!--    Not filtered values. Need filter if exists-->
 
 
 </resources>

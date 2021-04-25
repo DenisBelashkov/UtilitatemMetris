@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.GeneralButtonViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <Button
+            android:id="@+id/general_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/ripple_general_button"
+            android:clickable="true"
+            android:onClick="@{()->viewmodel.onClick.invoke()}"
+            android:text="@{viewmodel.buttonText}"
+            android:textAllCaps="false"
+            android:textColor="@color/white_background"
+            android:focusable="true" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

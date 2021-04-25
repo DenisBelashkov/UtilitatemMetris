@@ -26,12 +26,12 @@ class LoginViewPagerFragment : Fragment() {
 
         viewPager.adapter = LoginPagerAdapter(this)
 
-        // Set the icon and text for each tab
+        // Set the text for each tab
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = getTabTitle(position)
         }.attach()
 
-        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        (activity as AppCompatActivity).setSupportActionBar(binding.appBarLayoutInclude.toolbar)
 
         return binding.root
     }

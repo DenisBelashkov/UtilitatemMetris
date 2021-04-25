@@ -81,4 +81,7 @@ dependencies {
 
     //textfieldboxes
     implementation 'com.github.HITGIF:TextFieldBoxes:1.4.5'
+
+    //logger
+    implementation 'com.orhanobut:logger:2.2.0'
 }

@@ -3,6 +3,7 @@ package org.vsu.pt.team2.utilitatemmetrisapp.ui.login
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.EditorInfo
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +17,8 @@ import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.ImeActionListener
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.EmailValidator
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.PasswordValidator
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.hideKeyboard
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.LoginViewModel
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText
 import studio.carbonylgroup.textfieldboxes.TextFieldBoxes
@@ -82,6 +85,8 @@ class LoginFragment : Fragment() {
 
                 //here request to server
                 delay(2000L)
+
+                (activity as? AppCompatActivity)?.replaceActivity(MainActivity::class.java)
 
                 button.setStateDefault()
             }
