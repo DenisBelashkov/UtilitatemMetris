@@ -46,7 +46,9 @@ class BigGeneralButton @JvmOverloads constructor(
             initComponents(
                 context.obtainStyledAttributes(
                     it,
-                    R.styleable.BigGeneralButton, 0, 0
+                    R.styleable.BigGeneralButton,
+                    0,
+                    R.style.BigGeneralButton
                 )
             )
         }

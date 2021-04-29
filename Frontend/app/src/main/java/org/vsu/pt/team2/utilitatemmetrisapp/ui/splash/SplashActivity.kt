@@ -40,7 +40,7 @@ class SplashActivity : AppCompatActivity() {
 
     private fun userAlreadyLoggedIn(): Boolean {
         //todo check for cached user
-        return true
+        return false
     }
 
     private fun startAnimation() {

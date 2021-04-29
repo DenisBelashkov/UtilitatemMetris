@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="8dp"
+        android:background="@color/white_background"
         >
 
         <View
@@ -31,7 +32,11 @@
             app:layout_constraintStart_toStartOf="parent"
 
             style="@style/BigGeneralButtonText"
-            android:background="@drawable/ripple_big_general_button" />
+            android:background="@drawable/ripple_big_general_button"
+            android:backgroundTint="@color/white_background"
+            android:backgroundTintMode="src_over"
+
+            />
 
         <ImageView
             app:layout_constraintTop_toTopOf="parent"
