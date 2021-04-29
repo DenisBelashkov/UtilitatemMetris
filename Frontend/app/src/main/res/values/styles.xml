@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.UtilitatemMetris" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Theme.UtilitatemMetris" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/blue_primary</item>
         <item name="colorPrimaryVariant">@color/blue_primary_variant</item>
         <item name="colorOnPrimary">@color/white_background</item>
 
-        <item name="colorSecondary">@color/yellow_secondary</item>
-        <item name="colorSecondaryVariant">@color/md_yellow_300</item>
         <item name="colorOnSecondary">@color/dark_text</item>
 
 
@@ -17,7 +15,29 @@
         <item name="android:actionMenuTextColor">@color/white_background</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" >?attr/colorPrimary</item>
-        <!-- Customize your theme here. -->
+
+
+        <item name="materialDrawerStyle">@style/Widget.MaterialDrawerStyleCustom</item>
+        <item name="materialDrawerHeaderStyle">@style/Widget.MaterialDrawerHeaderStyleCustom</item>
+    </style>
+
+
+    <style name="Widget.MaterialDrawerStyleCustom" parent="Widget.MaterialDrawerStyle">
+        <item name="materialDrawerInsetForeground">#4000</item>
+        <!-- MaterialDrawer specific values -->
+        <item name="materialDrawerBackground">@color/white_background</item>
+        <item name="materialDrawerPrimaryText">@color/dark_text</item>
+        <item name="materialDrawerPrimaryIcon">?android:textColorSecondary</item>
+        <item name="materialDrawerSecondaryText">@color/gray</item>
+        <item name="materialDrawerSecondaryIcon">?android:textColorSecondary</item>
+        <item name="materialDrawerDividerColor">@color/gray</item>
+        <item name="materialDrawerSelectedBackgroundColor">?colorPrimary</item>
+    </style>
+
+    <style name="Widget.MaterialDrawerHeaderStyleCustom" parent="Widget.MaterialDrawerHeaderStyle">
+        <item name="materialDrawerCompactStyle">true</item>
+        <item name="materialDrawerHeaderSelectionText">@color/white_background</item>
+        <item name="materialDrawerHeaderSelectionSubtext">@color/white_darker</item>
     </style>
 
     <style name="BigGeneralButtonText" parent="Theme.UtilitatemMetris">
