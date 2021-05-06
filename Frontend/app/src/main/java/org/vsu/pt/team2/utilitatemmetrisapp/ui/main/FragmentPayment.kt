@@ -1,4 +1,4 @@
-package org.vsu.pt.team2.utilitatemmetrisapp.ui.payment
+package org.vsu.pt.team2.utilitatemmetrisapp.ui.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
