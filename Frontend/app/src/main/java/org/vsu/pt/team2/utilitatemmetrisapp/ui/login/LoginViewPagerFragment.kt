@@ -31,6 +31,8 @@ class LoginViewPagerFragment : Fragment() {
             tab.text = getTabTitle(position)
         }.attach()
 
+        binding.appBarLayoutInclude.toolbarIconContainer.visibility = View.GONE
+
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarLayoutInclude.toolbar)
 
         return binding.root

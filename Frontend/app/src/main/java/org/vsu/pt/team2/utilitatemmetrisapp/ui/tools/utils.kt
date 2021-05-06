@@ -9,3 +9,14 @@ fun hideKeyboardFrom(context: Context, view: View) {
     val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(view.windowToken, 0)
 }
+
+fun rusRubleAddition(num: Int): String {
+    val preLastDigit = num % 100 / 10
+    return if (preLastDigit == 1) {
+        "рублей"
+    } else when (num % 10) {
+        1 -> "рубль"
+        2, 3, 4 -> "рубля"
+        else -> "рублей"
+    }
+}

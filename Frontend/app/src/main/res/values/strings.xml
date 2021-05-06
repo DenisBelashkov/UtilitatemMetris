@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">Utilitatem Metris</string>
 
-<!--    default values-->
+    <!--    default values-->
     <string name="big_button_default_text">Войти</string>
 
     <!--    Fields error messages-->
     <string name="field_data_error_maximum_n_symbols">Максимум %1$d символов</string>
     <string name="field_data_error_minimum_n_symbols">Минимум %1$d символов</string>
 
-<!--    Auth activity-->
+    <!--    Auth activity-->
     <!--    demo fragment    -->
     <string name="auth_demo_tab_title">Быстрая оплата</string>
     <string name="auth_demo_button_fast_pay">Быстрая оплата</string>
@@ -21,10 +21,15 @@
     <string name="auth_login_menu_to_login">Войти</string>
     <string name="auth_login_textfield_pass_hint">password</string>
     <string name="auth_login_textfield_email_hint">email</string>
+    <!--    Not filtered values. Need filter if exists-->
     <string name="settings_button_text_change_email">Изменить почту</string>
     <string name="settings_button_text_change_password">Изменить пароль</string>
-
-    <!--    Not filtered values. Need filter if exists-->
+    <string name="backlog">Задолженность :</string>
+    <string name="meter_text">Счётчик</string>
+    <string name="meter_type_text">Тип</string>
+    <string name="backlog_empty">Задолженностей нет</string>
+    <string name="sum_for_pay">Сумма к оплате :</string>
+    <string name="pay_for_chosen">оплатить выбранные</string>
 
 
 </resources>

@@ -1,65 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="viewmodel"
             type="org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.LoginViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/RootElementStyle"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/big_general_button"
-            >
+            app:layout_constraintTop_toTopOf="parent">
+
             <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+                android:id="@+id/login_email_textfieldboxes"
+                style="@style/TextFieldBoxesStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                android:id="@+id/login_email_textfieldboxes"
-                android:layout_marginEnd="25dp"
                 android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
                 app:alwaysShowHint="true"
-                style="@style/TextFieldBoxesStyle"
-                >
+                app:layout_constraintTop_toTopOf="parent">
+
                 <studio.carbonylgroup.textfieldboxes.ExtendedEditText
                     android:id="@+id/login_email_extendededittext"
+                    style="@style/TextFieldBoxesExtendedEditTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/TextFieldBoxesExtendedEditTextStyle"
                     android:hint="@string/auth_login_textfield_email_hint"
-                    android:inputType="text"
                     android:imeOptions="actionNext"
-                    >
+                    android:inputType="text">
 
                 </studio.carbonylgroup.textfieldboxes.ExtendedEditText>
             </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
             <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+                android:id="@+id/login_password_textfieldboxes"
+                style="@style/TextFieldBoxesStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/login_email_textfieldboxes"
-                android:id="@+id/login_password_textfieldboxes"
-                android:layout_marginEnd="25dp"
                 android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
                 app:alwaysShowHint="true"
-                style="@style/TextFieldBoxesStyle"
-                >
+                app:layout_constraintTop_toBottomOf="@+id/login_email_textfieldboxes">
+
                 <studio.carbonylgroup.textfieldboxes.ExtendedEditText
                     android:id="@+id/login_password_extendededittext"
+                    style="@style/TextFieldBoxesExtendedEditTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/TextFieldBoxesExtendedEditTextStyle"
                     android:hint="@string/auth_login_textfield_pass_hint"
-                    android:inputType="text"
                     android:imeOptions="actionGo"
-                    >
+                    android:inputType="text">
 
                 </studio.carbonylgroup.textfieldboxes.ExtendedEditText>
             </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
@@ -70,9 +69,9 @@
             android:id="@+id/big_general_button"
             android:layout_width="match_parent"
             android:layout_height="@dimen/big_general_button_height"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/white_background"
             app:button_text="@string/auth_login_tab_title"
-            />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -18,7 +18,10 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appbarContentInclude.toolbar)
 
-        drawerController = DrawerController(this, binding.appbarContentInclude.toolbar)
+        val materialDrawerSliderView = binding.slider
+
+        drawerController =
+            DrawerController(this, materialDrawerSliderView, binding.appbarContentInclude)
         drawerController.create()
         drawerController.enableDrawer()
     }
