@@ -10,6 +10,9 @@ import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentSavedMetersBindi
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.MetersListAdapter
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BaseFragment
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.payment.FragmentPayment
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.appCompatActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.GeneralButtonViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
 
@@ -27,6 +30,7 @@ class SavedMetersFragment : BaseFragment() {
         binding.payChosenMetersButton.viewmodel =
             GeneralButtonViewModel(getString(R.string.pay_for_chosen)) {
                 //todo action when pay for all
+                appCompatActivity()?.replaceFragment(FragmentPayment())
             }
         binding.metersListRecyclerView.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false

@@ -20,7 +20,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.EmailV
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.PasswordValidator
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.hideKeyboard
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.LoginViewModel
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText
 import studio.carbonylgroup.textfieldboxes.TextFieldBoxes
@@ -89,11 +89,14 @@ class LoginFragment : Fragment() {
                 println(email)
                 println(password)
 
-                //here request to server
+                //todo here request to server
                 delay(2000L)
                 SessionManager.setSession(2, emailEditText.text.toString(), false, "")
 
-                (activity as? AppCompatActivity)?.replaceActivity(MainActivity::class.java)
+                (activity as? AppCompatActivity)?.openActivity(
+                    MainActivity::class.java,
+                    true
+                )
 
                 button.setStateDefault()
             }

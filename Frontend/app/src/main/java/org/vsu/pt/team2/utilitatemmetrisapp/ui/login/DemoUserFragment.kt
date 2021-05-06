@@ -18,7 +18,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.ImeActionListener
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.EmailValidator
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.hideKeyboard
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText
 import studio.carbonylgroup.textfieldboxes.TextFieldBoxes
 
@@ -60,11 +60,14 @@ class DemoUserFragment : Fragment() {
                 button.setStateLoading()
                 println(email)
 
-                //here request to server
+                //todo here request to server
                 delay(2000L)
                 SessionManager.setSession(1, emailEditText.text.toString(), true, "")
 
-                (activity as? AppCompatActivity)?.replaceActivity(MainActivity::class.java)
+                (activity as? AppCompatActivity)?.openActivity(
+                    MainActivity::class.java,
+                    true
+                )
 
                 button.setStateDefault()
             }
