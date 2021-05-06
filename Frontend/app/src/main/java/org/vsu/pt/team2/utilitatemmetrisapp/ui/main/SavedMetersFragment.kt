@@ -29,7 +29,7 @@ class SavedMetersFragment : BaseFragment() {
         binding.payChosenMetersButton.viewmodel =
             GeneralButtonViewModel(getString(R.string.pay_for_chosen)) {
                 //todo action when pay for all
-                appCompatActivity()?.replaceFragment(FragmentPayment())
+                appCompatActivity()?.replaceFragment(PaymentFragment())
             }
         binding.metersListRecyclerView.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false

@@ -9,7 +9,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentPaymentBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.DisabledDrawerFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.GeneralButtonViewModel
 
-class FragmentPayment: DisabledDrawerFragment() {
+class PaymentFragment: DisabledDrawerFragment() {
     private lateinit var binding : FragmentPaymentBinding
     override fun onCreateView(
         inflater: LayoutInflater,

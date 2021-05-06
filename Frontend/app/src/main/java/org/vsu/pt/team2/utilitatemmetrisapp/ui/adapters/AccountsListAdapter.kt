@@ -15,8 +15,7 @@ class AccountsListAdapter : ListAdapter<AccountViewModel, AccountsListAdapter.Ac
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
         return AccountViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_account, parent, false)
+            ItemAccountBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
@@ -24,11 +23,13 @@ class AccountsListAdapter : ListAdapter<AccountViewModel, AccountsListAdapter.Ac
         holder.bind(getItem(position))
     }
 
-    class AccountViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var binding: ItemAccountBinding? = null
+    class AccountViewHolder(
+        val binding: ItemAccountBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(item: AccountViewModel) = with(itemView) {
 
-            binding = ItemAccountBinding.bind(itemView).apply {
+            binding.apply {
                 this.identifier = item.identifier
                 this.address = item.address
             }
@@ -40,11 +41,17 @@ class AccountsListAdapter : ListAdapter<AccountViewModel, AccountsListAdapter.Ac
     }
 
     class AccountDiffCallback : DiffUtil.ItemCallback<AccountViewModel>() {
-        override fun areItemsTheSame(oldItem: AccountViewModel, newItem: AccountViewModel): Boolean {
+        override fun areItemsTheSame(
+            oldItem: AccountViewModel,
+            newItem: AccountViewModel
+        ): Boolean {
             return oldItem.identifier == newItem.identifier
         }
 
-        override fun areContentsTheSame(oldItem: AccountViewModel, newItem: AccountViewModel): Boolean {
+        override fun areContentsTheSame(
+            oldItem: AccountViewModel,
+            newItem: AccountViewModel
+        ): Boolean {
             return oldItem == newItem
         }
     }

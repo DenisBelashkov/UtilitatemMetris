@@ -36,6 +36,8 @@
     <string name="identifier">Идентификатор</string>
     <string name="address">Адрес</string>
     <string name="settings_menu_exit">Выйти</string>
+    <string name="account_identifier_title">Идентификатор счёта</string>
+    <string name="meters_on_this_account">Счётчики, принадлежащие счёту :</string>
 
 
 </resources>
