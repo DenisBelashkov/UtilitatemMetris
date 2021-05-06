@@ -33,6 +33,9 @@
     <string name="payment_ready_for_pay">Квитанция готова к оплате</string>
     <string name="sent_to_email">Отправить на почту</string>
     <string name="to_pay">Оплатить</string>
+    <string name="identifier">Идентификатор</string>
+    <string name="address">Адрес</string>
+    <string name="settings_menu_exit">Выйти</string>
 
 
 </resources>

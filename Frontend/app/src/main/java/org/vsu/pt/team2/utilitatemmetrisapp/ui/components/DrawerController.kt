@@ -20,6 +20,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.databinding.AppbarContentBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.IntentExtrasManager
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.SessionManager
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.login.LoginActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MyAccountsFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.SavedMetersFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.SettingsFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
@@ -115,7 +116,7 @@ class DrawerController(
             addItem(
                 simpleMenuItem("Мои счета"),
                 { view, pos, drItem ->
-                    //todo
+                    activity.replaceFragment(MyAccountsFragment())
                 }
             )
             addItem(

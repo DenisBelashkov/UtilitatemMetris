@@ -17,4 +17,11 @@ object SessionManager {
         this.isDemo = isDemo
         this.jwt = jwt
     }
+
+    fun clear(){
+        this.email = ""
+        this.id = -1
+        this.isDemo = true
+        this.jwt = ""
+    }
 }
