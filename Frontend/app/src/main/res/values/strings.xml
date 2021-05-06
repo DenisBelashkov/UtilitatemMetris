@@ -29,7 +29,10 @@
     <string name="meter_type_text">Тип</string>
     <string name="backlog_empty">Задолженностей нет</string>
     <string name="sum_for_pay">Сумма к оплате :</string>
-    <string name="pay_for_chosen">оплатить выбранные</string>
+    <string name="pay_for_chosen">Оплатить выбранные</string>
+    <string name="payment_ready_for_pay">Квитанция готова к оплате</string>
+    <string name="sent_to_email">Отправить на почту</string>
+    <string name="to_pay">Оплатить</string>
 
 
 </resources>

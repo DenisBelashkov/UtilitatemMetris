@@ -12,13 +12,15 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentLoginBinding
+import org.vsu.pt.team2.utilitatemmetrisapp.managers.IntentExtrasManager
+import org.vsu.pt.team2.utilitatemmetrisapp.managers.SessionManager
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BigGeneralButton
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.ImeActionListener
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.EmailValidator
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.PasswordValidator
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.hideKeyboard
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.LoginViewModel
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText
 import studio.carbonylgroup.textfieldboxes.TextFieldBoxes
@@ -40,6 +42,10 @@ class LoginFragment : Fragment() {
         emailTextFieldBoxes = binding.loginEmailTextfieldboxes
         passwordTextFieldBoxes = binding.loginPasswordTextfieldboxes
         emailEditText = binding.loginEmailExtendededittext
+        activity?.intent?.let {
+            if (IntentExtrasManager.continueRegister.getFrom(it))
+                emailEditText.setText(SessionManager.email)
+        }
         passwordEditText = binding.loginPasswordExtendededittext.also {
             it.setOnEditorActionListener(
                 ImeActionListener(ImeActionListener.Association(EditorInfo.IME_ACTION_GO) { doRequest() })
@@ -83,10 +89,14 @@ class LoginFragment : Fragment() {
                 println(email)
                 println(password)
 
-                //here request to server
+                //todo here request to server
                 delay(2000L)
+                SessionManager.setSession(2, emailEditText.text.toString(), false, "")
 
-                (activity as? AppCompatActivity)?.replaceActivity(MainActivity::class.java)
+                (activity as? AppCompatActivity)?.openActivity(
+                    MainActivity::class.java,
+                    true
+                )
 
                 button.setStateDefault()
             }

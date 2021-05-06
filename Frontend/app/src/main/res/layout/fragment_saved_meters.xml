@@ -25,9 +25,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="6dp"
+            style="@style/GeneralButtonMargins"
             android:visibility="@{sum_for_pay.equals(0)?View.GONE:View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +71,7 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <include
-                    android:id="@+id/pay_for_chosen_button"
+                    android:id="@+id/pay_chosen_meters_button"
                     layout="@layout/general_button_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

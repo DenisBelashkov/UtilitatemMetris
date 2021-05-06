@@ -8,7 +8,7 @@
 
         <variable
             name="backlog_value"
-            type="Integer" />
+            type="Double" />
 
         <variable
             name="backlog_addition"
@@ -28,7 +28,9 @@
         android:layout_height="wrap_content"
         android:paddingStart="12dp"
         android:paddingTop="6dp"
-        android:paddingEnd="12dp">
+        android:paddingEnd="12dp"
+        android:background="@drawable/ripple_meter_item"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/top_content"

@@ -17,7 +17,12 @@ import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.AppbarContentBinding
+import org.vsu.pt.team2.utilitatemmetrisapp.managers.IntentExtrasManager
+import org.vsu.pt.team2.utilitatemmetrisapp.managers.SessionManager
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.login.LoginActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.SavedMetersFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.SettingsFragment
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
 
 class DrawerController(
@@ -57,24 +62,28 @@ class DrawerController(
     fun initAnonimous(): DrawerItemsEasyCreator {
         return DrawerItemsEasyCreator().apply {
             addItem(
-                simpleMenuItem("~Оплатить"),
+                simpleMenuItem("Оплатить"),
                 { view, pos, drItem ->
                     //todo
                 }
             )
             addItem(
-                simpleMenuItem("~Сохранённые счётчики"),
+                simpleMenuItem("Сохранённые счётчики"),
                 { view, pos, drItem ->
-                    //todo
+                    activity.replaceFragment(SavedMetersFragment())
                 }
             )
             addItem(
                 DividerDrawerItem()
             )
             addItem(
-                simpleMenuItem("~Продолжить регистрацию"),
+                simpleMenuItem("Продолжить регистрацию"),
                 { view, pos, drItem ->
-                    //todo
+                    activity.openActivity(
+                        LoginActivity::class.java,
+                        true,
+                        IntentExtrasManager.continueRegister::putInto
+                    )
                 }
             )
         }
@@ -83,13 +92,28 @@ class DrawerController(
     fun initDefalut(): DrawerItemsEasyCreator {
         return DrawerItemsEasyCreator().apply {
             addItem(
-                simpleMenuItem("~Оплатить"),
+                simpleMenuItem("Оплатить"),
                 { view, pos, drItem ->
                     //todo
                 }
             )
             addItem(
-                simpleMenuItem("~Сохранённые счётчики"),
+                simpleMenuItem("Сохранённые счётчики"),
+                { view, pos, drItem ->
+                    activity.replaceFragment(SavedMetersFragment())
+                }
+            )
+            addItem(
+                DividerDrawerItem()
+            )
+            addItem(
+                simpleMenuItem("Добавить счёт"),
+                { view, pos, drItem ->
+                    //todo
+                }
+            )
+            addItem(
+                simpleMenuItem("Мои счета"),
                 { view, pos, drItem ->
                     //todo
                 }
@@ -98,22 +122,7 @@ class DrawerController(
                 DividerDrawerItem()
             )
             addItem(
-                simpleMenuItem("~Добавить счёт"),
-                { view, pos, drItem ->
-                    //todo
-                }
-            )
-            addItem(
-                simpleMenuItem("~Мои счета"),
-                { view, pos, drItem ->
-                    //todo
-                }
-            )
-            addItem(
-                DividerDrawerItem()
-            )
-            addItem(
-                simpleMenuItem("~История выплат"),
+                simpleMenuItem("История выплат"),
                 { view, pos, drItem ->
                     //todo
                 }
@@ -122,13 +131,13 @@ class DrawerController(
     }
 
     private fun createDrawer() {
-        val drawerItemsEasyCreator = initDefalut()//initAnonimous()
+        val drawerItemsEasyCreator = if (SessionManager.isDemo) initAnonimous() else initDefalut()
         for (item in drawerItemsEasyCreator.items()) {
             materialDrawerSliderView.addItems(item)
         }
 
         materialDrawerSliderView.addStickyDrawerItems(
-            simpleMenuItem("~Настройки").apply { identifier = 1010 }
+            simpleMenuItem("Настройки").apply { identifier = 1010 }
         )
         materialDrawerSliderView.onDrawerItemClickListener = { view: View?,
                                                                drawerItem: IDrawerItem<*>,
@@ -143,8 +152,8 @@ class DrawerController(
 
     private fun createHeader() {
         val profileItem = ProfileDrawerItem().apply {
-            nameText = "name"
-            descriptionText = "email"
+            nameText = SessionManager.email
+            descriptionText = if (SessionManager.isDemo) "Анонимный аккаунт" else ""
         }
         AccountHeaderView(activity).apply {
             attachToSliderView(materialDrawerSliderView)
@@ -164,9 +173,9 @@ class DrawerController(
     }
 
     class DrawerItemsEasyCreator {
-        private var identifierCounter = 0;
+        private var identifierCounter = 0L;
 
-        private val drawerItemIdToPairItemAction = mutableMapOf<Int, Pair<IDrawerItem<*>, ((
+        private val drawerItemIdToPairItemAction = mutableMapOf<Long, Pair<IDrawerItem<*>, ((
             view: View?,
             drawerItem: IDrawerItem<*>,
             position: Int,

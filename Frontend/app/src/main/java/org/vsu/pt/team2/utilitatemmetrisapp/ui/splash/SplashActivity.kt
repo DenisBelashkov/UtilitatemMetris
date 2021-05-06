@@ -13,6 +13,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.databinding.ActivitySplashBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.LoadingAnimationController
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.login.LoginActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceActivity
 
 
@@ -29,10 +30,10 @@ class SplashActivity : AppCompatActivity() {
         startAnimation()
         lifecycleScope.launch {
             if (userAlreadyLoggedIn())
-                replaceActivity(MainActivity::class.java)
+                openActivity(MainActivity::class.java, true)
             else {
                 delay(1400L)
-                replaceActivity(LoginActivity::class.java)
+                openActivity(LoginActivity::class.java, true)
             }
             clearAnimation()
         }
