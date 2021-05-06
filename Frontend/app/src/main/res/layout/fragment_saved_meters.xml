@@ -73,7 +73,7 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <include
-                    android:id="@+id/pay_for_chosen_button"
+                    android:id="@+id/pay_chosen_meters_button"
                     layout="@layout/general_button_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

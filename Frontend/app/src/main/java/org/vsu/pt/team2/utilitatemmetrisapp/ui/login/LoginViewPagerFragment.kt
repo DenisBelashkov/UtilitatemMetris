@@ -8,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import org.vsu.pt.team2.utilitatemmetrisapp.R
-import org.vsu.pt.team2.utilitatemmetrisapp.adapters.DEMO_USER_PAGE_INDEX
-import org.vsu.pt.team2.utilitatemmetrisapp.adapters.LOGIN_PAGE_INDEX
-import org.vsu.pt.team2.utilitatemmetrisapp.adapters.LoginPagerAdapter
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.DEMO_USER_PAGE_INDEX
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.LOGIN_PAGE_INDEX
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.LoginPagerAdapter
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentLoginViewPagerBinding
 
 class LoginViewPagerFragment : Fragment() {

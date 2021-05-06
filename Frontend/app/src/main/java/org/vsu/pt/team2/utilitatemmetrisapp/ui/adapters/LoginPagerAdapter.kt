@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.vsu.pt.team2.utilitatemmetrisapp.adapters
+package org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
