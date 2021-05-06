@@ -12,6 +12,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentDemoUserBinding
+import org.vsu.pt.team2.utilitatemmetrisapp.managers.SessionManager
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BigGeneralButton
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.ImeActionListener
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.EmailValidator
@@ -50,7 +51,7 @@ class DemoUserFragment : Fragment() {
 
     private fun buttonClicked(v: View) = doRequest()
 
-    private fun doRequest(){
+    private fun doRequest() {
         hideKeyboard()
         job?.cancel()
 
@@ -61,6 +62,7 @@ class DemoUserFragment : Fragment() {
 
                 //here request to server
                 delay(2000L)
+                SessionManager.setSession(1, emailEditText.text.toString(), true, "")
 
                 (activity as? AppCompatActivity)?.replaceActivity(MainActivity::class.java)
 

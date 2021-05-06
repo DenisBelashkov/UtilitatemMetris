@@ -12,6 +12,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.DEMO_USER_PAGE_INDEX
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.LOGIN_PAGE_INDEX
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.LoginPagerAdapter
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentLoginViewPagerBinding
+import org.vsu.pt.team2.utilitatemmetrisapp.managers.IntentExtrasManager
 
 class LoginViewPagerFragment : Fragment() {
 
@@ -26,10 +27,14 @@ class LoginViewPagerFragment : Fragment() {
 
         viewPager.adapter = LoginPagerAdapter(this)
 
-        // Set the text for each tab
+
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = getTabTitle(position)
         }.attach()
+        activity?.intent?.let {
+            if (IntentExtrasManager.continueRegister.getFrom(it))
+                viewPager.currentItem = LOGIN_PAGE_INDEX
+        }
 
         binding.appBarLayoutInclude.toolbarIconContainer.visibility = View.GONE
 

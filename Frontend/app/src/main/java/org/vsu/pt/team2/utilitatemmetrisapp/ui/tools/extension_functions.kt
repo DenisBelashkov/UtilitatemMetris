@@ -21,9 +21,11 @@ fun Fragment.hideKeyboard() {
 
 fun <T : AppCompatActivity> AppCompatActivity.openActivity(
     activity: Class<T>,
-    finishThis: Boolean = false
+    finishThis: Boolean = false,
+    applyIntent: (Intent) -> Unit = {}
 ) {
     val intent = Intent(this, activity)
+    applyIntent.invoke(intent)
     startActivity(intent)
     if (finishThis)
         this.finish()
@@ -45,10 +47,10 @@ fun AppCompatActivity.showToast(message: String, isShort: Boolean = true) {
 }
 
 fun Fragment.appCompatActivity(): AppCompatActivity? {
-    if (activity==null)
+    if (activity == null)
         Logger.i("Cant get activity. it is null")
     (activity as? AppCompatActivity).let {
-        if (it==null)
+        if (it == null)
             Logger.i("Cant transform activity to AppCompatActivity")
         return it
     }
@@ -59,10 +61,10 @@ fun Fragment.requireAppCompatActivity(): AppCompatActivity {
 }
 
 fun Fragment.mainActivity(): MainActivity? {
-    if (activity==null)
+    if (activity == null)
         Logger.i("Cant get activity. it is null")
     (activity as? MainActivity).let {
-        if (it==null)
+        if (it == null)
             Logger.i("Cant transform activity to AppCompatActivity")
         return it
     }
