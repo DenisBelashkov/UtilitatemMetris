@@ -3,9 +3,9 @@ package org.vsu.pt.team2.utilitatemmetrisapp.viewmodels
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 
 class MeterViewModel(
-    val identifier: String,
-    val type: MeterType,
-    val backlog: Double,
+    var identifier: String,
+    var type: MeterType,
+    var backlog: Double,
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

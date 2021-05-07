@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="meterFound"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+            android:id="@+id/meter_identifier_textfieldboxes"
+            style="@style/TextFieldBoxesStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            app:alwaysShowHint="true"
+            app:layout_constraintTop_toTopOf="parent"
+
+            >
+
+            <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                android:id="@+id/meter_identifier_extendededittext"
+                style="@style/TextFieldBoxesExtendedEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/meter_identifier_title"
+                android:imeOptions="actionDone"
+                android:inputType="text">
+
+            </studio.carbonylgroup.textfieldboxes.ExtendedEditText>
+        </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/meter_content_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:visibility="@{meterFound ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/meter_identifier_textfieldboxes">
+
+            <include
+                android:id="@+id/meter_content"
+                layout="@layout/item_meter" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/saved_meters_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:visibility="@{meterFound? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/meter_content_container" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

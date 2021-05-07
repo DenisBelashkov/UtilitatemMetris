@@ -48,10 +48,10 @@ fun AppCompatActivity.showToast(message: String, isShort: Boolean = true) {
 
 fun Fragment.appCompatActivity(): AppCompatActivity? {
     if (activity == null)
-        Logger.i("Cant get activity. it is null")
+        Logger.e("Cant get activity. it is null")
     (activity as? AppCompatActivity).let {
         if (it == null)
-            Logger.i("Cant transform activity to AppCompatActivity")
+            Logger.e("Cant transform activity to AppCompatActivity")
         return it
     }
 }
@@ -62,10 +62,10 @@ fun Fragment.requireAppCompatActivity(): AppCompatActivity {
 
 fun Fragment.mainActivity(): MainActivity? {
     if (activity == null)
-        Logger.i("Cant get activity. it is null")
+        Logger.e("Cant get activity. it is null")
     (activity as? MainActivity).let {
         if (it == null)
-            Logger.i("Cant transform activity to AppCompatActivity")
+            Logger.e("Cant transform activity to AppCompatActivity")
         return it
     }
 }

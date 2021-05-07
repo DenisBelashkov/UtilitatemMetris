@@ -15,8 +15,7 @@ class MetersListAdapter : ListAdapter<MeterViewModel, MetersListAdapter.MeterVie
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MeterViewHolder {
         return MeterViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_meter, parent, false)
+            ItemMeterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
@@ -24,11 +23,12 @@ class MetersListAdapter : ListAdapter<MeterViewModel, MetersListAdapter.MeterVie
         holder.bind(getItem(position))
     }
 
-    class MeterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var binding: ItemMeterBinding? = null
-        fun bind(item: MeterViewModel) = with(itemView) {
+    class MeterViewHolder(
+        val binding: ItemMeterBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-            binding = ItemMeterBinding.bind(itemView).apply {
+        fun bind(item: MeterViewModel) = with(itemView) {
+            binding.apply {
                 meterType = item.type.name
                 this.setMeterIdentifier(item.identifier)
                 this.setBacklogValue(item.backlog)
@@ -36,8 +36,8 @@ class MetersListAdapter : ListAdapter<MeterViewModel, MetersListAdapter.MeterVie
             }
 
             setOnClickListener {
-                binding?.checkbox?.let {
-                    binding?.checkbox?.isChecked = !it.isChecked
+                binding.checkbox.let {
+                    it.isChecked = !it.isChecked
                 }
             }
         }
@@ -45,7 +45,7 @@ class MetersListAdapter : ListAdapter<MeterViewModel, MetersListAdapter.MeterVie
 
     class MeterDiffCallback : DiffUtil.ItemCallback<MeterViewModel>() {
         override fun areItemsTheSame(oldItem: MeterViewModel, newItem: MeterViewModel): Boolean {
-            return oldItem.identifier == newItem.identifier
+            return oldItem.identifier === newItem.identifier
         }
 
         override fun areContentsTheSame(oldItem: MeterViewModel, newItem: MeterViewModel): Boolean {
