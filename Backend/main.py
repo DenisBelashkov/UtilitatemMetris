@@ -22,7 +22,7 @@ Flat = Base.classes.Personal_account
 Type_metric = Base.classes.Type_metrics
 Tariff = Base.classes.Tariff
 Address = Base.classes.Address
-
+Payment = Base.classes.Payment_history
 
 @app.route('/', methods=["GET"])
 def hello_world():
@@ -48,10 +48,37 @@ def heworld():
 		print('all is bad')
 	return 'Hello, World!4\n'
 
-@app.route('/put/', methods=["PUT"])
-def pworld():
-	print(request.json)
-	return 'Hello, World!5\n'
+@app.route('/payment/metrics', methods=["POST"])
+def payment_metrics():
+	try:
+		print(request.json)
+		json_r = request.json
+		for d in json_r:
+			metric = db.session.query(Metrics).join(Tariff, Tariff.id_tariff == Metrics.id_tariff).filter(Metrics.id_metrics == d['idMetric']).one_or_none()
+			cost = d["cost"]
+			need_cost = metric.curr_value - metric.prev_value
+			print(1)
+		return "", 200
+	except Exception as e:
+		pass
+	return "", 400
+
+@app.route('/metric/update/', methods=["PUT"])
+def update_metric():
+	try:
+		print(request.json)
+		d = request.json
+		metric = db.session.query(Metrics).join(Flat, Flat.id_personal_account == Metrics.id_personal_account).filter(Flat.id_owner_user == d['idUser']).filter(Metrics.id_metrics == d['id']).one_or_none()
+		if not metric:
+			return "", 404
+		if metric.curr_value > d['currentValue']:
+			return "", 400
+		metric.curr_value = d['currentValue']
+		db.session.commit()
+		return "", 200
+	except Exception as e:
+		db.session.rollback()
+	return "", 400
 
 def toString(a):
 	str = ""
@@ -64,7 +91,6 @@ def toString(a):
 @app.route('/flat/<user_id>', methods=["GET"])
 def get_flats_by_id_user(user_id):
 	try:
-		print(user_id)
 		id = int(user_id)
 		flats = db.session.query(Flat.id_personal_account, Address).join(Address, Address.id_adress == Flat.id_adress).filter(Flat.id_owner_user == id).all()
 		if len(flats) > 0:
@@ -74,16 +100,16 @@ def get_flats_by_id_user(user_id):
 			return jsonify(out)
 		return " ", 404
 	except Exception as e:
-		print (e.__str__())
+		print(e)
 	return " ", 400
 
 @app.route('/metric/<flat_id>', methods=["GET"])
 def get_metrics_by_id_flat(flat_id):
 	try:
 		id = int(flat_id)
-		metrics = db.session.query(Metrics.id_metrics, Metrics.balance, Metrics.prev_value, Metrics.curr_value, Tariff.price, Type_metric.name).join(Tariff, Tariff.id_tariff == Metrics.id_tariff).join(Type_metric, Type_metric.id_type == Metrics.id_type).filter(Metrics.id_personal_account == id).all()
+		metrics = db.session.query(Metrics.id_metrics.label("id"), Metrics.balance, Metrics.prev_value, Metrics.curr_value, Tariff.price.label("tariff"), Type_metric.name.label("typeMetric")).join(Tariff, Tariff.id_tariff == Metrics.id_tariff).join(Type_metric, Type_metric.id_type == Metrics.id_type).filter(Metrics.id_personal_account == id).all()
 		if len(metrics) > 0:
-			return metrics
+			return jsonify(metrics)
 	except Exception as e:
 		pass
 	return " ", 404
