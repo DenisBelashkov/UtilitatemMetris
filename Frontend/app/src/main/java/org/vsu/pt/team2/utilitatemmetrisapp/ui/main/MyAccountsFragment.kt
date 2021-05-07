@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentMyAccountsBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.AccountsListAdapter
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BaseFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.DisabledDrawerFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.AccountViewModel
 
-class MyAccountsFragment : DisabledDrawerFragment() {
+class MyAccountsFragment : BaseFragment() {
     private lateinit var binding: FragmentMyAccountsBinding
     private val adapter = AccountsListAdapter()
     override fun onCreateView(

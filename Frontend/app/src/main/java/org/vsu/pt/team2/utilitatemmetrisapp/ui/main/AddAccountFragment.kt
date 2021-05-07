@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentAddAccountBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.MetersListAdapter
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.DisabledDrawerFragment
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BaseFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
 
-class AddAccountFragment : DisabledDrawerFragment() {
+class AddAccountFragment : BaseFragment() {
     private lateinit var binding: FragmentAddAccountBinding
     private val adapter = MetersListAdapter()
     override fun onCreateView(
@@ -72,7 +72,7 @@ class AddAccountFragment : DisabledDrawerFragment() {
         override fun afterTextChanged(s: Editable?) {
             //todo Проверка на правильность идентификатора
             s?.let {
-                if (it.length > 6) {
+                if (it.length >= 6) {
                     updateMeters(it.toString())
                 }else
                     binding.metersFound = false

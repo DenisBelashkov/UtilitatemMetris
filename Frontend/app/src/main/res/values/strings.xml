@@ -38,6 +38,8 @@
     <string name="settings_menu_exit">Выйти</string>
     <string name="account_identifier_title">Идентификатор счёта</string>
     <string name="meters_on_this_account">Счётчики, принадлежащие счёту :</string>
+    <string name="meter_identifier_title">Идентификатор счётчика</string>
+    <string name="meters_found">Найденный счётчик</string>
 
 
 </resources>
