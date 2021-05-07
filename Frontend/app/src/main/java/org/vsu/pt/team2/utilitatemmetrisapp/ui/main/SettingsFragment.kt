@@ -30,6 +30,10 @@ class SettingsFragment : DisabledDrawerFragment(R.string.fragment_title_settings
             Logger.i("Change email clicked")
         }
 
+        binding.settingsGeneralButtonChangePass.root.visibility =
+            if (SessionManager.isDemo) View.GONE
+            else View.VISIBLE
+
         binding.settingsGeneralButtonChangePass.viewmodel = GeneralButtonViewModel(
             getString(R.string.settings_button_text_change_password)
         ) {

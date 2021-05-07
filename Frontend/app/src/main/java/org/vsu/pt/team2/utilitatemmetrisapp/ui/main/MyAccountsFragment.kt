@@ -7,13 +7,22 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentMyAccountsBinding
+import org.vsu.pt.team2.utilitatemmetrisapp.managers.BundleManager.AccountViewModelBundlePackager
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.AccountsListAdapter
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.AccountViewModel
 
 class MyAccountsFragment : BaseTitledFragment(R.string.fragment_title_my_accounts) {
     private lateinit var binding: FragmentMyAccountsBinding
-    private val adapter = AccountsListAdapter()
+    private val adapter = AccountsListAdapter { accountViewModel ->
+        val b = Bundle()
+        AccountViewModelBundlePackager.putInto(b, accountViewModel)
+        val f = AccountFragment()
+        f.arguments = b
+        replaceFragment(f)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

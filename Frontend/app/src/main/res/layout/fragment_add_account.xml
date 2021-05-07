@@ -80,5 +80,14 @@
 
             />
 
+        <org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BigGeneralButton
+            android:id="@+id/big_general_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/big_general_button_height"
+            android:background="@color/white_background"
+            app:button_text="@string/add_account"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
