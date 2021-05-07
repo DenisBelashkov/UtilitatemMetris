@@ -1,14 +1,45 @@
 <resources>
     <string name="app_name">Utilitatem Metris</string>
-    <string name="demo_user_tab_title">Быстрая оплата</string>
-    <string name="login_tab_title">Вход</string>
-    <string name="login_button_enter">Войти</string>
-    <string name="login_button_register">Зарегистрироваться</string>
-    <string name="register_tab_title">Быстрая оплата</string>
-    <string name="big_general_button_default_text">Войти</string>
-    <string name="fast_pay">Быстрая оплата</string>
+
+    <!--    default values-->
+    <string name="big_button_default_text">Войти</string>
+
+    <!--    Fields error messages-->
     <string name="field_data_error_maximum_n_symbols">Максимум %1$d символов</string>
     <string name="field_data_error_minimum_n_symbols">Минимум %1$d символов</string>
-    <string name="menu_login_to_register">Зарегистрироваться</string>
-    <string name="menu_login_from_register">Войти</string>
+
+    <!--    Auth activity-->
+    <!--    demo fragment    -->
+    <string name="auth_demo_tab_title">Быстрая оплата</string>
+    <string name="auth_demo_button_fast_pay">Быстрая оплата</string>
+    <string name="auth_demo_textfield_hint">email</string>
+    <!--    login fragment    -->
+    <string name="auth_login_tab_title">Вход</string>
+    <string name="auth_login_button_enter">Войти</string>
+    <string name="auth_login_button_register">Зарегистрироваться</string>
+    <string name="auth_login_menu_to_register">Зарегистрироваться</string>
+    <string name="auth_login_menu_to_login">Войти</string>
+    <string name="auth_login_textfield_pass_hint">password</string>
+    <string name="auth_login_textfield_email_hint">email</string>
+    <!--    Not filtered values. Need filter if exists-->
+    <string name="settings_button_text_change_email">Изменить почту</string>
+    <string name="settings_button_text_change_password">Изменить пароль</string>
+    <string name="backlog">Задолженность :</string>
+    <string name="meter_text">Счётчик</string>
+    <string name="meter_type_text">Тип</string>
+    <string name="backlog_empty">Задолженностей нет</string>
+    <string name="sum_for_pay">Сумма к оплате :</string>
+    <string name="pay_for_chosen">Оплатить выбранные</string>
+    <string name="payment_ready_for_pay">Квитанция готова к оплате</string>
+    <string name="sent_to_email">Отправить на почту</string>
+    <string name="to_pay">Оплатить</string>
+    <string name="identifier">Идентификатор</string>
+    <string name="address">Адрес</string>
+    <string name="settings_menu_exit">Выйти</string>
+    <string name="account_identifier_title">Идентификатор счёта</string>
+    <string name="meters_on_this_account">Счётчики, принадлежащие счёту :</string>
+    <string name="meter_identifier_title">Идентификатор счётчика</string>
+    <string name="meters_found">Найденный счётчик</string>
+
+
 </resources>

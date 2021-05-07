@@ -8,10 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import org.vsu.pt.team2.utilitatemmetrisapp.R
-import org.vsu.pt.team2.utilitatemmetrisapp.adapters.DEMO_USER_PAGE_INDEX
-import org.vsu.pt.team2.utilitatemmetrisapp.adapters.LOGIN_PAGE_INDEX
-import org.vsu.pt.team2.utilitatemmetrisapp.adapters.LoginPagerAdapter
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.DEMO_USER_PAGE_INDEX
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.LOGIN_PAGE_INDEX
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.LoginPagerAdapter
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentLoginViewPagerBinding
+import org.vsu.pt.team2.utilitatemmetrisapp.managers.IntentExtrasManager
 
 class LoginViewPagerFragment : Fragment() {
 
@@ -26,20 +27,26 @@ class LoginViewPagerFragment : Fragment() {
 
         viewPager.adapter = LoginPagerAdapter(this)
 
-        // Set the icon and text for each tab
+
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = getTabTitle(position)
         }.attach()
+        activity?.intent?.let {
+            if (IntentExtrasManager.continueRegister.getFrom(it))
+                viewPager.currentItem = LOGIN_PAGE_INDEX
+        }
 
-        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        binding.appBarLayoutInclude.toolbarIconContainer.visibility = View.GONE
+
+        (activity as AppCompatActivity).setSupportActionBar(binding.appBarLayoutInclude.toolbar)
 
         return binding.root
     }
 
     private fun getTabTitle(position: Int): String? {
         return when (position) {
-            DEMO_USER_PAGE_INDEX -> getString(R.string.demo_user_tab_title)
-            LOGIN_PAGE_INDEX -> getString(R.string.login_tab_title)
+            DEMO_USER_PAGE_INDEX -> getString(R.string.auth_demo_tab_title)
+            LOGIN_PAGE_INDEX -> getString(R.string.auth_login_tab_title)
             else -> null
         }
     }

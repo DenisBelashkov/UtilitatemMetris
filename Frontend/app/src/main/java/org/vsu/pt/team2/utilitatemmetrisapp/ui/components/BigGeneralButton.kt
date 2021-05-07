@@ -27,7 +27,7 @@ class BigGeneralButton @JvmOverloads constructor(
             field = value
             button.text = value
         }
-    var loadingAnimation: Animation
+    var loadingAnimationController: LoadingAnimationController
 
     init {
         val binding = BigGeneralButtonBinding.inflate(
@@ -37,20 +37,21 @@ class BigGeneralButton @JvmOverloads constructor(
         )
         loading_iv = binding.bigGeneralButtonImageView
         button = binding.bigGeneralButtonButton
+        loadingAnimationController = LoadingAnimationController(
+            context,
+            loading_iv
+        )
 
         attributeSet?.let {
             initComponents(
                 context.obtainStyledAttributes(
                     it,
-                    R.styleable.BigGeneralButton, 0, 0
+                    R.styleable.BigGeneralButton,
+                    0,
+                    R.style.BigGeneralButton
                 )
             )
         }
-        loadingAnimation = AnimationUtils.loadAnimation(
-            context,
-            R.anim.rotate_center
-        )
-        loadingAnimation.interpolator = LinearInterpolator()
 
         setStateDefault()
     }
@@ -59,7 +60,7 @@ class BigGeneralButton @JvmOverloads constructor(
         val textBtn = resources.getText(
             typedArray.getResourceId(
                 R.styleable.BigGeneralButton_button_text,
-                R.string.big_general_button_default_text
+                R.string.big_button_default_text
             )
         )
         val img_src = resources.getDrawable(
@@ -99,9 +100,7 @@ class BigGeneralButton @JvmOverloads constructor(
         button.visibility = View.VISIBLE
         button.text = ""
 
-        loading_iv.visibility = View.VISIBLE
-        loading_iv.startAnimation(loadingAnimation)
-
+        loadingAnimationController.startAnimation()
     }
 
     fun setStateDefault() {
@@ -110,7 +109,6 @@ class BigGeneralButton @JvmOverloads constructor(
         button.visibility = View.VISIBLE
         button.text = buttonText
 
-        loading_iv.visibility = View.INVISIBLE
-        loading_iv.clearAnimation()
+        loadingAnimationController.clearAnimation()
     }
 }

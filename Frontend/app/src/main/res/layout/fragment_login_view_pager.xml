@@ -9,73 +9,37 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        android:background="@color/white_background"
+        style="@style/RootElementStyle"
         >
+
+        <include
+            android:id="@+id/app_bar_layout_include"
+            layout="@layout/appbar_content"
+            />
+        <!-- Override tabIconTint attribute of style with selector -->
+        <com.google.android.material.tabs.TabLayout
+            app:layout_constraintTop_toBottomOf="@+id/app_bar_layout_include"
+            android:id="@+id/tabs"
+            style="@style/Widget.AppCompat.ActionBar.TabBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:tabBackground="?attr/colorPrimary"
+
+            app:tabIndicatorColor="@color/white_background"
+            app:tabIndicatorGravity="stretch"
+            app:tabMaxWidth="0dp"
+            app:tabTextColor="@drawable/tab_text_color_selector"
+            app:tabTextAppearance="@style/TabsTextAppearance"
+            />
 
         <androidx.viewpager2.widget.ViewPager2
 
             android:id="@+id/view_pager"
-            app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
+            app:layout_constraintTop_toBottomOf="@+id/tabs"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_width="match_parent"
             android:layout_height="0dp"
              />
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/app_bar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            app:layout_constraintTop_toTopOf="parent"
-            >
-            <!--        android:theme="@style/Theme.Sunflower.AppBarOverlay"-->
-
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/toolbar_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|snap"
-                app:toolbarId="@id/toolbar">
-
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/toolbar"
-                    style="@style/Widget.MaterialComponents.Toolbar.Primary"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:contentInsetStart="0dp"
-                    app:layout_collapseMode="parallax">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_marginStart="12dp"
-                        android:gravity="start|center_vertical"
-                        android:textSize="@dimen/text_default_16"
-                        android:text="@string/app_name"
-                        android:textAppearance="?attr/textAppearanceHeadline5"
-                        android:textColor="@color/blue_primary_text"
-                        />
-
-                </com.google.android.material.appbar.MaterialToolbar>
-
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-            <!-- Override tabIconTint attribute of style with selector -->
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabs"
-                style="@style/Widget.AppCompat.ActionBar.TabBar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:tabBackground="?attr/colorPrimary"
-
-                app:tabIndicatorColor="@color/white_background"
-                app:tabIndicatorGravity="stretch"
-                app:tabMaxWidth="0dp"
-                app:tabTextColor="@drawable/tab_text_color_selector"
-                app:tabTextAppearance="@style/TabsTextAppearance"
-                />
-
-        </com.google.android.material.appbar.AppBarLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -5,16 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentDemoUserBinding
+import org.vsu.pt.team2.utilitatemmetrisapp.managers.SessionManager
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BigGeneralButton
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.ImeActionListener
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.EmailValidator
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.hideKeyboard
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText
 import studio.carbonylgroup.textfieldboxes.TextFieldBoxes
 
@@ -47,7 +51,7 @@ class DemoUserFragment : Fragment() {
 
     private fun buttonClicked(v: View) = doRequest()
 
-    private fun doRequest(){
+    private fun doRequest() {
         hideKeyboard()
         job?.cancel()
 
@@ -56,8 +60,14 @@ class DemoUserFragment : Fragment() {
                 button.setStateLoading()
                 println(email)
 
-                //here request to server
+                //todo here request to server
                 delay(2000L)
+                SessionManager.setSession(1, emailEditText.text.toString(), true, "")
+
+                (activity as? AppCompatActivity)?.openActivity(
+                    MainActivity::class.java,
+                    true
+                )
 
                 button.setStateDefault()
             }
