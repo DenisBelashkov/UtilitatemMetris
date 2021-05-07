@@ -52,7 +52,7 @@
     <string name="meters_on_this_account">Счётчики, принадлежащие счёту :</string>
     <string name="meter_identifier_title">Идентификатор счётчика</string>
     <string name="meters_found">Найденный счётчик</string>
-
+    <string name="meters_on_account">Счётчики принадлежащие счёту</string>
 
 
 </resources>

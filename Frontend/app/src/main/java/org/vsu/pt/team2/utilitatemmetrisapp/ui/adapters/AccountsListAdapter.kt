@@ -10,7 +10,9 @@ import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.ItemAccountBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.AccountViewModel
 
-class AccountsListAdapter : ListAdapter<AccountViewModel, AccountsListAdapter.AccountViewHolder>(
+class AccountsListAdapter(
+    val toAccountCallback: (AccountViewModel) -> Unit
+) : ListAdapter<AccountViewModel, AccountsListAdapter.AccountViewHolder>(
     AccountDiffCallback()
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
@@ -20,24 +22,26 @@ class AccountsListAdapter : ListAdapter<AccountViewModel, AccountsListAdapter.Ac
     }
 
     override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), toAccountCallback)
     }
 
     class AccountViewHolder(
         val binding: ItemAccountBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: AccountViewModel) = with(itemView) {
+        fun bind(item: AccountViewModel, toAccountCallback: (AccountViewModel) -> Unit) =
+            with(itemView)
+            {
 
-            binding.apply {
-                this.identifier = item.identifier
-                this.address = item.address
+                binding.apply {
+                    this.identifier = item.identifier
+                    this.address = item.address
+                }
+
+                setOnClickListener {
+                    toAccountCallback.invoke(item)
+                }
             }
-
-            setOnClickListener {
-
-            }
-        }
     }
 
     class AccountDiffCallback : DiffUtil.ItemCallback<AccountViewModel>() {
