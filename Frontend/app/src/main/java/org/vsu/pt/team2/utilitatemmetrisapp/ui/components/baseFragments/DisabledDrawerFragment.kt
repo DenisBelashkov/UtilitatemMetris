@@ -1,9 +1,8 @@
-package org.vsu.pt.team2.utilitatemmetrisapp.ui.components
+package org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments
 
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.appCompatActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.mainActivity
 
-open class DisabledDrawerFragment : BaseFragment() {
+open class DisabledDrawerFragment(titleResId: Int) : BaseTitledFragment(titleResId) {
     override fun onStart() {
         super.onStart()
         mainActivity()?.drawerController?.disableDrawer()

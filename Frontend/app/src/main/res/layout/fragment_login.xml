@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/auth_login_textfield_pass_hint"
                     android:imeOptions="actionGo"
-                    android:inputType="text">
+                    android:inputType="textPassword">
 
                 </studio.carbonylgroup.textfieldboxes.ExtendedEditText>
             </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>

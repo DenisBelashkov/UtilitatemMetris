@@ -37,7 +37,7 @@
                     android:layout_height="@dimen/toolbar_icons_size"
                     android:layout_marginStart="6dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/toolbar_textview"
+                    app:layout_constraintEnd_toStartOf="@+id/toolbar_title_textview"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -65,7 +65,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
-                    android:id="@+id/toolbar_textview"
+                    android:id="@+id/toolbar_title_textview"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="start|center_vertical"

@@ -6,11 +6,14 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentAddMeterBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BaseFragment
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.setFromVM
+import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
 
-class AddMeterFragment : BaseFragment() {
+class AddMeterFragment : BaseTitledFragment(R.string.fragment_title_add_meter) {
     private lateinit var binding: FragmentAddMeterBinding
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,13 +31,19 @@ class AddMeterFragment : BaseFragment() {
     }
 
     fun updateMeter(correctAccountIdentifier: String) {
-        //todo подгрузка счётчика
+        val meterVM = loadMeter(correctAccountIdentifier)
+
         binding.meterFound = true
-        binding.meterContent.apply {
-            setBacklogValue(452.4)
-            setMeterIdentifier("7a6d87asd")
-            meterType = MeterType.ColdWater.name
-        }
+        binding.meterContent.setFromVM(meterVM, requireContext())
+    }
+
+    private fun loadMeter(correctAccountIdentifier: String): MeterViewModel {
+        //todo подгрузка счётчика
+        return MeterViewModel(
+            correctAccountIdentifier,
+            MeterType.random(),
+            452.4,
+        )
     }
 
     private val identifierTextChangedListener = object : TextWatcher {

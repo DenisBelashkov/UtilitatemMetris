@@ -26,11 +26,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="70dp"
-        android:background="@drawable/ripple_meter_item"
         android:paddingStart="12dp"
         android:paddingTop="6dp"
-        android:paddingEnd="12dp">
+        android:paddingEnd="12dp"
+        android:background="@drawable/ripple_meter_item"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/top_content"
@@ -99,8 +99,7 @@
             android:id="@+id/bot_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/top_content"
-            >
+            app:layout_constraintBottom_toTopOf="@+id/checkbox">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
@@ -164,6 +163,14 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:padding="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <View
             android:layout_width="match_parent"
