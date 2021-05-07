@@ -39,6 +39,24 @@
             </studio.carbonylgroup.textfieldboxes.ExtendedEditText>
         </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/account_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:visibility="@{ metersFound ? View.VISIBLE : View.GONE}"
+            app:layout_constraintTop_toBottomOf="@+id/account_identifier_textfieldboxes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+
+            <include
+                android:id="@+id/add_account_item_account_container"
+                layout="@layout/item_account"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <TextView
             android:id="@+id/meters_on_this_account_title_text_view"
             android:layout_width="wrap_content"
@@ -49,7 +67,7 @@
             android:visibility="@{ metersFound ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/account_identifier_textfieldboxes" />
+            app:layout_constraintTop_toBottomOf="@+id/account_container" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/meters_on_account_recycler_view"

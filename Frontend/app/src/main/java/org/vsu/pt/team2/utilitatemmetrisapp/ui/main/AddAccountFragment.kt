@@ -7,13 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentAddAccountBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.MetersListAdapter
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BaseFragment
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.metersList.MetersListAdapter
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.setFromVM
+import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.AccountViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
 
-class AddAccountFragment : BaseFragment() {
+class AddAccountFragment : BaseTitledFragment(R.string.fragment_title_add_account) {
     private lateinit var binding: FragmentAddAccountBinding
     private val adapter = MetersListAdapter()
     override fun onCreateView(
@@ -37,22 +40,26 @@ class AddAccountFragment : BaseFragment() {
     }
 
     fun updateMeters(correctAccountIdentifier: String) {
-        //todo подгрузка счётчиков
         binding.metersFound = true
+
+        val (accVM, metersVM) = loadAccount(correctAccountIdentifier)
+
+        adapter.submitList(metersVM)
+        binding.addAccountItemAccountContainer.setFromVM(accVM)
+    }
+
+    fun loadAccount(correctAccountIdentifier: String): Pair<AccountViewModel, List<MeterViewModel>> {
+        //todo подгрузка счётчиков
         val list = mutableListOf<MeterViewModel>()
         list.add(
-            MeterViewModel(
-                "7a6d87asd", MeterType.ColdWater, 452.4
-            )
+            MeterViewModel("7a6d87asd", MeterType.ColdWater, 452.4)
         )
         if (correctAccountIdentifier.length % 2 == 0)
             list.add(
-                MeterViewModel(
-                    "6633pqff445", MeterType.Elect, 1209.1
-                )
+                MeterViewModel("6633pqff445", MeterType.Elect, 1209.1)
             )
-
-        adapter.submitList(list)
+        val acc = AccountViewModel(correctAccountIdentifier, "Воронеж, пр. революции, д. 1, кв 101")
+        return Pair(acc, list)
     }
 
     private val identifierTextChangedListener = object : TextWatcher {
@@ -74,7 +81,7 @@ class AddAccountFragment : BaseFragment() {
             s?.let {
                 if (it.length >= 6) {
                     updateMeters(it.toString())
-                }else
+                } else
                     binding.metersFound = false
             }
         }

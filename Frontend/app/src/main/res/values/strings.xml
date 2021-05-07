@@ -21,6 +21,18 @@
     <string name="auth_login_menu_to_login">Войти</string>
     <string name="auth_login_textfield_pass_hint">password</string>
     <string name="auth_login_textfield_email_hint">email</string>
+    <!--    Meter types as string -->
+    <string name="meter_type_cold_water">Х. Вода</string>
+    <string name="meter_type_hot_water">Г. Вода</string>
+    <string name="meter_type_electricity">Электричество</string>
+    <string name="meter_type_gas">Газ</string>
+    <!--    Fragment names      -->
+    <string name="fragment_title_add_account">Добавить счёт</string>
+    <string name="fragment_title_add_meter">Добавить счётчик</string>
+    <string name="fragment_title_saved_meters">Сохранённые счётчики</string>
+    <string name="fragment_title_settings">Настройки</string>
+    <string name="fragment_title_payment">Оплата</string>
+    <string name="fragment_title_my_accounts">Мои счета</string>
     <!--    Not filtered values. Need filter if exists-->
     <string name="settings_button_text_change_email">Изменить почту</string>
     <string name="settings_button_text_change_password">Изменить пароль</string>
@@ -40,6 +52,7 @@
     <string name="meters_on_this_account">Счётчики, принадлежащие счёту :</string>
     <string name="meter_identifier_title">Идентификатор счётчика</string>
     <string name="meters_found">Найденный счётчик</string>
+
 
 
 </resources>
