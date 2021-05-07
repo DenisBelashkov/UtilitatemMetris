@@ -8,16 +8,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentSavedMetersBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.MetersListAdapter
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BaseFragment
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.metersList.MetersWithCheckboxListAdapter
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.appCompatActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.GeneralButtonViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
 
-class SavedMetersFragment : BaseFragment() {
+class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_meters) {
 
-    private val adapter = MetersListAdapter()
+    private val adapter = MetersWithCheckboxListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,

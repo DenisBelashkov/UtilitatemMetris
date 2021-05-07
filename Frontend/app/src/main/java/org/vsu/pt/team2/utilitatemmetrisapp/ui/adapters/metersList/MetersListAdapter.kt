@@ -1,13 +1,13 @@
-package org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters
+package org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.metersList
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.ItemMeterBinding
+import org.vsu.pt.team2.utilitatemmetrisapp.databinding.ItemMeterWithCheckboxBinding
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.setFromVM
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
 
 class MetersListAdapter : ListAdapter<MeterViewModel, MetersListAdapter.MeterViewHolder>(
@@ -28,17 +28,10 @@ class MetersListAdapter : ListAdapter<MeterViewModel, MetersListAdapter.MeterVie
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: MeterViewModel) = with(itemView) {
-            binding.apply {
-                meterType = item.type.name
-                this.setMeterIdentifier(item.identifier)
-                this.setBacklogValue(item.backlog)
-                checkbox.isChecked = false
-            }
+            binding.setFromVM(item,context)
 
             setOnClickListener {
-                binding.checkbox.let {
-                    it.isChecked = !it.isChecked
-                }
+                //todo переход на страницу с счётчиком
             }
         }
     }

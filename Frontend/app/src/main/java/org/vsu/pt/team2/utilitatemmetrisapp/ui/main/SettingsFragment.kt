@@ -6,13 +6,13 @@ import com.orhanobut.logger.Logger
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentSettingsBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.SessionManager
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.DisabledDrawerFragment
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.DisabledDrawerFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.login.LoginActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.appCompatActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.GeneralButtonViewModel
 
-class SettingsFragment : DisabledDrawerFragment() {
+class SettingsFragment : DisabledDrawerFragment(R.string.fragment_title_settings) {
 
     private lateinit var binding: FragmentSettingsBinding
 
