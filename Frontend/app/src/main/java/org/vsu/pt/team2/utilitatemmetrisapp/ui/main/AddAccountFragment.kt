@@ -14,7 +14,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.metersList.MetersListAda
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.setFromVM
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.AccountViewModel
-import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
+import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterItemViewModel
 
 class AddAccountFragment : BaseTitledFragment(R.string.fragment_title_add_account) {
     private lateinit var binding: FragmentAddAccountBinding
@@ -48,15 +48,15 @@ class AddAccountFragment : BaseTitledFragment(R.string.fragment_title_add_accoun
         binding.addAccountItemAccountContainer.setFromVM(accVM)
     }
 
-    fun loadAccount(correctAccountIdentifier: String): Pair<AccountViewModel, List<MeterViewModel>> {
+    fun loadAccount(correctAccountIdentifier: String): Pair<AccountViewModel, List<MeterItemViewModel>> {
         //todo подгрузка счётчиков
-        val list = mutableListOf<MeterViewModel>()
+        val list = mutableListOf<MeterItemViewModel>()
         list.add(
-            MeterViewModel("7a6d87asd", MeterType.ColdWater, 452.4)
+            MeterItemViewModel("7a6d87asd", MeterType.ColdWater, 452.4)
         )
         if (correctAccountIdentifier.length % 2 == 0)
             list.add(
-                MeterViewModel("6633pqff445", MeterType.Elect, 1209.1)
+                MeterItemViewModel("6633pqff445", MeterType.Elect, 1209.1)
             )
         val acc = AccountViewModel(correctAccountIdentifier, "Воронеж, пр. революции, д. 1, кв 101")
         return Pair(acc, list)

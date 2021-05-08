@@ -18,8 +18,8 @@ import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BigGeneralButton
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.ImeActionListener
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.EmailValidator
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.PasswordValidator
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.hideKeyboard
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.hideKeyboard
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.LoginViewModel
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText

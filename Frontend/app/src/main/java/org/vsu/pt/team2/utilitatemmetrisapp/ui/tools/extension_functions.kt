@@ -1,8 +1,11 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.ui.tools
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Looper
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -74,7 +77,9 @@ fun Fragment.requireMainActivity(): AppCompatActivity {
     return mainActivity()!!
 }
 
-fun Fragment.replaceFragment(fragment: Fragment) {
+fun Fragment.replaceFragment(fragment: Fragment, closingCurrent: Boolean = false) {
+    if (closingCurrent)
+        parentFragmentManager.popBackStackImmediate()
     parentFragmentManager
         .beginTransaction()
         .addToBackStack(null)
@@ -82,10 +87,26 @@ fun Fragment.replaceFragment(fragment: Fragment) {
         .commit()
 }
 
-fun AppCompatActivity.replaceFragment(fragment: Fragment) {
+fun AppCompatActivity.replaceFragment(fragment: Fragment, closingCurrent: Boolean = false) {
+    if (closingCurrent)
+        supportFragmentManager.popBackStackImmediate()
     supportFragmentManager.beginTransaction()
         .addToBackStack(null)
         .replace(R.id.dataContainer, fragment)
         .commit()
     fragment.view?.let { hideKeyboard(it) }
+}
+
+fun Activity.hideKeyboard() {
+    hideKeyboard(currentFocus ?: View(this))
+}
+
+fun Context.hideKeyboard(view: View) {
+    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+
+fun AppCompatActivity.setTitleIfMain(title: String) {
+    (this as? MainActivity)?.titleTV?.text = title
 }

@@ -11,6 +11,8 @@ import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentAddMeterBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.setFromVM
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
+import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterItemViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
 
 class AddMeterFragment : BaseTitledFragment(R.string.fragment_title_add_meter) {
@@ -34,7 +36,11 @@ class AddMeterFragment : BaseTitledFragment(R.string.fragment_title_add_meter) {
         val meterVM = loadMeter(correctAccountIdentifier)
 
         binding.meterFound = true
-        binding.meterContent.setFromVM(meterVM, requireContext())
+        binding.meterContent.setFromVM(meterVM.toMeterItemVM(), requireContext())
+        binding.meterContent.root.setOnClickListener {
+            val meterFragment = MeterFragment.createWithVM(meterVM)
+            replaceFragment(meterFragment)
+        }
     }
 
     private fun loadMeter(correctAccountIdentifier: String): MeterViewModel {
@@ -43,6 +49,10 @@ class AddMeterFragment : BaseTitledFragment(R.string.fragment_title_add_meter) {
             correctAccountIdentifier,
             MeterType.random(),
             452.4,
+            123.4,
+            432.21,
+            102.0,
+            false
         )
     }
 

@@ -1,11 +1,9 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments
 
-import androidx.fragment.app.Fragment
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.hideKeyboard
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.setTitleIfMain
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.appCompatActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.setTitleIfMain
 
-open class BaseTitledFragment(private val titleStringResId: Int? = null) : Fragment() {
+open class BaseTitledFragment(private val titleStringResId: Int? = null) : BaseFragment() {
     var title: String = ""
     override fun onStart() {
         super.onStart()
@@ -16,12 +14,6 @@ open class BaseTitledFragment(private val titleStringResId: Int? = null) : Fragm
 
     override fun onStop() {
         super.onStop()
-        hideKeyboard()
         appCompatActivity()?.setTitleIfMain("")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        hideKeyboard()
     }
 }
