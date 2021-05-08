@@ -6,16 +6,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.ItemMeterBinding
-import org.vsu.pt.team2.utilitatemmetrisapp.databinding.ItemMeterWithCheckboxBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.setFromVM
-import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
+import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterItemViewModel
 
-class MetersListAdapter : ListAdapter<MeterViewModel, MetersListAdapter.MeterViewHolder>(
+class MetersListAdapter(
+    val onMeterClickCallback: (MeterItemViewModel) -> Unit = {}
+) : ListAdapter<MeterItemViewModel, MetersListAdapter.MeterViewHolder>(
     MeterDiffCallback()
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MeterViewHolder {
         return MeterViewHolder(
-            ItemMeterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemMeterBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            onMeterClickCallback
         )
     }
 
@@ -24,24 +26,31 @@ class MetersListAdapter : ListAdapter<MeterViewModel, MetersListAdapter.MeterVie
     }
 
     class MeterViewHolder(
-        val binding: ItemMeterBinding
+        val binding: ItemMeterBinding,
+        private val onMeterClickCallback: (MeterItemViewModel) -> Unit = {}
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: MeterViewModel) = with(itemView) {
-            binding.setFromVM(item,context)
+        fun bind(item: MeterItemViewModel) = with(itemView) {
+            binding.setFromVM(item, context)
 
             setOnClickListener {
-                //todo переход на страницу с счётчиком
+                onMeterClickCallback.invoke(item)
             }
         }
     }
 
-    class MeterDiffCallback : DiffUtil.ItemCallback<MeterViewModel>() {
-        override fun areItemsTheSame(oldItem: MeterViewModel, newItem: MeterViewModel): Boolean {
+    class MeterDiffCallback : DiffUtil.ItemCallback<MeterItemViewModel>() {
+        override fun areItemsTheSame(
+            oldItem: MeterItemViewModel,
+            newItem: MeterItemViewModel
+        ): Boolean {
             return oldItem.identifier === newItem.identifier
         }
 
-        override fun areContentsTheSame(oldItem: MeterViewModel, newItem: MeterViewModel): Boolean {
+        override fun areContentsTheSame(
+            oldItem: MeterItemViewModel,
+            newItem: MeterItemViewModel
+        ): Boolean {
             return oldItem == newItem
         }
     }

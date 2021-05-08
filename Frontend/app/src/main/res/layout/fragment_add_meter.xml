@@ -51,18 +51,9 @@
 
             <include
                 android:id="@+id/meter_content"
-                layout="@layout/item_meter" />
+                layout="@layout/item_meter"
+                />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/saved_meters_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="20dp"
-            android:visibility="@{meterFound? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/meter_content_container" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

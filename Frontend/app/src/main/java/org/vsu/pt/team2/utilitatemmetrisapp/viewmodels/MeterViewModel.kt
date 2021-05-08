@@ -5,25 +5,38 @@ import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 class MeterViewModel(
     var identifier: String,
     var type: MeterType,
+    var tariff: Double,
+    var prevMonthData: Double,
+    var curMonthData: Double,
     var backlog: Double,
-){
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
+    var isSaved: Boolean,
+) {
 
-        other as MeterViewModel
-
-        if (identifier != other.identifier) return false
-        if (type != other.type) return false
-        if (backlog != other.backlog) return false
-
-        return true
+    fun toMeterItemVM(): MeterItemViewModel {
+        return MeterItemViewModel(
+            identifier,
+            type,
+            backlog
+        )
     }
 
-    override fun hashCode(): Int {
-        var result = identifier.hashCode()
-        result = 31 * result + type.hashCode()
-        result = 31 * result + backlog.hashCode()
-        return result
+    companion object {
+        fun fromMeterItemVM(
+            mivm: MeterItemViewModel,
+            tariff: Double,
+            prevMonthData: Double,
+            curMonthData: Double,
+            isSaved: Boolean
+        ): MeterViewModel {
+            return MeterViewModel(
+                mivm.identifier,
+                mivm.type,
+                tariff,
+                prevMonthData,
+                curMonthData,
+                mivm.backlog,
+                isSaved
+            )
+        }
     }
 }

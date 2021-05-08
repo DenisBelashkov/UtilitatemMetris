@@ -54,6 +54,15 @@
     <string name="meters_found">Найденный счётчик</string>
     <string name="meters_on_account">Счётчики принадлежащие счёту</string>
     <string name="add_account">Добавить счёт</string>
+    <string name="fragment_meter_meter_identifier_title">Счётчик</string>
+    <string name="fragment_meter_meter_tariff_title">Тариф</string>
+    <string name="fragment_meter_meter_type_title">Тип коммунальной услуги</string>
+    <string name="fragment_meter_meter_prev_month_data_title">Данные за предыдущий месяц</string>
+    <string name="fragment_meter_meter_backlog_title">Задолженность</string>
+    <string name="fragment_title_meter">Счётчик</string>
+    <string name="fragment_title_example">Пример</string>
+    <string name="show_payment_history">Просмотреть историю платежей</string>
+    <string name="pay_backlog">Погасить задолженность</string>
 
 
 </resources>
