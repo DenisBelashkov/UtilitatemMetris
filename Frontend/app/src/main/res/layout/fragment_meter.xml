@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable
+            name="identifier"
+            type="String" />
+        <variable
+            name="type"
+            type="String" />
+        <variable
+            name="prevMonthData"
+            type="Double" />
+        <variable
+            name="tariff"
+            type="Double" />
+        <variable
+            name="backlog"
+            type="Double" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/RootElementStyle"
+        >
+
+       <androidx.constraintlayout.widget.ConstraintLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintTop_toTopOf="parent"
+           android:layout_marginStart="66dp"
+           android:layout_marginEnd="66dp"
+           android:layout_marginTop="25dp"
+           >
+           <androidx.constraintlayout.widget.ConstraintLayout
+               android:id="@+id/meter_identifier_container"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintTop_toTopOf="parent"
+               android:paddingTop="8dp"
+               android:paddingBottom="8dp"
+               >
+
+               <TextView
+                   android:id="@+id/meter_identifier_title"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textColor="@color/gray"
+                   android:textSize="@dimen/text_small_12"
+                   app:layout_constraintTop_toTopOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   android:text="@string/fragment_meter_meter_identifier_title"
+                   />
+               <TextView
+                   android:id="@+id/meter_identifier_value"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textColor="@color/dark_text"
+                   android:textSize="@dimen/text_default_16"
+                   app:layout_constraintTop_toBottomOf="@+id/meter_identifier_title"
+                   app:layout_constraintStart_toStartOf="parent"
+                   android:text="@{identifier}"
+
+                   />
+           </androidx.constraintlayout.widget.ConstraintLayout>
+
+           <androidx.constraintlayout.widget.ConstraintLayout
+               android:id="@+id/meter_type_container"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintTop_toBottomOf="@+id/meter_identifier_container"
+               android:paddingTop="8dp"
+               android:paddingBottom="8dp"
+               >
+
+               <TextView
+                   android:id="@+id/meter_type_title"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textColor="@color/gray"
+                   android:textSize="@dimen/text_small_12"
+                   app:layout_constraintTop_toTopOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   android:text="@string/fragment_meter_meter_type_title"
+                   />
+               <TextView
+                   android:id="@+id/meter_type_value"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textColor="@color/dark_text"
+                   android:textSize="@dimen/text_default_16"
+                   app:layout_constraintTop_toBottomOf="@+id/meter_type_title"
+                   app:layout_constraintStart_toStartOf="parent"
+                   android:text="@{type}"
+
+                   />
+           </androidx.constraintlayout.widget.ConstraintLayout>
+           <androidx.constraintlayout.widget.ConstraintLayout
+               android:id="@+id/meter_tariff_container"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintTop_toBottomOf="@+id/meter_type_container"
+               android:paddingTop="8dp"
+               android:paddingBottom="8dp"
+               >
+
+               <TextView
+                   android:id="@+id/meter_tariff_title"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textColor="@color/gray"
+                   android:textSize="@dimen/text_small_12"
+                   app:layout_constraintTop_toTopOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   android:text="@string/fragment_meter_meter_tariff_title"
+                   />
+               <TextView
+                   android:id="@+id/meter_tariff_value"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textColor="@color/dark_text"
+                   android:textSize="@dimen/text_default_16"
+                   app:layout_constraintTop_toBottomOf="@+id/meter_tariff_title"
+                   app:layout_constraintStart_toStartOf="parent"
+                   android:text="@{tariff.toString()}"
+
+                   />
+           </androidx.constraintlayout.widget.ConstraintLayout>
+           <androidx.constraintlayout.widget.ConstraintLayout
+               android:id="@+id/meter_prev_month_data_container"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintTop_toBottomOf="@+id/meter_tariff_container"
+               android:paddingTop="8dp"
+               android:paddingBottom="8dp"
+               >
+
+               <TextView
+                   android:id="@+id/meter_prev_month_data_title"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textColor="@color/gray"
+                   android:textSize="@dimen/text_small_12"
+                   app:layout_constraintTop_toTopOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   android:text="@string/fragment_meter_meter_prev_month_data_title"
+                   />
+               <TextView
+                   android:id="@+id/meter_prev_month_data_value"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textColor="@color/dark_text"
+                   android:textSize="@dimen/text_default_16"
+                   app:layout_constraintTop_toBottomOf="@+id/meter_prev_month_data_title"
+                   app:layout_constraintStart_toStartOf="parent"
+                   android:text="@{prevMonthData.toString()}"
+
+                   />
+           </androidx.constraintlayout.widget.ConstraintLayout>
+           <androidx.constraintlayout.widget.ConstraintLayout
+               android:id="@+id/meter_backlog_container"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintTop_toBottomOf="@+id/meter_prev_month_data_container"
+               android:paddingTop="8dp"
+               android:paddingBottom="8dp"
+               >
+
+               <TextView
+                   android:id="@+id/meter_backlog_title"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textColor="@color/gray"
+                   android:textSize="@dimen/text_small_12"
+                   app:layout_constraintTop_toTopOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   android:text="@string/fragment_meter_meter_backlog_title"
+                   />
+               <TextView
+                   android:id="@+id/meter_backlog_value"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textColor="@color/blue_primary"
+                   android:textSize="@dimen/text_default_16"
+                   app:layout_constraintTop_toBottomOf="@+id/meter_backlog_title"
+                   app:layout_constraintStart_toStartOf="parent"
+                   android:text="@{backlog.toString()}"
+
+                   />
+           </androidx.constraintlayout.widget.ConstraintLayout>
+
+       </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            android:id="@+id/meter_show_history"
+            style="@style/GeneralButtonMargins"
+            layout="@layout/general_button_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toTopOf="@+id/meter_pay_backlog"
+
+            />
+
+        <include
+            android:id="@+id/meter_pay_backlog"
+            style="@style/GeneralButtonMargins"
+            layout="@layout/general_button_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

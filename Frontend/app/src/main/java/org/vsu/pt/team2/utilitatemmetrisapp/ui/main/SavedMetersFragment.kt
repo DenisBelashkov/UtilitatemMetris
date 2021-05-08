@@ -13,11 +13,22 @@ import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitl
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.appCompatActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.GeneralButtonViewModel
+import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterItemViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
 
 class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_meters) {
 
-    private val adapter = MetersWithCheckboxListAdapter()
+    private val adapter = MetersWithCheckboxListAdapter {
+        //todo Получить всю инфу о счётчике из meterRepository например
+        val vm = MeterViewModel.fromMeterItemVM(
+            it,
+            4.86,
+            3098.92,
+            3124.12,
+            false
+        )
+        replaceFragment(MeterFragment.createWithVM(vm))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,14 +52,14 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
     }
 
     fun updateAdapter() {
-        val list = mutableListOf<MeterViewModel>()
+        val list = mutableListOf<MeterItemViewModel>()
         list.add(
-            MeterViewModel(
+            MeterItemViewModel(
                 "7a6d87asd", MeterType.ColdWater, 452.4
             )
         )
         list.add(
-            MeterViewModel(
+            MeterItemViewModel(
                 "6633pqff445", MeterType.Elect, 1209.1
             )
         )
