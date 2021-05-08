@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import and_
 from werkzeug.middleware.proxy_fix import ProxyFix
 from sqlalchemy.ext.automap import automap_base
+from datetime import date
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -40,27 +42,54 @@ def hworld():
 	print(request.json)
 	return 'Hello, World!3\n'
 
-@app.route('/json2/', methods=["GET"])
-def heworld():
+@app.route('/payment/history', methods=["GET"])
+def payment_history():
 	try:
-		print(request.json['ema'])
+		print(request.json)
+		r_json = request.json
+		id = r_json["idUser"]
+		res_list =[]
+		date_1 = datetime.strptime(r_json["dateWith"], '%d-%m-%Y').date()
+		date_2 = datetime.strptime(r_json["dateTo"], '%d-%m-%Y').date()
+		all_m = db.session.query(Payment).join(Metrics, Metrics.id_metrics == Payment.id_metrics).join(Flat, Flat.id_personal_account == Metrics.id_personal_account).filter(Flat.id_owner_user == id).filter(Payment.date > date_1).filter(Payment.date < date_2).all()
+		for p in all_m:
+			res_list.append({"date": p.date, "cost": float(p.cost)})
+		return jsonify(res_list)
 	except Exception as e:
-		print('all is bad')
-	return 'Hello, World!4\n'
+		print(e)
+	return "", 404
 
 @app.route('/payment/metrics', methods=["POST"])
 def payment_metrics():
 	try:
 		print(request.json)
+		res_list = []
 		json_r = request.json
 		for d in json_r:
-			metric = db.session.query(Metrics).join(Tariff, Tariff.id_tariff == Metrics.id_tariff).filter(Metrics.id_metrics == d['idMetric']).one_or_none()
-			cost = d["cost"]
-			need_cost = metric.curr_value - metric.prev_value
-			print(1)
-		return "", 200
+			metric = db.session.query(Metrics, Tariff.price).join(Tariff, Tariff.id_tariff == Metrics.id_tariff).filter(Metrics.id_metrics == d['idMetric']).one_or_none()
+			if not metric:
+				continue
+			cost = d["cost"] + metric.Metrics.balance
+			p = Payment()
+			p.id_metrics = metric.Metrics.id_metrics
+			p.id_user = d["idUser"]
+			p.prev_value = metric.Metrics.prev_value
+			p.date = date.today()
+			p.cost = d["cost"]
+			if cost <= 0:
+				metric.Metrics.balance = cost
+				p.curr_value = metric.Metrics.prev_value
+			else:
+				need_cost = (metric.Metrics.curr_value - metric.Metrics.prev_value) * metric.price
+				metric.Metrics.balance = cost - need_cost
+				p.curr_value = metric.Metrics.curr_value
+				metric.Metrics.prev_value = metric.Metrics.curr_value
+			db.session.add(p)
+			db.session.commit()
+			res_list.append({"id": p.id_payment_history, "date": p.date, "cost": float(p.cost), "prevValue": float(p.prev_value), "currValue": float(p.curr_value), "userName" : " "})
+		return jsonify(res_list)
 	except Exception as e:
-		pass
+		db.session.rollback()
 	return "", 400
 
 @app.route('/metric/update/', methods=["PUT"])
