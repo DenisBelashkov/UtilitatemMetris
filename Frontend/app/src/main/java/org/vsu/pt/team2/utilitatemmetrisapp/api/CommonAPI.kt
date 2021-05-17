@@ -4,7 +4,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.api.model.*
 import retrofit2.Response
 import retrofit2.http.*
 
-interface BaseAPI {
+interface CommonAPI {
 
     /**
      * Account
@@ -23,7 +23,7 @@ interface BaseAPI {
     @GET("/metrics/{flatId}")
     fun getMetrics(
             @Path("flatId") flatIdentifier: String
-    )
+    ): Response<List<Metric>>
 
     @PUT("/metrics/update")
     fun updateMetric(
