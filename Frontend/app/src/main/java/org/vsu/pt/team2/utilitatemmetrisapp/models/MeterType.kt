@@ -7,6 +7,7 @@ enum class MeterType {
     ColdWater,
     HotWater,
     Gas,
+    Heating,
     Elect;
 
     fun toLanguagedString(context: Context): String {
@@ -15,6 +16,7 @@ enum class MeterType {
             ColdWater -> context.getString(R.string.meter_type_cold_water)
             HotWater -> context.getString(R.string.meter_type_hot_water)
             Gas -> context.getString(R.string.meter_type_gas)
+            Heating -> context.getString(R.string.heating)
         }
     }
 

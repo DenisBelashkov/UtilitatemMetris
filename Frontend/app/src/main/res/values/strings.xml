@@ -63,6 +63,7 @@
     <string name="fragment_title_example">Пример</string>
     <string name="show_payment_history">Просмотреть историю платежей</string>
     <string name="pay_backlog">Погасить задолженность</string>
+    <string name="heating">Отопление</string>
 
 
 </resources>
