@@ -14,6 +14,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentLoginBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.IntentExtrasManager
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.SessionManager
+import org.vsu.pt.team2.utilitatemmetrisapp.models.User
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BigGeneralButton
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.ImeActionListener
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.EmailValidator
@@ -44,11 +45,11 @@ class LoginFragment : Fragment() {
         emailEditText = binding.loginEmailExtendededittext
         activity?.intent?.let {
             if (IntentExtrasManager.continueRegister.getFrom(it))
-                emailEditText.setText(SessionManager.email)
+                emailEditText.setText(SessionManager.user.email)
         }
         passwordEditText = binding.loginPasswordExtendededittext.also {
             it.setOnEditorActionListener(
-                ImeActionListener(ImeActionListener.Association(EditorInfo.IME_ACTION_GO) { doRequest() })
+                    ImeActionListener(ImeActionListener.Association(EditorInfo.IME_ACTION_GO) { doRequest() })
             )
         }
 
@@ -65,9 +66,9 @@ class LoginFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         val binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
         initFields(binding)
@@ -91,11 +92,11 @@ class LoginFragment : Fragment() {
 
                 //todo here request to server
                 delay(2000L)
-                SessionManager.setSession(2, emailEditText.text.toString(), false, "")
+                SessionManager.setSession(User(2, emailEditText.text.toString(), ""), false)
 
                 (activity as? AppCompatActivity)?.openActivity(
-                    MainActivity::class.java,
-                    true
+                        MainActivity::class.java,
+                        true
                 )
 
                 button.setStateDefault()

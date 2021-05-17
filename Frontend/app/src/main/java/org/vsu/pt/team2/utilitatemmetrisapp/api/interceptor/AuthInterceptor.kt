@@ -9,8 +9,8 @@ class AuthInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val requestBuilder: Request.Builder = chain.request().newBuilder()
-        if (!SessionManager.isDemo) {
-            requestBuilder.addHeader(HEADER_AUTH_TOKEN, SessionManager.jwt)
+        if (SessionManager.isAuthorized() && !SessionManager.isDemo) {
+            requestBuilder.addHeader(HEADER_AUTH_TOKEN, SessionManager.user.token)
         }
         return chain.proceed(requestBuilder.build())
     }

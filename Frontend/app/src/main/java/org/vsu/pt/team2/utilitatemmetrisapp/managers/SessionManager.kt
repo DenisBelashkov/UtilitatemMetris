@@ -1,27 +1,29 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.managers
 
+import org.vsu.pt.team2.utilitatemmetrisapp.models.User
+
 object SessionManager {
-    var email: String = "email.email@email"
-    var id: Int = 123
+
+    private final val EmptyUser = User(0, "", "")
+
+    var user: User = this.EmptyUser
+
     var isDemo: Boolean = false
-    var jwt: String = "empty"
 
     fun setSession(
-        id: Int,
-        email: String,
-        isDemo: Boolean,
-        jwt: String
+            user: User,
+            isDemo: Boolean
     ) {
-        this.email = email
-        this.id = id
+        this.user = user
         this.isDemo = isDemo
-        this.jwt = jwt
     }
 
-    fun clear(){
-        this.email = ""
-        this.id = -1
+    fun clear() {
+        this.user = EmptyUser
         this.isDemo = true
-        this.jwt = ""
     }
+
+    fun isAuthorized() = user != EmptyUser
+
+
 }

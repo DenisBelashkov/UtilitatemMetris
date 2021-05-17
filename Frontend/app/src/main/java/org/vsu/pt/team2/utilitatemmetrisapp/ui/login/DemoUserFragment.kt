@@ -13,6 +13,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentDemoUserBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.SessionManager
+import org.vsu.pt.team2.utilitatemmetrisapp.models.User
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BigGeneralButton
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.ImeActionListener
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.EmailValidator
@@ -34,15 +35,15 @@ class DemoUserFragment : Fragment() {
         emailTextFieldBoxes = binding.demoUserEmailTextfieldboxes
         emailEditText = binding.demoUserEmailExtendededittext.also {
             it.setOnEditorActionListener(
-                ImeActionListener(ImeActionListener.Association(EditorInfo.IME_ACTION_GO) { doRequest() })
+                    ImeActionListener(ImeActionListener.Association(EditorInfo.IME_ACTION_GO) { doRequest() })
             )
         }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         val binding = FragmentDemoUserBinding.inflate(layoutInflater, container, false)
         initFields(binding)
@@ -62,11 +63,11 @@ class DemoUserFragment : Fragment() {
 
                 //todo here request to server
                 delay(2000L)
-                SessionManager.setSession(1, emailEditText.text.toString(), true, "")
+                SessionManager.setSession(User(1, emailEditText.text.toString(), ""), true)
 
                 (activity as? AppCompatActivity)?.openActivity(
-                    MainActivity::class.java,
-                    true
+                        MainActivity::class.java,
+                        true
                 )
 
                 button.setStateDefault()

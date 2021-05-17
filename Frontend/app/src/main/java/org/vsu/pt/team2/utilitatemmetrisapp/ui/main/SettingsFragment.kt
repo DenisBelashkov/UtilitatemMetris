@@ -22,7 +22,7 @@ class SettingsFragment : DisabledDrawerFragment(R.string.fragment_title_settings
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
-        binding.email = SessionManager.email
+        binding.email = SessionManager.user.email
         binding.settingsGeneralButtonChangeEmail.viewmodel = GeneralButtonViewModel(
             getString(R.string.settings_button_text_change_email)
         ) {

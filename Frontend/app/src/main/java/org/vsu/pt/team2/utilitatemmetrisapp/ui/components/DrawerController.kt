@@ -151,7 +151,7 @@ class DrawerController(
 
     private fun createHeader() {
         val profileItem = ProfileDrawerItem().apply {
-            nameText = SessionManager.email
+            nameText = SessionManager.user.email
             descriptionText = if (SessionManager.isDemo) "Анонимный аккаунт" else ""
         }
         AccountHeaderView(activity).apply {
