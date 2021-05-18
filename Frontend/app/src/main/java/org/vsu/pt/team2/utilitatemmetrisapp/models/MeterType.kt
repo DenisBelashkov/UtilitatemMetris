@@ -1,7 +1,10 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.models
 
 import android.content.Context
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonValue
 import org.vsu.pt.team2.utilitatemmetrisapp.R
+import java.lang.RuntimeException
 
 enum class MeterType {
     ColdWater,
@@ -20,7 +23,29 @@ enum class MeterType {
         }
     }
 
+    @JsonValue
+    fun toValue(): String {
+        return when (this) {
+            Elect -> "electric"
+            ColdWater -> "water"
+            Gas -> "gas"
+            Heating -> "heating"
+            else -> throw RuntimeException("Cant serialize Meter Type $this")
+        }
+    }
+
     companion object {
         fun random(): MeterType = MeterType.values().random()
+
+        @JsonCreator
+        fun forValue(value: String): MeterType {
+            return when (value) {
+                "electric" -> Elect
+                "water" -> ColdWater
+                "gas" -> Gas
+                "heating" -> Heating
+                else -> throw RuntimeException("Cant deserialize Meter Type from string $value")
+            }
+        }
     }
 }

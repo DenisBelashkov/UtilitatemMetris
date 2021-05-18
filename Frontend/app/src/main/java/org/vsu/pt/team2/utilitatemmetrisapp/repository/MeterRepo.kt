@@ -6,23 +6,25 @@ import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 class MeterRepo {
     private val meters = mutableListOf<Meter>()
 
-    fun clear() {
+    suspend fun meters(): List<Meter> = meters
+
+    suspend fun clear() {
         meters.clear()
     }
 
-    fun addMeter(meter: Meter) {
+    suspend fun addMeter(meter: Meter) {
         meters.add(meter)
     }
 
-    fun addMeter(meters: List<Meter>) {
+    suspend fun addMeters(meters: List<Meter>) {
         this.meters.addAll(meters)
     }
 
-    fun deleteMeter(meter: Meter) {
+    suspend fun deleteMeter(meter: Meter) {
         meters.remove(meter)
     }
 
-    fun deleteMeter(identifier: String) {
+    suspend fun deleteMeter(identifier: String) {
         meters.find { it.identifier == identifier }?.let {
             deleteMeter(it)
         }

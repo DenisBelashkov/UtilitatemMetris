@@ -5,8 +5,9 @@ import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 class MeterItemViewModel(
     var identifier: String,
     var type: MeterType,
-    var backlog: Double,
-){
+    balance: Double,
+) {
+    var backlog: Double = if (balance >= 0.0) 0.0 else -balance
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

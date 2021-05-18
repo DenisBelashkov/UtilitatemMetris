@@ -4,7 +4,7 @@ class ApiResult<T> {
     var data: T? = null
     var errCode: Int? = null
 
-    fun success() = errCode == null
+    fun isSuccess() = errCode == null
 
     companion object {
         fun <T> Error(responseCode: Int): ApiResult<T> {

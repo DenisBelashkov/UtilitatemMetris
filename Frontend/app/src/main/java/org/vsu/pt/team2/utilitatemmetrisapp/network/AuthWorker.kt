@@ -1,14 +1,16 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.network
 
-import org.vsu.pt.team2.utilitatemmetrisapp.api.ApiRetrofitBuilder
 import org.vsu.pt.team2.utilitatemmetrisapp.api.AuthAPI
 import org.vsu.pt.team2.utilitatemmetrisapp.api.model.LoginUser
 import org.vsu.pt.team2.utilitatemmetrisapp.api.model.QuickLoginUser
 import org.vsu.pt.team2.utilitatemmetrisapp.api.model.SuccessfulLoginUser
+import retrofit2.Retrofit
+import javax.inject.Inject
 
-class AuthWorker : ApiWorker() {
+class AuthWorker @Inject constructor(
+    val retrofit: Retrofit
+) : ApiWorker() {
 
-    private val retrofit = ApiRetrofitBuilder.build()
     private val authApi = retrofit.create(AuthAPI::class.java)
 
     suspend fun login(loginUser: LoginUser) : ApiResult<SuccessfulLoginUser>{

@@ -6,6 +6,8 @@ import org.vsu.pt.team2.utilitatemmetrisapp.models.Account
 class AccountRepo {
     private val accounts = mutableListOf<Account>()
 
+    fun accounts(): List<Account> = accounts
+
     fun clear() {
         accounts.clear()
     }

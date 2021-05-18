@@ -1,11 +1,15 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.network
 
-import org.vsu.pt.team2.utilitatemmetrisapp.api.ApiRetrofitBuilder
 import org.vsu.pt.team2.utilitatemmetrisapp.api.CommonAPI
 import org.vsu.pt.team2.utilitatemmetrisapp.api.model.*
+import retrofit2.Retrofit
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BaseWorker : ApiWorker() {
-    private val retrofit = ApiRetrofitBuilder.build()
+@Singleton
+class BaseWorker @Inject constructor(
+    val retrofit: Retrofit
+) : ApiWorker() {
     private val commonAPI = retrofit.create(CommonAPI::class.java)
 
     suspend fun accounts(userId: Int): ApiResult<List<Flat>> {
