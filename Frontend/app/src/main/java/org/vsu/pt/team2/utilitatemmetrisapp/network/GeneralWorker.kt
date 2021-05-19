@@ -6,11 +6,19 @@ import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
-class BaseWorker @Inject constructor(
+class GeneralWorker @Inject constructor(
     val retrofit: Retrofit
 ) : ApiWorker() {
     private val commonAPI = retrofit.create(CommonAPI::class.java)
+
+    override fun handleError(errorCode: Int) {
+        when (errorCode) {
+            401 -> {
+                //todo
+                //on unauthorized action
+            }
+        }
+    }
 
     suspend fun accounts(userId: Int): ApiResult<List<Flat>> {
         return safeApiCall { commonAPI.getAccounts(userId) }

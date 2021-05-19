@@ -19,7 +19,7 @@ class AuthWorker @Inject constructor(
         delay(2000L)
         return ApiResult<SuccessfulLoginUser>().apply {
             data = SuccessfulLoginUser(
-                "emain",
+                "email",
                 -1,
                 "jwtjwtjwt"
             )
@@ -30,7 +30,7 @@ class AuthWorker @Inject constructor(
         delay(2000L)
         return ApiResult<SuccessfulLoginUser>().apply {
             data = SuccessfulLoginUser(
-                "emain",
+                "email",
                 -1,
                 "jwtjwtjwt"
             )

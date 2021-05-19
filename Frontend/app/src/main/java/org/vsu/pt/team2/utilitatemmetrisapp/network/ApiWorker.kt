@@ -7,7 +7,7 @@ open class ApiWorker {
         return safeApiResult(call)
     }
 
-    private suspend fun <T: Any> safeApiResult(call: suspend ()-> Response<T>) : ApiResult<T>{
+    private suspend fun <T : Any> safeApiResult(call: suspend () -> Response<T>): ApiResult<T> {
         val response = call.invoke()
 
         return if (response.isSuccessful) {
@@ -19,7 +19,12 @@ open class ApiWorker {
                 ApiResult.Success(body)
             }
         } else {
+            handleError(response.code())
             ApiResult.Error(response.code())
         }
+    }
+
+    protected open fun handleError(errorCode: Int) {
+        //pass
     }
 }
