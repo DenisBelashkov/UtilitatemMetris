@@ -1,30 +1,45 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.network
 
-import retrofit2.Response
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import java.io.IOException
 
 open class ApiWorker {
-    suspend fun <T : Any> safeApiCall(call: suspend () -> Response<T>): ApiResult<T> {
-        return safeApiResult(call)
+    suspend fun <T : Any> safeApiCall(
+        dispatcher: CoroutineDispatcher,
+        call: suspend () -> T
+    ): ApiResult<T> {
+        return safeApiResult(dispatcher, call)
     }
 
-    private suspend fun <T : Any> safeApiResult(call: suspend () -> Response<T>): ApiResult<T> {
-        val response = call.invoke()
-
-        return if (response.isSuccessful) {
-            val body = response.body()
-
-            if (body == null) {
-                ApiResult.Error(response.code())
-            } else {
-                ApiResult.Success(body)
+    suspend fun <T> safeApiResult(
+        dispatcher: CoroutineDispatcher,
+        apiCall: suspend () -> T
+    ): ApiResult<T> {
+        return withContext(dispatcher) {
+            try {
+                ApiResult.Success<T>(apiCall.invoke())
+            } catch (throwable: Throwable) {
+                when (throwable) {
+                    is IOException -> ApiResult.NetworkError
+                    is HttpException -> {
+                        val code = throwable.code()
+                        val errorResponse = convertErrorBody(throwable)
+                        ApiResult.GenericError(code, errorResponse)
+                    }
+                    else -> {
+                        ApiResult.GenericError(null, null)
+                    }
+                }
             }
-        } else {
-            handleError(response.code())
-            ApiResult.Error(response.code())
         }
     }
 
-    protected open fun handleError(errorCode: Int) {
-        //pass
+    private fun convertErrorBody(throwable: HttpException): ErrorResponse {
+        //todo handle throwable into ErrorResponse if needed
+        //https://medium.com/@douglas.iacovelli/how-to-handle-errors-with-retrofit-and-coroutines-33e7492a912
+
+        return ErrorResponse()
     }
 }

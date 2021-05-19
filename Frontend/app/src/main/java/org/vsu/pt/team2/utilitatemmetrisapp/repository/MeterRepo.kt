@@ -4,6 +4,14 @@ import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 
 
 class MeterRepo {
+    //todo если будет реальный репозиторий с бд, то сделать :
+    /*
+        private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+         withContext(dispatcher) {
+            //code
+         }
+     */
+
     private val meters = mutableListOf<Meter>()
 
     suspend fun meters(): List<Meter> = meters

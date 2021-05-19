@@ -4,6 +4,14 @@ import org.vsu.pt.team2.utilitatemmetrisapp.models.Account
 
 
 class AccountRepo {
+    //todo если будет реальный репозиторий с бд, то сделать:
+    /*
+        private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+         withContext(dispatcher) {
+            //code
+         }
+     */
+
     private val accounts = mutableListOf<Account>()
 
     fun accounts(): List<Account> = accounts

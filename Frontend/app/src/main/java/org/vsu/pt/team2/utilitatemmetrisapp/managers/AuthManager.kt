@@ -15,22 +15,40 @@ class AuthManager @Inject constructor(
 
     suspend fun authUser(email: String, pass: String): ApiResult<SuccessfulLoginUser> {
         val result = authWorker.login(LoginUser(email, pass))
-        result.ifSuccess {
-            sessionManager.isDemo = false
-            sessionManager.user = User(this.id, this.email, this.token)
-        }.ifError {
-            sessionManager.clear()
+        when (result) {
+            is ApiResult.NetworkError -> {
+                /*showtoast internet lost*/
+            }
+            is ApiResult.GenericError -> {
+                sessionManager.clear()
+            }
+            is ApiResult.Success -> {
+                sessionManager.isDemo = false
+                result.value.apply {
+                    sessionManager.user = User(this.id, this.email, this.token)
+                }
+
+            }
         }
         return result
     }
 
     suspend fun authUser(email: String): ApiResult<SuccessfulLoginUser> {
         val result = authWorker.login(QuickLoginUser(email))
-        result.ifSuccess {
-            sessionManager.isDemo = true
-            sessionManager.user = User(this.id, this.email, this.token)
-        }.ifError {
-            sessionManager.clear()
+        when (result) {
+            is ApiResult.NetworkError -> {
+                /*showtoast internet lost*/
+            }
+            is ApiResult.GenericError -> {
+                sessionManager.clear()
+            }
+            is ApiResult.Success -> {
+                sessionManager.isDemo = true
+                result.value.apply {
+                    sessionManager.user = User(this.id, this.email, this.token)
+                }
+
+            }
         }
         return result
     }

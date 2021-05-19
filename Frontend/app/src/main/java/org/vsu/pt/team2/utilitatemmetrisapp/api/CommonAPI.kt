@@ -13,7 +13,7 @@ interface CommonAPI {
     @GET("/flat/{userId}")
     fun getAccounts(
             @Path("userId") userId: Int
-    ): Response<List<Flat>>
+    ): List<Flat>
 
 
     /**
@@ -23,12 +23,12 @@ interface CommonAPI {
     @GET("/metrics/{flatId}")
     fun getMetrics(
             @Path("flatId") flatIdentifier: String
-    ): Response<List<Metric>>
+    ): List<Metric>
 
     @PUT("/metrics/update")
     fun updateMetric(
             @Body currentMetric: CurrentMetric
-    ): Response<*>
+    ): Nothing
 
 
     /**
@@ -36,10 +36,10 @@ interface CommonAPI {
      */
 
     @POST("/payment/metrics")
-    fun toPay(@Body body: Payment): Response<List<ItemPaymentHistory>>
+    fun toPay(@Body body: Payment): List<ItemPaymentHistory>
 
     @GET("/payment/history")
     fun paymentHistory(
             @Body informationAboutPayment: InformationAboutPayment
-    ): Response<List<ItemPaymentHistory>>
+    ): List<ItemPaymentHistory>
 }

@@ -1,36 +1,14 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.network
 
-class ApiResult<T> {
-    var data: T? = null
-    var errCode: Int? = null
+sealed class ApiResult<out T> {
 
-    fun isSuccess() = errCode == null
+    data class Success<T>(val value: T) : ApiResult<T>()
 
-    fun ifSuccess(func: T.() -> Unit): ApiResult<T> {
-        if (isSuccess())
-            data?.let(func)
-        return this
-    }
+    data class GenericError(
+        val code: Int? = null,
+        val error: ErrorResponse? = null
+    ) : ApiResult<Nothing>()
 
-    fun ifError(func: (errCode: Int) -> Unit): ApiResult<T> {
-        if (!isSuccess())
-            errCode?.let(func)
-        return this
-    }
-
-    companion object {
-        fun <T> Error(responseCode: Int): ApiResult<T> {
-            return ApiResult<T>().apply {
-                errCode = responseCode
-            }
-        }
-
-        fun <T> Success(data: T): ApiResult<T> {
-            return ApiResult<T>().apply {
-                this.data = data
-            }
-        }
-    }
-
+    object NetworkError : ApiResult<Nothing>()
 
 }

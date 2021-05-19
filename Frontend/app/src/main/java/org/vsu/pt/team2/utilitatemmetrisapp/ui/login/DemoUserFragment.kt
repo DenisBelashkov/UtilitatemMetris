@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.*
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentDemoUserBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.AuthManager
+import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BigGeneralButton
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.ImeActionListener
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.EmailValidator
@@ -64,19 +65,19 @@ class DemoUserFragment : Fragment() {
                 button.setStateLoading()
                 println(email)
 
-                //todo here request to server
-//                delay(2000L)
-                val authResult = withContext(Dispatchers.IO) {
-                    authManager.authUser(email)
-                }
-
-                authResult.ifSuccess {
-                    (activity as? AppCompatActivity)?.openActivity(
-                        MainActivity::class.java,
-                        true
-                    )
-                }.ifError {
-                    //todo show error
+                when (authManager.authUser(email)) {
+                    is ApiResult.NetworkError -> {
+                        //todo show error
+                    }
+                    is ApiResult.GenericError -> {
+                        //todo show error
+                    }
+                    is ApiResult.Success -> {
+                        (activity as? AppCompatActivity)?.openActivity(
+                            MainActivity::class.java,
+                            true
+                        )
+                    }
                 }
 
                 button.setStateDefault()

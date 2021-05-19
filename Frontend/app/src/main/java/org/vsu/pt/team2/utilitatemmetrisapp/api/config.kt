@@ -1,4 +1,4 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.api
 
-//todo Корректный url ввести
-const val BASE_URL = "http://virtserver.swaggerhub.com/TNTrol/taras_p/1.0.0/"
+
+const val BASE_URL = "https://f1c369a0-83ab-49db-88fd-123425ddbea2.mock.pstmn.io/"

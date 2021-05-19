@@ -14,6 +14,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentLoginBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.AuthManager
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.IntentExtrasManager
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.SessionManager
+import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BigGeneralButton
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.ImeActionListener
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.EmailValidator
@@ -97,19 +98,19 @@ class LoginFragment : Fragment() {
                 println(email)
                 println(password)
 
-                //todo here request to server
-                delay(2000L)
-                val authResult = withContext(Dispatchers.IO) {
-                    authManager.authUser(email, password)
-                }
-
-                authResult.ifSuccess {
-                    (activity as? AppCompatActivity)?.openActivity(
-                        MainActivity::class.java,
-                        true
-                    )
-                }.ifError {
-                    //todo showError
+                when (authManager.authUser(email, password)) {
+                    is ApiResult.NetworkError -> {
+                        //todo show error
+                    }
+                    is ApiResult.GenericError -> {
+                        //todo show error
+                    }
+                    is ApiResult.Success -> {
+                        (activity as? AppCompatActivity)?.openActivity(
+                            MainActivity::class.java,
+                            true
+                        )
+                    }
                 }
 
                 button.setStateDefault()
