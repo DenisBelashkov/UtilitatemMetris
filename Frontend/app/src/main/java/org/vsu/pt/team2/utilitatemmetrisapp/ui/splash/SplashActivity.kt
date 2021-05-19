@@ -14,7 +14,6 @@ import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.LoadingAnimationContro
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.login.LoginActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceActivity
 
 
 class SplashActivity : AppCompatActivity() {

@@ -1,21 +1,24 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.di
 
 import dagger.Component
-import org.vsu.pt.team2.utilitatemmetrisapp.network.BaseWorker
-import org.vsu.pt.team2.utilitatemmetrisapp.repository.AccountRepo
-import org.vsu.pt.team2.utilitatemmetrisapp.repository.MeterRepo
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.SavedMetersFragment
+import org.vsu.pt.team2.utilitatemmetrisapp.di.components.AccountComponent
+import org.vsu.pt.team2.utilitatemmetrisapp.di.components.AuthComponent
+import org.vsu.pt.team2.utilitatemmetrisapp.di.components.MeterComponent
+import org.vsu.pt.team2.utilitatemmetrisapp.di.components.SettingsComponent
+import org.vsu.pt.team2.utilitatemmetrisapp.managers.SessionManager
 import javax.inject.Singleton
 
-@Component(modules = [NetworkModule::class, RepositoryModule::class, ManagersModule::class])
+@Component(modules = [NetworkModule::class, RepositoryModule::class, CommonModule::class])
 @Singleton
 interface ApplicationComponent {
 
-    fun inject(fragment: SavedMetersFragment)
+    fun meterComponent(): MeterComponent
 
-    fun getMeterRepository(): MeterRepo
+    fun accountComponent(): AccountComponent
 
-    fun getAccountRepository(): AccountRepo
+    fun settingsComponent(): SettingsComponent
 
-    fun getBaseWorker(): BaseWorker
+    fun authComponent(): AuthComponent
+
+    fun getSessionManager(): SessionManager
 }

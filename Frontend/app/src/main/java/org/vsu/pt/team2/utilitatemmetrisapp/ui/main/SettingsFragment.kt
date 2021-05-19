@@ -1,5 +1,6 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.ui.main
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import com.orhanobut.logger.Logger
@@ -9,10 +10,15 @@ import org.vsu.pt.team2.utilitatemmetrisapp.managers.SessionManager
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.DisabledDrawerFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.login.LoginActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.appCompatActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.myApplication
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.GeneralButtonViewModel
+import javax.inject.Inject
 
 class SettingsFragment : DisabledDrawerFragment(R.string.fragment_title_settings) {
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     private lateinit var binding: FragmentSettingsBinding
 
@@ -22,7 +28,7 @@ class SettingsFragment : DisabledDrawerFragment(R.string.fragment_title_settings
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
-        binding.email = SessionManager.user.email
+        binding.email = sessionManager.user.email
         binding.settingsGeneralButtonChangeEmail.viewmodel = GeneralButtonViewModel(
             getString(R.string.settings_button_text_change_email)
         ) {
@@ -31,7 +37,7 @@ class SettingsFragment : DisabledDrawerFragment(R.string.fragment_title_settings
         }
 
         binding.settingsGeneralButtonChangePass.root.visibility =
-            if (SessionManager.isDemo) View.GONE
+            if (sessionManager.isDemo) View.GONE
             else View.VISIBLE
 
         binding.settingsGeneralButtonChangePass.viewmodel = GeneralButtonViewModel(
@@ -48,6 +54,11 @@ class SettingsFragment : DisabledDrawerFragment(R.string.fragment_title_settings
         super.onStart()
     }
 
+    override fun onAttach(context: Context) {
+        myApplication()?.appComponent?.settingsComponent()?.inject(this)
+        super.onAttach(context)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         activity?.menuInflater?.inflate(R.menu.settings_action_menu, menu)
     }
@@ -55,7 +66,7 @@ class SettingsFragment : DisabledDrawerFragment(R.string.fragment_title_settings
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.settings_menu_exit -> {
-                SessionManager.clear()
+                sessionManager.clear()
                 appCompatActivity()?.openActivity(
                     LoginActivity::class.java,
                     true,

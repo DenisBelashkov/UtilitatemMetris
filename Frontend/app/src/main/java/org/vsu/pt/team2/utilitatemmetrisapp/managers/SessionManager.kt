@@ -1,8 +1,11 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.managers
 
 import org.vsu.pt.team2.utilitatemmetrisapp.models.User
+import javax.inject.Inject
 
-object SessionManager {
+class SessionManager @Inject constructor(
+    //todo shared prefs
+) {
 
     private final val EmptyUser = User(0, "", "")
 

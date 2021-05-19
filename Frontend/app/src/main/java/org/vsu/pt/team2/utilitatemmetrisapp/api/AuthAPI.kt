@@ -9,8 +9,8 @@ import retrofit2.http.POST
 
 interface AuthAPI {
     @POST("/login/user")
-    fun login( @Body body: LoginUser) : Response<SuccessfulLoginUser>
+    suspend fun login( @Body body: LoginUser) : Response<SuccessfulLoginUser>
 
     @POST("/login/quick")
-    fun login( @Body body: QuickLoginUser) : Response<SuccessfulLoginUser>
+    suspend fun login( @Body body: QuickLoginUser) : Response<SuccessfulLoginUser>
 }

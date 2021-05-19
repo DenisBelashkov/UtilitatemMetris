@@ -25,6 +25,30 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    flavorDimensions "appType"
+    productFlavors {
+        create("defaultFlavor"){
+            dimension = "appType"
+        }
+        create("mockFlavor"){
+            dimension = "appType"
+            applicationIdSuffix = ".offlineDemo"
+            versionNameSuffix = "-offlineDemo"
+        }
+    }
+    sourceSets {
+        'defaultFlavor' {
+            java {
+                srcDirs = ['src/defaultFlavor/java']
+            }
+        }
+
+        mockFlavor {
+            java {
+                srcDirs = ['src/mockFlavor/java']
+            }
+        }
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

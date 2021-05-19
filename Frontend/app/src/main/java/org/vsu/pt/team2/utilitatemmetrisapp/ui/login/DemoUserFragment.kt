@@ -1,5 +1,6 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.ui.login
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,22 +9,24 @@ import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentDemoUserBinding
-import org.vsu.pt.team2.utilitatemmetrisapp.managers.SessionManager
-import org.vsu.pt.team2.utilitatemmetrisapp.models.User
+import org.vsu.pt.team2.utilitatemmetrisapp.managers.AuthManager
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BigGeneralButton
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.ImeActionListener
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.EmailValidator
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.hideKeyboard
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.myApplication
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText
 import studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+import javax.inject.Inject
 
 class DemoUserFragment : Fragment() {
+
+    @Inject
+    lateinit var authManager: AuthManager
 
     private lateinit var emailEditText: ExtendedEditText
     private lateinit var emailTextFieldBoxes: TextFieldBoxes
@@ -35,15 +38,15 @@ class DemoUserFragment : Fragment() {
         emailTextFieldBoxes = binding.demoUserEmailTextfieldboxes
         emailEditText = binding.demoUserEmailExtendededittext.also {
             it.setOnEditorActionListener(
-                    ImeActionListener(ImeActionListener.Association(EditorInfo.IME_ACTION_GO) { doRequest() })
+                ImeActionListener(ImeActionListener.Association(EditorInfo.IME_ACTION_GO) { doRequest() })
             )
         }
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         val binding = FragmentDemoUserBinding.inflate(layoutInflater, container, false)
         initFields(binding)
@@ -62,13 +65,19 @@ class DemoUserFragment : Fragment() {
                 println(email)
 
                 //todo here request to server
-                delay(2000L)
-                SessionManager.setSession(User(1, emailEditText.text.toString(), ""), true)
+//                delay(2000L)
+                val authResult = withContext(Dispatchers.IO) {
+                    authManager.authUser(email)
+                }
 
-                (activity as? AppCompatActivity)?.openActivity(
+                authResult.ifSuccess {
+                    (activity as? AppCompatActivity)?.openActivity(
                         MainActivity::class.java,
                         true
-                )
+                    )
+                }.ifError {
+                    //todo show error
+                }
 
                 button.setStateDefault()
             }
@@ -87,5 +96,10 @@ class DemoUserFragment : Fragment() {
 
         if (!containsError)
             func.invoke(email)
+    }
+
+    override fun onAttach(context: Context) {
+        myApplication()?.appComponent?.authComponent()?.injectDemoUserFragment(this)
+        super.onAttach(context)
     }
 }

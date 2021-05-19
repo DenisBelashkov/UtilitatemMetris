@@ -27,8 +27,8 @@ import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
 class DrawerController(
     private val activity: AppCompatActivity,
     private val materialDrawerSliderView: MaterialDrawerSliderView,
-    private val appbarContentBinding: AppbarContentBinding
-
+    private val appbarContentBinding: AppbarContentBinding,
+    private val sessionManager: SessionManager,
 ) {
     private var mDrawerLayout: DrawerLayout? = null
 
@@ -130,7 +130,7 @@ class DrawerController(
     }
 
     private fun createDrawer() {
-        val drawerItemsEasyCreator = if (SessionManager.isDemo) initAnonimous() else initDefalut()
+        val drawerItemsEasyCreator = if (sessionManager.isDemo) initAnonimous() else initDefalut()
         for (item in drawerItemsEasyCreator.items()) {
             materialDrawerSliderView.addItems(item)
         }
@@ -151,8 +151,8 @@ class DrawerController(
 
     private fun createHeader() {
         val profileItem = ProfileDrawerItem().apply {
-            nameText = SessionManager.user.email
-            descriptionText = if (SessionManager.isDemo) "Анонимный аккаунт" else ""
+            nameText = sessionManager.user.email
+            descriptionText = if (sessionManager.isDemo) "Анонимный аккаунт" else ""
         }
         AccountHeaderView(activity).apply {
             attachToSliderView(materialDrawerSliderView)

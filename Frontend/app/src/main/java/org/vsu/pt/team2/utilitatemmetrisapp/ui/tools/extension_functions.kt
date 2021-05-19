@@ -114,4 +114,7 @@ fun AppCompatActivity.setTitleIfMain(title: String) {
 
 fun AppCompatActivity.myApplication(): MyApplication? = application as? MyApplication
 
+fun AppCompatActivity.requireMyApplication(): MyApplication = application as? MyApplication
+    ?: throw RuntimeException("cant get my application, but its required")
+
 fun Fragment.myApplication(): MyApplication? = appCompatActivity()?.myApplication()

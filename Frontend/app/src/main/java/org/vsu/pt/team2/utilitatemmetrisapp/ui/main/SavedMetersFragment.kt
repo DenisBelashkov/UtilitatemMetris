@@ -39,7 +39,9 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
     }
 
     override fun onAttach(context: Context) {
-        myApplication()?.appComponent?.inject(this)
+        myApplication()?.appComponent
+            ?.meterComponent()
+            ?.injectSavedMetersFragment(this)
         super.onAttach(context)
     }
 

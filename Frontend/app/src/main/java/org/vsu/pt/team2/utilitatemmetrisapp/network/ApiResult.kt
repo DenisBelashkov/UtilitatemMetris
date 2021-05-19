@@ -6,6 +6,18 @@ class ApiResult<T> {
 
     fun isSuccess() = errCode == null
 
+    fun ifSuccess(func: T.() -> Unit): ApiResult<T> {
+        if (isSuccess())
+            data?.let(func)
+        return this
+    }
+
+    fun ifError(func: (errCode: Int) -> Unit): ApiResult<T> {
+        if (!isSuccess())
+            errCode?.let(func)
+        return this
+    }
+
     companion object {
         fun <T> Error(responseCode: Int): ApiResult<T> {
             return ApiResult<T>().apply {

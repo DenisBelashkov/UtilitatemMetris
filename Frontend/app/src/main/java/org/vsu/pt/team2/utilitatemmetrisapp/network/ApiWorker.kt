@@ -22,7 +22,4 @@ open class ApiWorker {
             ApiResult.Error(response.code())
         }
     }
-
-
-
 }

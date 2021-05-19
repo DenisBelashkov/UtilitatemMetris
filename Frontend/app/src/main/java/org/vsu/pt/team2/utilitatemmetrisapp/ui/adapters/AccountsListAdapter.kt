@@ -1,12 +1,10 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.ItemAccountBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.AccountViewModel
 

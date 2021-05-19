@@ -21,10 +21,11 @@ class NetworkModule {
     @Singleton
     @Provides
     fun provideOkHttpClient(
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
+        authInterceptor: AuthInterceptor,
     ): OkHttpClient {
         return OkHttpClient().newBuilder()
-            .addInterceptor(AuthInterceptor())
+            .addInterceptor(authInterceptor)
             .addInterceptor(CommonDataInterceptor())
             .addInterceptor(loggingInterceptor)
             .connectTimeout(TIMEOUT, TimeUnit.SECONDS)

@@ -12,7 +12,6 @@ import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.setFromVM
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
-import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterItemViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
 
 class AddMeterFragment : BaseTitledFragment(R.string.fragment_title_add_meter) {

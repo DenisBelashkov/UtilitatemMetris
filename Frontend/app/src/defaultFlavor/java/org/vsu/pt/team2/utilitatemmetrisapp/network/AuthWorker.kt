@@ -8,7 +8,7 @@ import retrofit2.Retrofit
 import javax.inject.Inject
 
 class AuthWorker @Inject constructor(
-    val retrofit: Retrofit
+    retrofit: Retrofit
 ) : ApiWorker() {
 
     private val authApi = retrofit.create(AuthAPI::class.java)

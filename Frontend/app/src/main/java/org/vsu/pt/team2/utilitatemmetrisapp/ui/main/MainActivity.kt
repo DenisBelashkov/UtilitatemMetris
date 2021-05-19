@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil.setContentView
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.ActivityMainBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.DrawerController
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.requireMyApplication
 
 
 class MainActivity : AppCompatActivity() {
@@ -23,7 +24,12 @@ class MainActivity : AppCompatActivity() {
         val materialDrawerSliderView = binding.slider
 
         drawerController =
-            DrawerController(this, materialDrawerSliderView, binding.appbarContentInclude)
+            DrawerController(
+                this,
+                materialDrawerSliderView,
+                binding.appbarContentInclude,
+                requireMyApplication().appComponent.getSessionManager(),
+            )
         drawerController.create()
         drawerController.enableDrawer()
     }
