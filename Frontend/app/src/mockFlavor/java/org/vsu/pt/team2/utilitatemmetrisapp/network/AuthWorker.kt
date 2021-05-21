@@ -10,30 +10,30 @@ import retrofit2.Retrofit
 import javax.inject.Inject
 
 class AuthWorker @Inject constructor(
-    //retrofit: Retrofit
+        //retrofit: Retrofit
 ) : ApiWorker() {
 
 //    private val authApi = retrofit.create(AuthAPI::class.java)
 
-    suspend fun login(loginUser: LoginUser) : ApiResult<SuccessfulLoginUser>{
+    suspend fun login(loginUser: LoginUser): ApiResult<SuccessfulLoginUser> {
         delay(2000L)
-        return ApiResult<SuccessfulLoginUser>().apply {
-            data = SuccessfulLoginUser(
-                "email",
-                -1,
-                "jwtjwtjwt"
-            )
-        }
+        return ApiResult.Success<SuccessfulLoginUser>(
+                SuccessfulLoginUser(
+                        "email",
+                        -1,
+                        "jwtjwtjwt"
+                )
+        )
     }
 
-    suspend fun login(quickLoginUser: QuickLoginUser) : ApiResult<SuccessfulLoginUser>{
+    suspend fun login(quickLoginUser: QuickLoginUser): ApiResult<SuccessfulLoginUser> {
         delay(2000L)
-        return ApiResult<SuccessfulLoginUser>().apply {
-            data = SuccessfulLoginUser(
-                "email",
-                -1,
-                "jwtjwtjwt"
-            )
-        }
+        return ApiResult.Success<SuccessfulLoginUser>(
+                SuccessfulLoginUser(
+                        "email",
+                        -1,
+                        "jwtjwtjwt"
+                )
+        )
     }
 }

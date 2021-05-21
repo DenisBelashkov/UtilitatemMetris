@@ -1,11 +1,9 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.ui
 
 import android.content.Context
-import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentMeterBinding
-import org.vsu.pt.team2.utilitatemmetrisapp.databinding.ItemAccountBinding
-import org.vsu.pt.team2.utilitatemmetrisapp.databinding.ItemMeterBinding
-import org.vsu.pt.team2.utilitatemmetrisapp.databinding.ItemMeterWithCheckboxBinding
+import org.vsu.pt.team2.utilitatemmetrisapp.databinding.*
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.AccountViewModel
+import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.HistoryMeterItemViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterItemViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
 
@@ -20,6 +18,14 @@ fun ItemMeterWithCheckboxBinding.setFromVM(mvm: MeterItemViewModel, context: Con
     setBacklogValue(mvm.backlog)
     setMeterIdentifier(mvm.identifier)
     meterType = mvm.type.toLanguagedString(context)
+}
+
+fun ItemMeterHistoryBinding.setFromVM(hmvm: HistoryMeterItemViewModel, context: Context) {
+    setMeterIdentifier(hmvm.identifier)
+    meterType = hmvm.type.toLanguagedString(context)
+    sum = hmvm.sum
+    date = hmvm.date
+    address = hmvm.address
 }
 
 fun ItemAccountBinding.setFromVM(accountViewModel: AccountViewModel) {
