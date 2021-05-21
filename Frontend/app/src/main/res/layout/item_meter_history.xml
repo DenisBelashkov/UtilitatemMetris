@@ -7,6 +7,10 @@
         <import type="android.view.View" />
 
         <variable
+            name="should_show_labels"
+            type="Boolean" />
+
+        <variable
             name="sum"
             type="Double" />
 
@@ -35,7 +39,8 @@
         android:focusable="true"
         android:minHeight="70dp"
         android:paddingStart="12dp"
-        android:paddingTop="6dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="6dp"
         android:paddingEnd="12dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -58,6 +63,7 @@
                     android:text="@string/meter_text"
                     android:textColor="@color/gray"
                     android:textSize="@dimen/text_small_12"
+                    android:visibility="@{should_show_labels?View.VISIBLE:View.GONE}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -86,6 +92,7 @@
                     android:text="@string/meter_type_text"
                     android:textColor="@color/gray"
                     android:textSize="@dimen/text_small_12"
+                    android:visibility="@{should_show_labels?View.VISIBLE:View.GONE}"
                     app:layout_constraintBottom_toTopOf="@+id/meter_type_value"
                     app:layout_constraintEnd_toEndOf="parent" />
 
@@ -105,29 +112,30 @@
             android:id="@+id/mid_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:paddingTop="4dp"
             app:layout_constraintTop_toBottomOf="@id/top_content">
 
             <TextView
                 android:id="@+id/meter_sum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_big_20"
-                android:textColor="@color/blue_primary"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 android:text="@{sum.toString()}"
-                />
+                android:textColor="@color/blue_primary"
+                android:textSize="@dimen/text_big_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_small_12"
-                android:textColor="@color/dark_text"
                 android:layout_marginStart="2dp"
-                app:layout_constraintStart_toEndOf="@+id/meter_sum"
-                app:layout_constraintBottom_toBottomOf="@+id/meter_sum"
                 android:text="р."
-                />
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_small_12"
+                app:layout_constraintBottom_toBottomOf="@+id/meter_sum"
+                app:layout_constraintStart_toEndOf="@+id/meter_sum" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -139,22 +147,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{date}"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/text_small_12"
-                android:text="@{date}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{address}"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/text_small_12"
-                android:text="@{address}"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -163,7 +169,8 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/dark_text"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

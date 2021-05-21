@@ -21,7 +21,11 @@ class HistoryFragment : BaseTitledFragment(R.string.fragment_history_title) {
         //открыть фрагмент с данной квитанцией
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentHistoryBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -34,14 +38,33 @@ class HistoryFragment : BaseTitledFragment(R.string.fragment_history_title) {
     private fun initFields(binding: FragmentHistoryBinding) {
 
         binding.historyMetersListRecyclerView.layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.historyMetersListRecyclerView.adapter = adapter
     }
 
-    private fun loadData(){
+    private fun loadData() {
         val data = listOf<HistoryMeterItemViewModel>(
-                HistoryMeterItemViewModel("765432bhjdskf",  MeterType.ColdWater,123.3,  "2014:01:12","Ленинский проспект, 102, кв 14"),
-                HistoryMeterItemViewModel("345hj345h34",    MeterType.Elect,    3423.9, "2014:01:12","Ленинский проспект, 102, кв 14"),
+            HistoryMeterItemViewModel(
+                "765432bhjdskf",
+                MeterType.ColdWater,
+                123.3,
+                "2014:01:12",
+                "Ленинский проспект, 102, кв 14"
+            ),
+            HistoryMeterItemViewModel(
+                "345hj345h34",
+                MeterType.Elect,
+                3423.9,
+                "2014:01:12",
+                "Ленинский проспект, 102, кв 14"
+            ),
+            HistoryMeterItemViewModel(
+                "j7k567kj56321",
+                MeterType.Heating,
+                1029.9,
+                "2014:01:12",
+                "Ленинский проспект, 102, кв 14"
+            ),
         )
 
         adapter.submitList(data)

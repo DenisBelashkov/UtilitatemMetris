@@ -77,15 +77,7 @@ object BundleManager {
                         return null
                     }
                 }
-                val backlog = getDouble("Backlog").also {
-                    if (it == 0.0) {
-                        logger.log(
-                            java.util.logging.Level.SEVERE,
-                            "bundle contains zero backlog"
-                        )
-                        return null
-                    }
-                }
+                val backlog = getDouble("Backlog")
                 val isSaved = getBoolean("IsSaved", false)
                 return MeterViewModel(
                     id,

@@ -12,12 +12,16 @@ fun ItemMeterBinding.setFromVM(mvm: MeterItemViewModel, context: Context) {
     setBacklogValue(mvm.backlog)
     setMeterIdentifier(mvm.identifier)
     meterType = mvm.type.toLanguagedString(context)
+
+    shouldShowLabels = true
 }
 
 fun ItemMeterWithCheckboxBinding.setFromVM(mvm: MeterItemViewModel, context: Context) {
     setBacklogValue(mvm.backlog)
     setMeterIdentifier(mvm.identifier)
     meterType = mvm.type.toLanguagedString(context)
+
+    shouldShowLabels = true
 }
 
 fun ItemMeterHistoryBinding.setFromVM(hmvm: HistoryMeterItemViewModel, context: Context) {
@@ -26,6 +30,8 @@ fun ItemMeterHistoryBinding.setFromVM(hmvm: HistoryMeterItemViewModel, context: 
     sum = hmvm.sum
     date = hmvm.date
     address = hmvm.address
+
+    shouldShowLabels = false
 }
 
 fun ItemAccountBinding.setFromVM(accountViewModel: AccountViewModel) {
