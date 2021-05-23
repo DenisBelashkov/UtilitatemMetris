@@ -8,7 +8,7 @@ import jwt
 class RegistrationModule(Module):
 	def __init__(self):
 		gmailUser = 'tntrol.go@gmail.com'
-		gmailPassword = 'fuck_you1215'
+		gmailPassword = ''
 		mailServer = smtplib.SMTP('smtp.gmail.com', 587)
 		mailServer.ehlo()
 		mailServer.starttls()
