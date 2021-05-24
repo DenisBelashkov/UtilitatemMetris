@@ -3,7 +3,7 @@ package org.vsu.pt.team2.utilitatemmetrisapp.repository
 import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 
 
-class MeterRepo {
+class SavedMeterRepo {
     //todo если будет реальный репозиторий с бд, то сделать :
     /*
         private val dispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -15,6 +15,11 @@ class MeterRepo {
     private val meters = mutableListOf<Meter>()
 
     suspend fun meters(): List<Meter> = meters
+
+    suspend fun meters(identifier: String): List<Meter> = meters.filter { it.identifier == identifier }
+
+    suspend fun meterOrNull(identifier: String): Meter? = meters.firstOrNull { it.identifier == identifier }
+
 
     suspend fun clear() {
         meters.clear()
