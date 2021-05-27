@@ -1,5 +1,6 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.viewmodels
 
+import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 
 class MeterViewModel(
@@ -36,6 +37,20 @@ class MeterViewModel(
                 curMonthData,
                 mivm.backlog,
                 isSaved
+            )
+        }
+
+        fun fromMeter(
+            meter: Meter
+        ): MeterViewModel {
+            return MeterViewModel(
+                meter.identifier,
+                meter.type,
+                meter.tariff,
+                meter.prevMonthData,
+                meter.curMonthData,
+                -meter.balance,
+                meter.isSaved
             )
         }
     }

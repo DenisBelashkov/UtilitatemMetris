@@ -1,6 +1,7 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.managers
 
 import android.os.Bundle
+import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.AccountViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
@@ -26,20 +27,20 @@ object BundleManager {
         }
     )
 
-    val MeterViewModelBundlePackager = object : BundleManager.IBundlePackager<MeterViewModel> {
-        override fun putInto(bundle: Bundle, meterVM: MeterViewModel) {
+    val MeterBundlePackager = object : BundleManager.IBundlePackager<Meter> {
+        override fun putInto(bundle: Bundle, meter: Meter) {
             bundle.apply {
-                putString("Identifier", meterVM.identifier)
-                putDouble("Backlog", meterVM.backlog)
-                putDouble("CurMonthData", meterVM.curMonthData)
-                putBoolean("IsSaved", meterVM.isSaved)
-                putDouble("PrevMonthData", meterVM.prevMonthData)
-                putDouble("Tariff", meterVM.tariff)
-                putString("MeterType", meterVM.type.name)
+                putString("Identifier", meter.identifier)
+                putDouble("Balance", meter.balance)
+                putDouble("CurMonthData", meter.curMonthData)
+                putDouble("PrevMonthData", meter.prevMonthData)
+                putDouble("Tariff", meter.tariff)
+                putString("MeterType", meter.type.name)
+                putBoolean("IsSaved", meter.isSaved)
             }
         }
 
-        override fun getFrom(bundle: Bundle): MeterViewModel? {
+        override fun getFrom(bundle: Bundle): Meter? {
             bundle.apply {
                 val id = getString("Identifier").also {
                     if (it == null)
@@ -77,23 +78,15 @@ object BundleManager {
                         return null
                     }
                 }
-                val backlog = getDouble("Backlog").also {
-                    if (it == 0.0) {
-                        logger.log(
-                            java.util.logging.Level.SEVERE,
-                            "bundle contains zero backlog"
-                        )
-                        return null
-                    }
-                }
+                val balance = getDouble("Balance")
                 val isSaved = getBoolean("IsSaved", false)
-                return MeterViewModel(
+                return Meter(
                     id,
                     meterType,
                     tariff,
                     prevMonthData,
                     curMonthData,
-                    backlog,
+                    balance,
                     isSaved,
                 )
             }

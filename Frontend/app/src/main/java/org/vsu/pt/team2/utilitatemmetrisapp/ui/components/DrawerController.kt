@@ -123,7 +123,7 @@ class DrawerController(
             addItem(
                 simpleMenuItem("История выплат"),
                 { view, pos, drItem ->
-                    //todo
+                    activity.replaceFragment(HistoryFragment())
                 }
             )
         }

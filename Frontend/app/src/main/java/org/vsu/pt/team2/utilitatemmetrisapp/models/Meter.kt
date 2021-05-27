@@ -9,16 +9,19 @@ data class Meter(
     var prevMonthData: Double,
     var curMonthData: Double,
     var balance: Double,
+    var isSaved: Boolean
 ) {
     constructor(
-        metric: Metric
+        metric: Metric,
+        isSaved: Boolean,
     ) : this(
         metric.identifier,
         metric.typeMetric,
         metric.tariff,
         metric.prevValue,
         metric.curValue,
-        metric.balance
+        metric.balance,
+        isSaved,
     )
 
     override fun equals(other: Any?): Boolean {

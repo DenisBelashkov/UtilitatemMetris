@@ -29,14 +29,9 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
 
     private val adapter = MetersWithCheckboxListAdapter {
         //todo Получить всю инфу о счётчике из meterRepository например
-        val vm = MeterViewModel.fromMeterItemVM(
-            it,
-            4.86,
-            3098.92,
-            3124.12,
-            false
-        )
-        replaceFragment(MeterFragment.createWithVM(vm))
+        lifecycleScope.launch {
+            replaceFragment(MeterFragment.createWithMeterIdentifier(it.identifier))
+        }
     }
 
     override fun onAttach(context: Context) {
