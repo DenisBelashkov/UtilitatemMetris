@@ -7,6 +7,10 @@
         <import type="android.view.View" />
 
         <variable
+            name="should_show_labels"
+            type="Boolean" />
+
+        <variable
             name="backlog_value"
             type="Double" />
 
@@ -26,11 +30,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/ripple_meter_item"
         android:paddingStart="12dp"
         android:paddingTop="6dp"
-        android:paddingEnd="12dp"
-        android:background="@drawable/ripple_meter_item"
-        >
+        android:paddingEnd="12dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/top_content"
@@ -52,6 +55,7 @@
                     android:text="@string/meter_text"
                     android:textColor="@color/gray"
                     android:textSize="@dimen/text_small_12"
+                    android:visibility="@{should_show_labels?View.VISIBLE:View.GONE}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -80,6 +84,7 @@
                     android:text="@string/meter_type_text"
                     android:textColor="@color/gray"
                     android:textSize="@dimen/text_small_12"
+                    android:visibility="@{should_show_labels?View.VISIBLE:View.GONE}"
                     app:layout_constraintBottom_toTopOf="@+id/meter_type_value"
                     app:layout_constraintEnd_toEndOf="parent" />
 

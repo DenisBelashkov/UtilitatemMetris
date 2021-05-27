@@ -1,7 +1,5 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.viewmodels
 
-import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
-
 class AccountViewModel(
     var identifier: String,
     var address: String,

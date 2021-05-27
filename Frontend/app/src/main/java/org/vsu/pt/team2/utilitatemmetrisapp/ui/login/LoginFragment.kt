@@ -1,5 +1,6 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.ui.login
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.EditorInfo
@@ -7,25 +8,33 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentLoginBinding
+import org.vsu.pt.team2.utilitatemmetrisapp.managers.AuthManager
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.IntentExtrasManager
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.SessionManager
+import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BigGeneralButton
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.ImeActionListener
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.EmailValidator
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.PasswordValidator
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.hideKeyboard
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.myApplication
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.LoginViewModel
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText
 import studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+import javax.inject.Inject
 
 class LoginFragment : Fragment() {
+
+    @Inject
+    lateinit var sessionManager: SessionManager
+
+    @Inject
+    lateinit var authManager: AuthManager
 
     private var job: Job? = null
     private lateinit var button: BigGeneralButton
@@ -44,7 +53,7 @@ class LoginFragment : Fragment() {
         emailEditText = binding.loginEmailExtendededittext
         activity?.intent?.let {
             if (IntentExtrasManager.continueRegister.getFrom(it))
-                emailEditText.setText(SessionManager.email)
+                emailEditText.setText(sessionManager.user.email)
         }
         passwordEditText = binding.loginPasswordExtendededittext.also {
             it.setOnEditorActionListener(
@@ -89,19 +98,26 @@ class LoginFragment : Fragment() {
                 println(email)
                 println(password)
 
-                //todo here request to server
-                delay(2000L)
-                SessionManager.setSession(2, emailEditText.text.toString(), false, "")
-
-                (activity as? AppCompatActivity)?.openActivity(
-                    MainActivity::class.java,
-                    true
-                )
+                when (authManager.authUser(email, password)) {
+                    is ApiResult.NetworkError -> {
+                        //todo show error
+                    }
+                    is ApiResult.GenericError -> {
+                        //todo show error
+                    }
+                    is ApiResult.Success -> {
+                        (activity as? AppCompatActivity)?.openActivity(
+                            MainActivity::class.java,
+                            true
+                        )
+                    }
+                }
 
                 button.setStateDefault()
             }
         }
     }
+
 
     private suspend fun validateFieldsThenDo(func: suspend ((String, String) -> Unit)) {
         var containsError = false
@@ -153,5 +169,10 @@ class LoginFragment : Fragment() {
 
     private fun toRegisterClicked() {
         loginViewModel.inLoginMode.postValue(false)
+    }
+
+    override fun onAttach(context: Context) {
+        myApplication()?.appComponent?.authComponent()?.injectLoginFragment(this)
+        super.onAttach(context)
     }
 }
