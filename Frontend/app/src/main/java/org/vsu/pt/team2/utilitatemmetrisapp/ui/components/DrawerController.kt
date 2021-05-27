@@ -106,12 +106,6 @@ class DrawerController(
                 DividerDrawerItem()
             )
             addItem(
-                simpleMenuItem("Добавить счёт"),
-                { view, pos, drItem ->
-                    activity.replaceFragment(AddAccountFragment())
-                }
-            )
-            addItem(
                 simpleMenuItem("Мои счета"),
                 { view, pos, drItem ->
                     activity.replaceFragment(MyAccountsFragment())

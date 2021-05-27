@@ -27,7 +27,6 @@
     <string name="meter_type_electricity">Электричество</string>
     <string name="meter_type_gas">Газ</string>
     <!--    Fragment names      -->
-    <string name="fragment_title_add_account">Добавить счёт</string>
     <string name="fragment_title_add_meter">Добавить счётчик</string>
     <string name="fragment_title_saved_meters">Сохранённые счётчики</string>
     <string name="fragment_title_settings">Настройки</string>
