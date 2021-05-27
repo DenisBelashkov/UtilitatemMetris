@@ -21,7 +21,7 @@ class GeneralWorker @Inject constructor(
         return safeApiCall(dispatcher) { commonAPI.getMetricsByFlatIdentifier(flatIdentifier) }
     }
 
-    suspend fun metricByIdentifier(metricIdentifier: String): ApiResult<Metric> {
+    suspend fun metricByIdentifier(metricIdentifier: String): ApiResult<MetricWithSavedField> {
         return safeApiCall(dispatcher) { commonAPI.getMetricsByIdentifier(metricIdentifier) }
     }
 

@@ -5,9 +5,11 @@ import org.vsu.pt.team2.utilitatemmetrisapp.api.model.Metric
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import javax.inject.Inject
+import kotlin.math.pow
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
-class MeterManagerSupport @Inject constructor(){
+class MeterManagerSupport @Inject constructor() {
     private val random = Random.Default
 
     private fun randomIdentifier(): String = List(16) {
@@ -18,16 +20,26 @@ class MeterManagerSupport @Inject constructor(){
     }.joinToString("")
 
     private fun randomMetric(identifier: String? = null): Metric {
+        fun Double.roundTo(numFractionDigits: Int): Double {
+            val factor = 10.0.pow(numFractionDigits.toDouble())
+            return (this * factor).roundToInt() / factor
+        }
+
         val ident = identifier ?: randomIdentifier()
         val prev = random.nextDouble(200.0, 4000.0)
+        val balance =
+            if (random.nextInt(3) == 0)
+                0.0
+            else
+                -random.nextDouble(2000.0)
         val cur = prev + random.nextDouble(800.0)
         val tariff = random.nextDouble(80.0)
         return Metric(
             ident,
-            random.nextDouble(),
-            prev,
-            cur,
-            tariff,
+            balance.roundTo(2),
+            prev.roundTo(2),
+            cur.roundTo(2),
+            tariff.roundTo(2),
             MeterType.random()
         )
     }
@@ -39,8 +51,13 @@ class MeterManagerSupport @Inject constructor(){
         }
     }
 
-    fun meterByIdentifier(identifier: String): ApiResult<Metric> {
-        return ApiResult.Success<Metric>(randomMetric(identifier))
+    fun meterByIdentifier(identifier: String): ApiResult<Pair<Metric, Boolean>> {
+        return ApiResult.Success<Pair<Metric, Boolean>>(
+            Pair(
+                randomMetric(identifier),
+                random.nextBoolean()
+            )
+        )
     }
 
     fun metersByAccountIdentifier(accountIdentifier: String): ApiResult<List<Metric>> {

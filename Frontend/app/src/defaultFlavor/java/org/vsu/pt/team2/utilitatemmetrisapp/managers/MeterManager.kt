@@ -12,7 +12,7 @@ class MeterManager @Inject constructor(
     val meterRepo: MeterRepo
 ) {
 
-    suspend fun getMeterByIdentifier(identifier: String): ApiResult<Meter> {
+    suspend fun getMeterByIdentifier(identifier: String): ApiResult<Pair<Meter, Boolean>> {
         val res = generalWorker.metricByIdentifier(identifier)
         return when (res) {
             is ApiResult.NetworkError -> {
@@ -22,9 +22,9 @@ class MeterManager @Inject constructor(
                 res
             }
             is ApiResult.Success -> {
-                val meter = Meter(res.value)
-                meterRepo.addMeter(meter)
-                return ApiResult.Success(meter)
+                val meter = Meter(res.value.metric)
+                meterRepo.addMeter(meter, res.value.isSaved)
+                return ApiResult.Success(Pair(meter, res.value.isSaved))
             }
         }
     }
@@ -73,7 +73,7 @@ class MeterManager @Inject constructor(
         return res
     }
 
-    suspend fun daleteMeter(identifier: String): ApiResult<*> {
+    suspend fun deleteMeter(identifier: String): ApiResult<*> {
         val res = generalWorker.saveMetric(identifier)
         return res
     }

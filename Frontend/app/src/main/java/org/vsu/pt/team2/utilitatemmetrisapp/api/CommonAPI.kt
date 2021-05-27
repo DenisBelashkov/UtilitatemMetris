@@ -34,7 +34,7 @@ interface CommonAPI {
     @GET("/metrics/byId/{identifier}")
     suspend fun getMetricsByIdentifier(
         @Path("identifier") metricIdentifier: String
-    ): Metric
+    ): MetricWithSavedField
 
     @GET("/metrics/byUser")
     suspend fun getMetricsSavedByUser(): List<Metric>

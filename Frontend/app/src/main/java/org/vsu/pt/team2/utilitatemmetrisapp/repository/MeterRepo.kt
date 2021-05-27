@@ -3,7 +3,7 @@ package org.vsu.pt.team2.utilitatemmetrisapp.repository
 import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 
 
-class SavedMeterRepo {
+class MeterRepo {
     //todo если будет реальный репозиторий с бд, то сделать :
     /*
         private val dispatcher: CoroutineDispatcher = Dispatchers.IO

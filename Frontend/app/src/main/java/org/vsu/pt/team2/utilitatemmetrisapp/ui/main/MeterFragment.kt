@@ -3,33 +3,29 @@ package org.vsu.pt.team2.utilitatemmetrisapp.ui.main
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentMeterBinding
-import org.vsu.pt.team2.utilitatemmetrisapp.managers.BundleManager
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.MeterManager
 import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.DisabledDrawerFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.setFromVM
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.CreationFragmentArgs
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.bundleArgs
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.requireAppCompatActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.requireMyApplication
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.GeneralButtonViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
-import java.lang.NullPointerException
 import javax.inject.Inject
-import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KProperty
 
 
 class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
     private lateinit var binding: FragmentMeterBinding
     private val meterIdentifier by MeterFragment.creationFragmentArgs.asProperty()
     private var meter: Meter? = null
+    private var isSaved: Boolean = false
+    private var menu: Menu? = null
 
     @Inject
     lateinit var meterManager: MeterManager
@@ -50,6 +46,20 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.meter_menu, menu)
+        this.menu = menu
+        this.menu?.findItem(R.id.meter_menu_fav)?.let {
+            setMenuItemState(isSaved, it)
+        }
+    }
+
+    private fun setMenuItemState(isMeterSaved: Boolean, item: MenuItem) {
+        item.isChecked = isMeterSaved
+
+        if (isMeterSaved)
+            item.setIcon(R.drawable.ic_star_filled_24)
+        else
+            item.setIcon(R.drawable.ic_star_outline_24)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -60,14 +70,17 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
                 lifecycleScope.launch {
                     val success = changeFav(changedValue)
 
-                    if (success)
-                        item.isChecked = changedValue
 
-
-                    if (item.isChecked)
-                        item.setIcon(R.drawable.ic_star_filled_24)
-                    else
-                        item.setIcon(R.drawable.ic_star_outline_24)
+                    if (success) {
+                        setMenuItemState(changedValue, item)
+                    }
+//                        item.isChecked = changedValue
+//
+//
+//                    if (item.isChecked)
+//                        item.setIcon(R.drawable.ic_star_filled_24)
+//                    else
+//                        item.setIcon(R.drawable.ic_star_outline_24)
                 }
                 true
             }
@@ -82,10 +95,10 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
      */
     suspend fun changeFav(isFav: Boolean): Boolean {
         meter?.let {
-            val res = meterManager.changeMeterFavorite(
-                it,
-                isFav
-            )
+            val res = if (isFav)
+                meterManager.saveMeter(it.identifier)
+            else
+                meterManager.deleteMeter(it.identifier)
             return when (res) {
                 is ApiResult.Success ->
                     true
@@ -105,8 +118,24 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
 //        }
         lifecycleScope.launchWhenCreated {
             try {
-                meter = meterManager.requiredMeter(meterIdentifier).also {
-                    binding.setFromVM(MeterViewModel.fromMeter(it), requireContext())
+                val res = meterManager.getMeterByIdentifier(meterIdentifier)
+                when (res) {
+                    is ApiResult.NetworkError, is ApiResult.GenericError -> {
+                        //show toast
+                        parentFragmentManager.popBackStack()
+                    }
+                    is ApiResult.Success -> {
+                        meter = res.value.first
+                        binding.setFromVM(
+                            MeterViewModel.fromMeter(res.value.first),
+                            requireContext()
+                        )
+                        isSaved = res.value.second
+                        menu?.findItem(R.id.meter_menu_fav)?.let {
+                            setMenuItemState(isSaved, it)
+                        }
+
+                    }
                 }
             } catch (npe: NullPointerException) {
                 parentFragmentManager.popBackStack()
@@ -130,7 +159,8 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        requireAppCompatActivity().requireMyApplication().appComponent?.meterComponent()?.injectMeterFragment(this)
+        requireAppCompatActivity().requireMyApplication().appComponent?.meterComponent()
+            ?.injectMeterFragment(this)
     }
 
     companion object {

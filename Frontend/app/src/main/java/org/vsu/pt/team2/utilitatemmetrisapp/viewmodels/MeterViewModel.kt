@@ -10,7 +10,6 @@ class MeterViewModel(
     var prevMonthData: Double,
     var curMonthData: Double,
     var backlog: Double,
-    var isSaved: Boolean,
 ) {
 
     fun toMeterItemVM(): MeterItemViewModel {
@@ -26,8 +25,7 @@ class MeterViewModel(
             mivm: MeterItemViewModel,
             tariff: Double,
             prevMonthData: Double,
-            curMonthData: Double,
-            isSaved: Boolean
+            curMonthData: Double
         ): MeterViewModel {
             return MeterViewModel(
                 mivm.identifier,
@@ -35,8 +33,7 @@ class MeterViewModel(
                 tariff,
                 prevMonthData,
                 curMonthData,
-                mivm.backlog,
-                isSaved
+                mivm.backlog
             )
         }
 
@@ -49,8 +46,7 @@ class MeterViewModel(
                 meter.tariff,
                 meter.prevMonthData,
                 meter.curMonthData,
-                -meter.balance,
-                meter.isSaved
+                -meter.balance
             )
         }
     }

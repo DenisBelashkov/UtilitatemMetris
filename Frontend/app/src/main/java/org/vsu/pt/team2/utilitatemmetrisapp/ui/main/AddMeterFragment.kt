@@ -14,7 +14,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentAddMeterBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.MeterManager
 import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
-import org.vsu.pt.team2.utilitatemmetrisapp.repository.SavedMeterRepo
+import org.vsu.pt.team2.utilitatemmetrisapp.repository.MeterRepo
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.setFromVM
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
@@ -30,7 +30,7 @@ class AddMeterFragment : BaseTitledFragment(R.string.fragment_title_add_meter) {
     lateinit var meterManager: MeterManager
 
     @Inject
-    lateinit var savedMeterRepo: SavedMeterRepo
+    lateinit var meterRepo: MeterRepo
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,12 +53,12 @@ class AddMeterFragment : BaseTitledFragment(R.string.fragment_title_add_meter) {
     fun loadMeters(correctMeterIdentifier: String) {
         lifecycleScope.launch {
             val meter: Meter?
-            val res = meterManager.loadMeter(correctMeterIdentifier)
+            val res = meterManager.getMeterByIdentifier(correctMeterIdentifier)
             when (res) {
                 is ApiResult.Success ->
-                    meter = res.value
+                    meter = res.value.first
                 is ApiResult.GenericError, ApiResult.NetworkError ->
-                    meter = savedMeterRepo.meterOrNull(correctMeterIdentifier)?.also {
+                    meter = meterRepo.meterOrNull(correctMeterIdentifier)?.also {
                         //todo показать Toast с надписью "загружено из локального репозитория"
                     }
             }
