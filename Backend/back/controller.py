@@ -20,4 +20,4 @@ class Controller:
 			m.setOptions(app, self.db, Base)
 
 	def run(self):
-		self.app.run(debug=True)
+		self.app.run(host='0.0.0.0',debug=True)
