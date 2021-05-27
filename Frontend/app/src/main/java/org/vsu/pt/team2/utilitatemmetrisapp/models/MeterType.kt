@@ -27,7 +27,8 @@ enum class MeterType {
     fun toValue(): String {
         return when (this) {
             Elect -> "electric"
-            ColdWater -> "water"
+            ColdWater -> "coldwater"
+            HotWater -> "hotwater"
             Gas -> "gas"
             Heating -> "heating"
             else -> throw RuntimeException("Cant serialize Meter Type $this")
@@ -41,7 +42,8 @@ enum class MeterType {
         fun forValue(value: String): MeterType {
             return when (value) {
                 "electric" -> Elect
-                "water" -> ColdWater
+                "coldwater" -> ColdWater
+                "hotwater" -> HotWater
                 "gas" -> Gas
                 "heating" -> Heating
                 else -> throw RuntimeException("Cant deserialize Meter Type from string $value")

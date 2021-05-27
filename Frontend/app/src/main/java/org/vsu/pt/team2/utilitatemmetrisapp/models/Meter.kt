@@ -2,7 +2,7 @@ package org.vsu.pt.team2.utilitatemmetrisapp.models
 
 import org.vsu.pt.team2.utilitatemmetrisapp.api.model.Metric
 
-class Meter(
+data class Meter(
     var identifier: String,
     var type: MeterType,
     var tariff: Double,
@@ -20,4 +20,8 @@ class Meter(
         metric.curValue,
         metric.balance
     )
+
+    override fun equals(other: Any?): Boolean {
+        return identifier.isNotEmpty() && identifier == (other as? Meter)?.identifier
+    }
 }

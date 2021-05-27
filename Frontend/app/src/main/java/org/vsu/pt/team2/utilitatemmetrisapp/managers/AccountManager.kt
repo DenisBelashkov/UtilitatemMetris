@@ -11,26 +11,23 @@ class AccountManager @Inject constructor(
     val accountRepo: AccountRepo
 ) {
 
-    suspend fun updateAccounts(userId: Int) {
-        val accsApiRes = generalWorker.accounts(userId)
-        when (accsApiRes) {
+    suspend fun accounts(): ApiResult<List<Account>> {
+        val res = generalWorker.flats()
+        return when (res) {
             is ApiResult.NetworkError -> {
-                // todo show err
+                res
             }
             is ApiResult.GenericError -> {
-                // todo show err
+                res
             }
             is ApiResult.Success -> {
-                accsApiRes.value.let {
-                    accountRepo.clear()
-                    accountRepo.addAccounts(it.map { Account(it) })
-                }
+                val accounts = res.value.map { Account(it) }
+                accountRepo.clear()
+                accountRepo.addAccounts(accounts)
+
+                ApiResult.Success(accounts)
             }
         }
-    }
-
-    suspend fun getAccounts(): List<Account> {
-        return accountRepo.accounts()
     }
 
 }

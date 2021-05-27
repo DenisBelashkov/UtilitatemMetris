@@ -8,5 +8,5 @@ class Account(
 ) {
     constructor(
         flat: Flat
-    ) : this(flat.id, flat.address)
+    ) : this(flat.identifier, flat.address)
 }

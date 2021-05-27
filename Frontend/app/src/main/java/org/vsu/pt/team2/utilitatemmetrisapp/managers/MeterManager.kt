@@ -1,5 +1,6 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.managers
 
+import org.vsu.pt.team2.utilitatemmetrisapp.api.model.CurrentMetric
 import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import org.vsu.pt.team2.utilitatemmetrisapp.network.GeneralWorker
@@ -11,29 +12,72 @@ class MeterManager @Inject constructor(
     val meterRepo: MeterRepo
 ) {
 
-    suspend fun updateMeters(identifier: String) {
-        val res = generalWorker.metrics(identifier)
-        when (res) {
+    suspend fun getMeterByIdentifier(identifier: String): ApiResult<Meter> {
+        val res = generalWorker.metricByIdentifier(identifier)
+        return when (res) {
             is ApiResult.NetworkError -> {
-                /*showtoast internet lost*/
+                res
             }
             is ApiResult.GenericError -> {
-
+                res
             }
             is ApiResult.Success -> {
-                meterRepo.clear()
-                meterRepo.addMeters(res.value.map { Meter(it) })
+                val meter = Meter(res.value)
+                meterRepo.addMeter(meter)
+                return ApiResult.Success(meter)
             }
         }
     }
 
-    suspend fun getMeters(identifier: String? = null): List<Meter> {
-        return meterRepo.meters().also {
-            identifier?.let { ident ->
-                it.filter { it.identifier == ident }
+    suspend fun getMeterByAccountIdentifier(accountIdentifier: String): ApiResult<List<Meter>> {
+        val res = generalWorker.metricsByFlat(accountIdentifier)
+        return when (res) {
+            is ApiResult.NetworkError -> {
+                res
+            }
+            is ApiResult.GenericError -> {
+                res
+            }
+            is ApiResult.Success -> {
+                val meters = res.value.map { Meter(it) }
+                meterRepo.addMeters(meters)
+                return ApiResult.Success(meters)
             }
         }
     }
+
+    suspend fun getMeterSavedByUser(): ApiResult<List<Meter>> {
+        val res = generalWorker.metricsSavedByUser()
+        return when (res) {
+            is ApiResult.NetworkError -> {
+                res
+            }
+            is ApiResult.GenericError -> {
+                res
+            }
+            is ApiResult.Success -> {
+                val meters = res.value.map { Meter(it) }
+                meterRepo.addMeters(meters)
+                return ApiResult.Success(meters)
+            }
+        }
+    }
+
+    suspend fun updateMeterData(identifier: String, currentValue: Double): ApiResult<*> {
+        val res = generalWorker.updateMetric(CurrentMetric(identifier, currentValue))
+        return res
+    }
+
+    suspend fun saveMeter(identifier: String): ApiResult<*> {
+        val res = generalWorker.saveMetric(identifier)
+        return res
+    }
+
+    suspend fun daleteMeter(identifier: String): ApiResult<*> {
+        val res = generalWorker.saveMetric(identifier)
+        return res
+    }
+
 
     fun findMeters(identifier: String) {
 

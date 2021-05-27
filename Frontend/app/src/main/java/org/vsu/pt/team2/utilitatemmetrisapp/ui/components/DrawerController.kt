@@ -80,7 +80,7 @@ class DrawerController(
                 { view, pos, drItem ->
                     activity.openActivity(
                         LoginActivity::class.java,
-                        true,
+                        false,
                         IntentExtrasManager.continueRegister::putInto
                     )
                 }

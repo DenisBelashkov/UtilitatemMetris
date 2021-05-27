@@ -13,23 +13,39 @@ class GeneralWorker @Inject constructor(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
     private val commonAPI = retrofit.create(CommonAPI::class.java)
 
-    suspend fun accounts(userId: Int): ApiResult<List<Flat>> {
-        return safeApiCall(dispatcher) { commonAPI.getAccounts(userId) }
+    suspend fun flats(): ApiResult<List<Flat>> {
+        return safeApiCall(dispatcher) { commonAPI.getFlats() }
     }
 
-    suspend fun metrics(flatIdentifier: String): ApiResult<List<Metric>> {
-        return safeApiCall(dispatcher) { commonAPI.getMetrics(flatIdentifier) }
+    suspend fun metricsByFlat(flatIdentifier: String): ApiResult<List<Metric>> {
+        return safeApiCall(dispatcher) { commonAPI.getMetricsByFlatIdentifier(flatIdentifier) }
+    }
+
+    suspend fun metricByIdentifier(metricIdentifier: String): ApiResult<Metric> {
+        return safeApiCall(dispatcher) { commonAPI.getMetricsByIdentifier(metricIdentifier) }
+    }
+
+    suspend fun metricsSavedByUser(): ApiResult<List<Metric>> {
+        return safeApiCall(dispatcher) { commonAPI.getMetricsSavedByUser() }
     }
 
     suspend fun updateMetric(currentMetric: CurrentMetric): ApiResult<*> {
         return safeApiCall(dispatcher) { commonAPI.updateMetric(currentMetric) }
     }
 
-    suspend fun paymentHistory(informationAboutPayment: InformationAboutPayment): ApiResult<List<ItemPaymentHistory>> {
-        return safeApiCall(dispatcher) { commonAPI.paymentHistory(informationAboutPayment) }
+    suspend fun saveMetric(identifier: String): ApiResult<*> {
+        return safeApiCall(dispatcher) { commonAPI.saveMetric(identifier) }
     }
 
-    suspend fun toPay(payment: Payment): ApiResult<List<ItemPaymentHistory>> {
-        return safeApiCall(dispatcher) { commonAPI.toPay(payment) }
+    suspend fun deleteMetric(identifier: String): ApiResult<*> {
+        return safeApiCall(dispatcher) { commonAPI.deleteMetric(identifier) }
+    }
+
+    suspend fun doPayment(payment: Payment): ApiResult<List<ItemPaymentHistory>> {
+        return safeApiCall(dispatcher) { commonAPI.payment(payment) }
+    }
+
+    suspend fun paymentHistory(informationAboutPayment: InformationAboutPayment): ApiResult<List<ItemPaymentHistory>> {
+        return safeApiCall(dispatcher) { commonAPI.paymentHistory(informationAboutPayment) }
     }
 }

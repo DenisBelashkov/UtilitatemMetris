@@ -12,9 +12,9 @@ class MeterRepo {
          }
      */
 
-    private val meters = mutableListOf<Meter>()
+    private val meters : HashSet<Meter> = hashSetOf<Meter>()
 
-    suspend fun meters(): List<Meter> = meters
+    suspend fun meters(): Set<Meter> = meters
 
     suspend fun clear() {
         meters.clear()
