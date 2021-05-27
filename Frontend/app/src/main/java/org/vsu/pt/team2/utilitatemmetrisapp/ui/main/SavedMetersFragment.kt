@@ -5,13 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentSavedMetersBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.MeterManager
+import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.metersList.MetersWithCheckboxListAdapter
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.appCompatActivity
@@ -67,23 +68,22 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
     }
 
     fun updateAdapter() {
-//        val list = mutableListOf<MeterItemViewModel>()
-//        list.add(
-//            MeterItemViewModel(
-//                "7a6d87asd", MeterType.ColdWater, 452.4
-//            )
-//        )
-//        list.add(
-//            MeterItemViewModel(
-//                "6633pqff445", MeterType.Elect, 1209.1
-//            )
-//        )
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val list = meterManager.getMeters()
-                .map { MeterItemViewModel(it.identifier, it.type, it.balance) }
-            CoroutineScope(Dispatchers.Main).launch {
-                adapter.submitList(list)
+        lifecycleScope.launch {
+            val apiRes = meterManager.getMetersSavedByUser()
+            when (apiRes) {
+                is ApiResult.NetworkError -> {
+                    //todo show toast
+                    view?.let { Snackbar.make(it, "Net connection err", Snackbar.LENGTH_SHORT) }
+                }
+                is ApiResult.GenericError -> {
+                    //todo show toast
+                    apiRes.code
+                }
+                is ApiResult.Success -> {
+                    val list =
+                        apiRes.value.map { MeterItemViewModel(it.identifier, it.type, it.balance) }
+                    adapter.submitList(list)
+                }
             }
         }
     }

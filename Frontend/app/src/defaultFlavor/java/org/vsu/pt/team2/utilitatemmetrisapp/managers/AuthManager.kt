@@ -23,9 +23,8 @@ class AuthManager @Inject constructor(
                 sessionManager.clear()
             }
             is ApiResult.Success -> {
-                sessionManager.isDemo = false
                 result.value.apply {
-                    sessionManager.user = User(this.id, this.email, this.token)
+                    sessionManager.setSession(User(this.id, this.email, this.token), false)
                 }
 
             }
@@ -43,9 +42,8 @@ class AuthManager @Inject constructor(
                 sessionManager.clear()
             }
             is ApiResult.Success -> {
-                sessionManager.isDemo = true
                 result.value.apply {
-                    sessionManager.user = User(this.id, this.email, this.token)
+                    sessionManager.setSession(User(this.id, this.email, this.token), true)
                 }
 
             }

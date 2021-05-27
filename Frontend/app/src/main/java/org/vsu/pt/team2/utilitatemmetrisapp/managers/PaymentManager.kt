@@ -1,9 +1,7 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.managers
 
 import org.vsu.pt.team2.utilitatemmetrisapp.api.model.InformationAboutPayment
-import org.vsu.pt.team2.utilitatemmetrisapp.api.model.ItemPaymentHistory
 import org.vsu.pt.team2.utilitatemmetrisapp.api.model.Payment
-import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 import org.vsu.pt.team2.utilitatemmetrisapp.models.PaymentData
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
@@ -38,16 +36,16 @@ class PaymentManager @Inject constructor(
     }
 
     suspend fun paymentHistory(
-        //todo
-        dataWith: String,
-        dataTo: String,
+        //todo date
+        dateWith: String,
+        dateTo: String,
         type: MeterType
     ): ApiResult<List<PaymentData>> {
         val res =
             generalWorker.paymentHistory(
                 InformationAboutPayment(
-                    dataWith,
-                    dataTo,
+                    dateWith,
+                    dateTo,
                     type.toValue()
                 )
             )

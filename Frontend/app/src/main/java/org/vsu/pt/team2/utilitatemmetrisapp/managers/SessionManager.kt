@@ -10,12 +10,16 @@ class SessionManager @Inject constructor(
     private final val EmptyUser = User(0, "", "")
 
     var user: User = this.EmptyUser
+        get
+        private set
 
     var isDemo: Boolean = false
+        get
+        private set
 
     fun setSession(
-            user: User,
-            isDemo: Boolean
+        user: User,
+        isDemo: Boolean
     ) {
         this.user = user
         this.isDemo = isDemo

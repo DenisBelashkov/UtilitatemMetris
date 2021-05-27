@@ -46,7 +46,7 @@ class MeterManager @Inject constructor(
         }
     }
 
-    suspend fun getMeterSavedByUser(): ApiResult<List<Meter>> {
+    suspend fun getMetersSavedByUser(): ApiResult<List<Meter>> {
         val res = generalWorker.metricsSavedByUser()
         return when (res) {
             is ApiResult.NetworkError -> {
@@ -76,10 +76,5 @@ class MeterManager @Inject constructor(
     suspend fun daleteMeter(identifier: String): ApiResult<*> {
         val res = generalWorker.saveMetric(identifier)
         return res
-    }
-
-
-    fun findMeters(identifier: String) {
-
     }
 }

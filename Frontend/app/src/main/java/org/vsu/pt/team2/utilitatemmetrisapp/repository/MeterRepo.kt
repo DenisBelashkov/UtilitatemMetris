@@ -12,30 +12,58 @@ class MeterRepo {
          }
      */
 
-    private val meters : HashSet<Meter> = hashSetOf<Meter>()
+    private val meters: HashSet<Meter> = hashSetOf<Meter>()
 
-    suspend fun meters(): Set<Meter> = meters
+    private val savedMeters: HashSet<Meter> = hashSetOf<Meter>()
+
+    suspend fun meters(): Set<Meter> = meters.toSet()
+
+    suspend fun savedMeters(): Set<Meter> = savedMeters.toSet()
 
     suspend fun clear() {
         meters.clear()
     }
 
-    suspend fun addMeter(meter: Meter) {
-        meters.add(meter)
+    suspend fun addMeter(meter: Meter, isSaved: Boolean = false) {
+        if (isSaved)
+            savedMeters.add(meter)
+        else
+            meters.add(meter)
     }
 
-    suspend fun addMeters(meters: List<Meter>) {
-        this.meters.addAll(meters)
+    suspend fun addMeters(meters: List<Meter>, isSaved: Boolean = false) {
+        if (isSaved)
+            savedMeters.addAll(meters)
+        else
+            this.meters.addAll(meters)
     }
 
     suspend fun deleteMeter(meter: Meter) {
         meters.remove(meter)
+        savedMeters.remove(meter)
+    }
+
+    suspend fun deleteMeterFromSaved(meter: Meter) {
+        savedMeters.remove(meter)
     }
 
     suspend fun deleteMeter(identifier: String) {
         meters.find { it.identifier == identifier }?.let {
             deleteMeter(it)
         }
+        savedMeters.find { it.identifier == identifier }?.let {
+            deleteMeter(it)
+        }
     }
+
+    suspend fun deleteMeterFromSaved(identifier: String) {
+        savedMeters.find { it.identifier == identifier }?.let {
+            deleteMeter(it)
+        }
+    }
+
+    suspend fun findMeter(identifier: String) =
+        meters.find { it.identifier == identifier }
+            ?: savedMeters.find { it.identifier == identifier }
 
 }

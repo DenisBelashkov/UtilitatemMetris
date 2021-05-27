@@ -11,7 +11,7 @@ interface CommonAPI {
      * Continue register
      */
     @POST("/register/continue")
-    fun continueRegister(@Body continueRegisterUser: ContinueRegisterUser)
+    suspend fun continueRegister(@Body continueRegisterUser: ContinueRegisterUser)
 
     
     /**
@@ -19,7 +19,7 @@ interface CommonAPI {
      */
 
     @GET("/flat")
-    fun getFlats(): List<Flat>
+    suspend fun getFlats(): List<Flat>
 
 
     /**
@@ -27,30 +27,30 @@ interface CommonAPI {
      */
 
     @GET("/metrics/byFlatId/{identifier}")
-    fun getMetricsByFlatIdentifier(
+    suspend fun getMetricsByFlatIdentifier(
         @Path("identifier") flatIdentifier: String
     ): List<Metric>
 
     @GET("/metrics/byId/{identifier}")
-    fun getMetricsByIdentifier(
+    suspend fun getMetricsByIdentifier(
         @Path("identifier") metricIdentifier: String
     ): Metric
 
     @GET("/metrics/byUser")
-    fun getMetricsSavedByUser(): List<Metric>
+    suspend fun getMetricsSavedByUser(): List<Metric>
 
     @PUT("/metrics/update")
-    fun updateMetric(
+    suspend fun updateMetric(
         @Body currentMetric: CurrentMetric
     )
 
     @POST("/metric/{identifier}")
-    fun saveMetric(
+    suspend fun saveMetric(
         @Path("identifier") identifier: String
     )
 
     @DELETE("/metric/{identifier}")
-    fun deleteMetric(
+    suspend fun deleteMetric(
         @Path("identifier") identifier: String
     )
 
@@ -58,13 +58,13 @@ interface CommonAPI {
      * Payment
      */
     @POST("/payment/metrics")
-    fun payment(
+    suspend fun payment(
         @Body payment: Payment
     ): List<ItemPaymentHistory>
 
 
     @GET("/payment/history")
-    fun paymentHistory(
+    suspend fun paymentHistory(
         @Body informationAboutPayment: InformationAboutPayment
     ): List<ItemPaymentHistory>
 }
