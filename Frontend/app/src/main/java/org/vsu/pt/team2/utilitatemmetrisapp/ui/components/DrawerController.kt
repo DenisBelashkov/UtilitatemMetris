@@ -61,7 +61,7 @@ class DrawerController(
     fun initAnonimous(): DrawerItemsEasyCreator {
         return DrawerItemsEasyCreator().apply {
             addItem(
-                simpleMenuItem("Оплатить"),
+                simpleMenuItem("Найти счётчик"),
                 { view, pos, drItem ->
                     activity.replaceFragment(AddMeterFragment())
                 }
@@ -91,7 +91,7 @@ class DrawerController(
     fun initDefalut(): DrawerItemsEasyCreator {
         return DrawerItemsEasyCreator().apply {
             addItem(
-                simpleMenuItem("Оплатить"),
+                simpleMenuItem("Найти счётчик"),
                 { view, pos, drItem ->
                     activity.replaceFragment(AddMeterFragment())
                 }
