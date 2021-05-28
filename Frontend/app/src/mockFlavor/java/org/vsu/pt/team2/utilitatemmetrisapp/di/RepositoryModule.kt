@@ -5,6 +5,7 @@ import dagger.Provides
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.vsu.pt.team2.utilitatemmetrisapp.models.Account
 import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 import org.vsu.pt.team2.utilitatemmetrisapp.repository.AccountRepo
@@ -17,7 +18,22 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideAccountRepo(): AccountRepo = AccountRepo()
+    fun provideAccountRepo(): AccountRepo = AccountRepo().apply {
+        CoroutineScope(Dispatchers.IO).launch {
+            addAccount(
+                Account(
+                    "123455ВА8В923",
+                    "Воронеж, пр. революции, д. 1, кв 101"
+                )
+            )
+            addAccount(
+                Account(
+                    "043534АВ3423А",
+                    "Воронеж, ул. Пупкина, д. 13, кв 56"
+                )
+            )
+        }
+    }
 
     @Provides
     @Singleton
@@ -31,7 +47,7 @@ class RepositoryModule {
                     1234.0,
                     1273.0,
                     452.4
-                )
+                ), true
             )
             addMeter(
                 Meter(
@@ -41,7 +57,7 @@ class RepositoryModule {
                     433.0,
                     490.0,
                     1209.0
-                )
+                ), true
             )
         }
     }
