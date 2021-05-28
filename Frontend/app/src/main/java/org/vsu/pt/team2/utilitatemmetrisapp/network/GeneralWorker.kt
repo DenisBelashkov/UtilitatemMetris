@@ -2,7 +2,6 @@ package org.vsu.pt.team2.utilitatemmetrisapp.network
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import org.vsu.pt.team2.utilitatemmetrisapp.api.CommonAPI
 import org.vsu.pt.team2.utilitatemmetrisapp.api.model.*
 import retrofit2.Retrofit
@@ -14,47 +13,39 @@ class GeneralWorker @Inject constructor(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
     private val commonAPI = retrofit.create(CommonAPI::class.java)
 
-    suspend fun accounts(userId: Int): ApiResult<List<Flat>> {
-        return safeApiCall(dispatcher) { commonAPI.getAccounts(userId) }
+    suspend fun flats(): ApiResult<List<Flat>> {
+        return safeApiCall(dispatcher) { commonAPI.getFlats() }
     }
 
-    suspend fun metricsByAccountIdentifier(flatIdentifier: String): ApiResult<List<Metric>> {
-        return safeApiCall(dispatcher) { commonAPI.getMetrics(flatIdentifier) }
+    suspend fun metricsByFlat(flatIdentifier: String): ApiResult<List<Metric>> {
+        return safeApiCall(dispatcher) { commonAPI.getMetricsByFlatIdentifier(flatIdentifier) }
     }
 
-    //todo
-    suspend fun meterByIdentifier(metricIdentifier: String) : ApiResult<Metric> {
-        delay(1000L)
-        return ApiResult.NetworkError
+    suspend fun metricByIdentifier(metricIdentifier: String): ApiResult<MetricWithSavedField> {
+        return safeApiCall(dispatcher) { commonAPI.getMetricsByIdentifier(metricIdentifier) }
+    }
+
+    suspend fun metricsSavedByUser(): ApiResult<List<Metric>> {
+        return safeApiCall(dispatcher) { commonAPI.getMetricsSavedByUser() }
     }
 
     suspend fun updateMetric(currentMetric: CurrentMetric): ApiResult<*> {
         return safeApiCall(dispatcher) { commonAPI.updateMetric(currentMetric) }
     }
 
+    suspend fun saveMetric(identifier: String): ApiResult<*> {
+        return safeApiCall(dispatcher) { commonAPI.saveMetric(identifier) }
+    }
+
+    suspend fun deleteMetric(identifier: String): ApiResult<*> {
+        return safeApiCall(dispatcher) { commonAPI.deleteMetric(identifier) }
+    }
+
+    suspend fun doPayment(payment: Payment): ApiResult<List<ItemPaymentHistory>> {
+        return safeApiCall(dispatcher) { commonAPI.payment(payment) }
+    }
+
     suspend fun paymentHistory(informationAboutPayment: InformationAboutPayment): ApiResult<List<ItemPaymentHistory>> {
         return safeApiCall(dispatcher) { commonAPI.paymentHistory(informationAboutPayment) }
-    }
-
-    suspend fun toPay(payment: Payment): ApiResult<List<ItemPaymentHistory>> {
-        return safeApiCall(dispatcher) { commonAPI.toPay(payment) }
-    }
-
-    //todo
-    suspend fun favoriteMeter(identifier: String): ApiResult<*> {
-        delay(1000L)
-        return ApiResult.Success<Any>(Any())
-    }
-
-    //todo
-    suspend fun unfavoriteMeter(identifier: String): ApiResult<*> {
-        delay(1000L)
-        return ApiResult.Success<Any>(Any())
-    }
-
-    //todo
-    suspend fun metricsByUserId(userId: Int): ApiResult<List<Metric>> {
-        delay(1000L)
-        return ApiResult.NetworkError
     }
 }

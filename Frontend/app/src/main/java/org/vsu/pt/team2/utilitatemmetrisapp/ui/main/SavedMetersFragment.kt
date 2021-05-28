@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentSavedMetersBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.MeterManager
-import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
-import org.vsu.pt.team2.utilitatemmetrisapp.repository.SavedMeterRepo
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.metersList.MetersWithCheckboxListAdapter
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.appCompatActivity
@@ -21,15 +20,12 @@ import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.myApplication
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.GeneralButtonViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterItemViewModel
-import java.lang.NullPointerException
+import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
 import javax.inject.Inject
 
 class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_meters) {
     @Inject
     lateinit var meterManager: MeterManager
-
-    @Inject
-    lateinit var savedMeterRepo: SavedMeterRepo
 
     private val adapter = MetersWithCheckboxListAdapter {
         //todo Получить всю инфу о счётчике из meterRepository например
@@ -68,20 +64,22 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
 
     fun updateAdapter() {
         lifecycleScope.launch {
-
-            val res = meterManager.loadUserMeters()
-            val list: List<Meter> = when (res) {
-                is ApiResult.NetworkError, is ApiResult.GenericError ->
-                    savedMeterRepo.meters()
-                is ApiResult.Success ->
-                    res.value
-            }
-
-            adapter.submitList(
-                list.map {
-                    MeterItemViewModel(it.identifier, it.type, it.balance)
+            val apiRes = meterManager.getMetersSavedByUser()
+            when (apiRes) {
+                is ApiResult.NetworkError -> {
+                    //todo show toast
+                    view?.let { Snackbar.make(it, "Net connection err", Snackbar.LENGTH_SHORT) }
                 }
-            )
+                is ApiResult.GenericError -> {
+                    //todo show toast
+                    apiRes.code
+                }
+                is ApiResult.Success -> {
+                    val list =
+                        apiRes.value.map { MeterItemViewModel(it.identifier, it.type, it.balance) }
+                    adapter.submitList(list)
+                }
+            }
         }
     }
 }

@@ -36,8 +36,7 @@ class AccountFragment : DisabledDrawerFragment() {
             it,
             4.86,
             3098.92,
-            3124.12,
-            false
+            3124.12
         )
 
     }
@@ -74,6 +73,7 @@ class AccountFragment : DisabledDrawerFragment() {
     }
 
     fun updateAdapter() {
+        //todo убрать захардкоженые данные
         val list = mutableListOf<MeterItemViewModel>()
         list.add(
             MeterItemViewModel(

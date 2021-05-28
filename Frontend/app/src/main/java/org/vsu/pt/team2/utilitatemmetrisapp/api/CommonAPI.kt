@@ -6,40 +6,65 @@ import retrofit2.http.*
 
 interface CommonAPI {
 
+
+    /**
+     * Continue register
+     */
+    @POST("/register/continue")
+    suspend fun continueRegister(@Body continueRegisterUser: ContinueRegisterUser)
+
+    
     /**
      * Account
      */
 
-    @GET("/flat/{userId}")
-    fun getAccounts(
-            @Path("userId") userId: Int
-    ): List<Flat>
+    @GET("/flat")
+    suspend fun getFlats(): List<Flat>
 
 
     /**
      * Metrics
      */
 
-    @GET("/metrics/{flatId}")
-    fun getMetrics(
-            @Path("flatId") flatIdentifier: String
+    @GET("/metrics/byFlatId/{identifier}")
+    suspend fun getMetricsByFlatIdentifier(
+        @Path("identifier") flatIdentifier: String
     ): List<Metric>
 
-    @PUT("/metrics/update")
-    fun updateMetric(
-            @Body currentMetric: CurrentMetric
-    ): Nothing
+    @GET("/metrics/byId/{identifier}")
+    suspend fun getMetricsByIdentifier(
+        @Path("identifier") metricIdentifier: String
+    ): MetricWithSavedField
 
+    @GET("/metrics/byUser")
+    suspend fun getMetricsSavedByUser(): List<Metric>
+
+    @PUT("/metrics/update")
+    suspend fun updateMetric(
+        @Body currentMetric: CurrentMetric
+    )
+
+    @POST("/metric/{identifier}")
+    suspend fun saveMetric(
+        @Path("identifier") identifier: String
+    )
+
+    @DELETE("/metric/{identifier}")
+    suspend fun deleteMetric(
+        @Path("identifier") identifier: String
+    )
 
     /**
      * Payment
      */
-
     @POST("/payment/metrics")
-    fun toPay(@Body body: Payment): List<ItemPaymentHistory>
+    suspend fun payment(
+        @Body payment: Payment
+    ): List<ItemPaymentHistory>
+
 
     @GET("/payment/history")
-    fun paymentHistory(
-            @Body informationAboutPayment: InformationAboutPayment
+    suspend fun paymentHistory(
+        @Body informationAboutPayment: InformationAboutPayment
     ): List<ItemPaymentHistory>
 }

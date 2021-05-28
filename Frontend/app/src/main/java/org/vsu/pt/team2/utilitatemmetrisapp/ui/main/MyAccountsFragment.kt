@@ -1,20 +1,30 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.ui.main
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentMyAccountsBinding
+import org.vsu.pt.team2.utilitatemmetrisapp.managers.AccountManager
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.BundleManager.AccountViewModelBundlePackager
+import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.AccountsListAdapter
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.myApplication
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.AccountViewModel
+import javax.inject.Inject
 
 class MyAccountsFragment : BaseTitledFragment(R.string.fragment_title_my_accounts) {
     private lateinit var binding: FragmentMyAccountsBinding
+
+    @Inject
+    lateinit var accountManager: AccountManager
+
     private val adapter = AccountsListAdapter { accountViewModel ->
         val b = Bundle()
         AccountViewModelBundlePackager.putInto(b, accountViewModel)
@@ -34,6 +44,11 @@ class MyAccountsFragment : BaseTitledFragment(R.string.fragment_title_my_account
         return binding.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        myApplication()?.appComponent?.accountComponent()?.injectMyAccountsFragment(this)
+    }
+
     fun initFields(binding: FragmentMyAccountsBinding) {
         binding.metersListRecyclerView.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
@@ -42,18 +57,21 @@ class MyAccountsFragment : BaseTitledFragment(R.string.fragment_title_my_account
     }
 
     fun updateAccounts() {
-        val list = mutableListOf<AccountViewModel>().also {
-            it.add(
-                AccountViewModel(
-                    "123455ВА8В923", "Воронеж, пр. революции, д. 1, кв 101"
-                )
-            )
-            it.add(
-                AccountViewModel(
-                    "043534АВ3423А", "Воронеж, ул. Пупкина, д. 13, кв 56"
-                )
-            )
+        lifecycleScope.launchWhenCreated {
+            val res = accountManager.accounts()
+            when (res) {
+                is ApiResult.GenericError, is ApiResult.NetworkError -> {
+
+                }
+                is ApiResult.Success -> {
+                    adapter.submitList(res.value.map {
+                        AccountViewModel(
+                            it.identifier,
+                            it.address
+                        )
+                    })
+                }
+            }
         }
-        adapter.submitList(list)
     }
 }

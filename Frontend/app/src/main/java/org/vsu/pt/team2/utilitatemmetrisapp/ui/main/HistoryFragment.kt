@@ -16,10 +16,10 @@ class HistoryFragment : BaseTitledFragment(R.string.fragment_history_title) {
     private lateinit var binding: FragmentHistoryBinding
     private val adapter = MetersHistoryAdapter()
 
-    private fun openPaymentHistoryFragmentForMeterItem(historyMeterItem: HistoryMeterItemViewModel) {
-        //todo Найти квитанцию, в которой находится этот счётчик
-        //открыть фрагмент с данной квитанцией
-    }
+//    private fun openPaymentHistoryFragmentForMeterItem(historyMeterItem: HistoryMeterItemViewModel) {
+//        //todo Найти квитанцию, в которой находится этот счётчик
+//        //открыть фрагмент с данной квитанцией
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,6 +43,7 @@ class HistoryFragment : BaseTitledFragment(R.string.fragment_history_title) {
     }
 
     private fun loadData() {
+        //todo захардкоженые данные убрать
         val data = listOf<HistoryMeterItemViewModel>(
             HistoryMeterItemViewModel(
                 "765432bhjdskf",

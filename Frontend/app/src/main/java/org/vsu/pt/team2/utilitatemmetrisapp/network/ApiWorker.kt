@@ -1,5 +1,6 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.network
 
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -21,6 +22,7 @@ open class ApiWorker {
             try {
                 ApiResult.Success<T>(apiCall.invoke())
             } catch (throwable: Throwable) {
+                Logger.e(throwable,"Got exc while executing api call")
                 when (throwable) {
                     is IOException -> ApiResult.NetworkError
                     is HttpException -> {

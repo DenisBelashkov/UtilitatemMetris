@@ -12,9 +12,9 @@ class AccountRepo {
          }
      */
 
-    private val accounts = mutableListOf<Account>()
+    private val accounts = hashSetOf<Account>()
 
-    fun accounts(): List<Account> = accounts
+    fun accounts(): HashSet<Account> = accounts
 
     fun clear() {
         accounts.clear()

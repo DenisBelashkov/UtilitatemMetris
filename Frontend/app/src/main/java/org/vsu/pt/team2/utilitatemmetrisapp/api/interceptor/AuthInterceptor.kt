@@ -19,6 +19,6 @@ class AuthInterceptor @Inject constructor(
     }
 
     companion object {
-        const val HEADER_AUTH_TOKEN = "X-Auth-Token"
+        const val HEADER_AUTH_TOKEN = "token"
     }
 }

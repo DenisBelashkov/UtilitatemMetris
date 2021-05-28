@@ -61,7 +61,7 @@ class DrawerController(
     fun initAnonimous(): DrawerItemsEasyCreator {
         return DrawerItemsEasyCreator().apply {
             addItem(
-                simpleMenuItem("Оплатить"),
+                simpleMenuItem("Найти счётчик"),
                 { view, pos, drItem ->
                     activity.replaceFragment(AddMeterFragment())
                 }
@@ -80,7 +80,7 @@ class DrawerController(
                 { view, pos, drItem ->
                     activity.openActivity(
                         LoginActivity::class.java,
-                        true,
+                        false,
                         IntentExtrasManager.continueRegister::putInto
                     )
                 }
@@ -91,7 +91,7 @@ class DrawerController(
     fun initDefalut(): DrawerItemsEasyCreator {
         return DrawerItemsEasyCreator().apply {
             addItem(
-                simpleMenuItem("Оплатить"),
+                simpleMenuItem("Найти счётчик"),
                 { view, pos, drItem ->
                     activity.replaceFragment(AddMeterFragment())
                 }
@@ -104,12 +104,6 @@ class DrawerController(
             )
             addItem(
                 DividerDrawerItem()
-            )
-            addItem(
-                simpleMenuItem("Добавить счёт"),
-                { view, pos, drItem ->
-                    activity.replaceFragment(AddAccountFragment())
-                }
             )
             addItem(
                 simpleMenuItem("Мои счета"),

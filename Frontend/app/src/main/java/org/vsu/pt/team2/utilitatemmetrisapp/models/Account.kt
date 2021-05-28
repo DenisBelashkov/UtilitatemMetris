@@ -8,5 +8,21 @@ class Account(
 ) {
     constructor(
         flat: Flat
-    ) : this(flat.id, flat.address)
+    ) : this(flat.identifier, flat.address)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Account
+
+        if (identifier != other.identifier) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return identifier.hashCode()
+    }
+
 }
