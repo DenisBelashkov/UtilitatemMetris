@@ -6,10 +6,10 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_logo_launcher"
         android:label="@string/app_name"
         android:usesCleartextTraffic="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_logo_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.UtilitatemMetris">
         <activity android:name=".ui.login.LoginActivity" />
