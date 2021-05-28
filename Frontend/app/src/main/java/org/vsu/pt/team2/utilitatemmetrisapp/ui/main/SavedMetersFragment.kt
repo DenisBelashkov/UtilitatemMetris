@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentSavedMetersBinding
@@ -24,13 +25,21 @@ import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
 import javax.inject.Inject
 
 class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_meters) {
+
+    private lateinit var binding: FragmentSavedMetersBinding
+
     @Inject
     lateinit var meterManager: MeterManager
 
-    private val adapter = MetersWithCheckboxListAdapter {
-        //todo Получить всю инфу о счётчике из meterRepository например
-        lifecycleScope.launch {
-            replaceFragment(MeterFragment.createWithMeterIdentifier(it.identifier))
+    private val adapter = MetersWithCheckboxListAdapter().apply {
+        callbackOnItemLongClick = {
+            lifecycleScope.launch {
+                replaceFragment(MeterFragment.createWithMeterIdentifier(it.identifier))
+            }
+        }
+        callbackOnCheckedItemsChanged = { checked ->
+            val sum = checked.sumOf { it.backlog }
+            binding.sumForPay = sum
         }
     }
 
@@ -46,12 +55,22 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentSavedMetersBinding.inflate(inflater, container, false)
-        binding.sumForPay = 1
+        binding = FragmentSavedMetersBinding.inflate(inflater, container, false)
+        binding.sumForPay = 0.0
         binding.payChosenMetersButton.viewmodel =
             GeneralButtonViewModel(getString(R.string.pay_for_chosen)) {
-                //todo action when pay for all
-                appCompatActivity()?.replaceFragment(PaymentFragment())
+                adapter.getChecked().let { checked ->
+                    if (checked.isNotEmpty()) {
+                        val meterIdentifiersForPay: List<String> =
+                            checked.map { it.identifier }
+                        appCompatActivity()?.replaceFragment(
+                            PaymentFragment.createWithMetersIdentifier(meterIdentifiersForPay)
+                        )
+                    }else{
+                        //todo показать сообщение "не выбран ни один счётчик на оплтату"
+                    }
+                }
+
             }
         binding.metersListRecyclerView.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
@@ -59,6 +78,7 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
         binding.metersListRecyclerView.adapter = adapter
 
         updateAdapter()
+
         return binding.root
     }
 
@@ -75,9 +95,12 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
                     apiRes.code
                 }
                 is ApiResult.Success -> {
-                    val list =
+                    val list : List<MeterItemViewModel> =
                         apiRes.value.map { MeterItemViewModel(it.identifier, it.type, it.balance) }
                     adapter.submitList(list)
+
+                    val sum = adapter.getChecked().sumOf { it.backlog }
+                    binding.sumForPay = sum
                 }
             }
         }

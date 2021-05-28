@@ -23,22 +23,22 @@ import javax.inject.Inject
 
 class AccountFragment : DisabledDrawerFragment() {
 
+    private lateinit var binding: FragmentAccountBinding
+
     @Inject
     lateinit var meterManager: MeterManager
 
-    private val adapter = MetersWithCheckboxListAdapter {
-        lifecycleScope.launch {
-            val f = MeterFragment.createWithMeterIdentifier(it.identifier)
-            replaceFragment(f)
+    private val adapter = MetersWithCheckboxListAdapter().apply {
+        callbackOnItemLongClick = {
+            lifecycleScope.launch {
+                val f = MeterFragment.createWithMeterIdentifier(it.identifier)
+                replaceFragment(f)
+            }
         }
-
-        val vm = MeterViewModel.fromMeterItemVM(
-            it,
-            4.86,
-            3098.92,
-            3124.12
-        )
-
+        callbackOnCheckedItemsChanged = { checked->
+            val sum = checked.sumOf { it.backlog }
+            binding.sumForPay = sum
+        }
     }
 
     override fun onCreateView(
@@ -46,7 +46,7 @@ class AccountFragment : DisabledDrawerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentAccountBinding.inflate(inflater, container, false)
+        binding = FragmentAccountBinding.inflate(inflater, container, false)
         initFields(binding)
         arguments?.let {
             AccountViewModelBundlePackager.getFrom(it)?.let {
@@ -60,7 +60,7 @@ class AccountFragment : DisabledDrawerFragment() {
     }
 
     fun initFields(binding: FragmentAccountBinding) {
-        binding.sumForPay = 1
+        binding.sumForPay = 0.0
         binding.payChosenMetersButton.viewmodel =
             GeneralButtonViewModel(getString(R.string.pay_for_chosen)) {
                 //todo action when pay for all
