@@ -16,7 +16,7 @@ class PaymentModule(Module):
 		Users = base.classes.Users
 
 		@app.route('/payment/history', methods=["GET"])
-		#@wrapper_for_token
+		@wrapper_for_token
 		def payment_history():
 			try:
 				r_json = request.json
