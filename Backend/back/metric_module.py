@@ -63,13 +63,13 @@ class MetricModule(Module):
 				if not metric:
 					return "", 404
 				if metric.curr_value > r_json['currentValue']:
-					return "", 418
+					return "", 400
 				metric.curr_value = r_json['currentValue']
 				db.session.commit()
 				return "", 200
 			except Exception as e:
 				db.session.rollback()
-			return "", 400
+				return "", 500
 
 		# @app.route('/metrics/byUserId/<user_id>', methods = ["GET"])
 		# @wrapper_for_token
@@ -122,7 +122,7 @@ class MetricModule(Module):
 					return jsonify(self.make_json(metric)[0])
 			except Exception as e:
 				print(e)
-				return " ", 400
+				return " ", 500
 			return " ", 404
 
 		@app.route('/metrics/byUser/', methods=["GET"])
@@ -142,9 +142,41 @@ class MetricModule(Module):
 				if len(metrics) > 0:
 					return jsonify(self.make_json(metrics))
 			except Exception as e:
-				return " ", 400
+				return " ", 500
 			return " ", 404
 
-		@app.route('/metrics/<identifier>', methods = ['POST'])
+		@app.route('/metrics/<identifier>', methods=['POST'])
+		@wrapper_for_token
 		def post_bind_metrics_to_user(identifier):
-			pass
+			try:
+				decode_token = jwt.decode(request.headers["token"], "secret", algorithms=["HS256"])
+				user = db.session.query(User_metrics).join(Metrics, and_(User_metrics.id_metrics == Metrics.id_metrics,
+																		 Metrics.identifier == identifier)).filter(User_metrics.id_user == decode_token["id"]).first()
+				if user:
+					return " ", 409
+				user = User_metrics()
+				metric = db.session.query(Metrics.id_metrics).filter(Metrics.identifier == identifier).first()
+				user.id_metrics = metric.id_metrics
+				user.id_user = decode_token["id"]
+				db.session.add(user)
+				db.session.commit()
+				return " ", 200
+			except Exception as e:
+				print(e)
+				return " ", 400
+
+		@app.route('/metrics/<identifier>', methods=['DELETE'])
+		@wrapper_for_token
+		def delete_bind_metrics_to_user(identifier):
+			try:
+				decode_token = jwt.decode(request.headers["token"], "secret", algorithms=["HS256"])
+				user = db.session.query(User_metrics).join(Metrics, and_(User_metrics.id_metrics == Metrics.id_metrics,
+																		 Metrics.identifier == identifier)).filter(
+					User_metrics.id_user == decode_token["id"]).first()
+				if not user:
+					return " ", 404
+				db.session.delete(user)
+				db.session.commit()
+				return " ", 200
+			except Exception as e:
+				return " ", 400
