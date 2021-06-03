@@ -4,10 +4,7 @@ import android.app.Application
 import android.content.SharedPreferences
 import dagger.BindsInstance
 import dagger.Component
-import org.vsu.pt.team2.utilitatemmetrisapp.di.components.AccountComponent
-import org.vsu.pt.team2.utilitatemmetrisapp.di.components.AuthComponent
-import org.vsu.pt.team2.utilitatemmetrisapp.di.components.MeterComponent
-import org.vsu.pt.team2.utilitatemmetrisapp.di.components.SettingsComponent
+import org.vsu.pt.team2.utilitatemmetrisapp.di.components.*
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.SessionManager
 import javax.inject.Singleton
 
@@ -23,6 +20,8 @@ interface ApplicationComponent {
     fun settingsComponent(): SettingsComponent
 
     fun authComponent(): AuthComponent
+
+    fun paymentComponent(): PaymentComponent
 
     fun getSessionManager(): SessionManager
 

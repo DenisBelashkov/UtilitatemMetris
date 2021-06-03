@@ -7,7 +7,7 @@ import kotlin.reflect.KProperty
 
 class CreationFragmentArgs<Data>(
     val pack: (Data, Bundle) -> Bundle,
-    val unpack: (Bundle) -> Data
+    val unpack: (Bundle) -> Data?
 ) {
 
     fun <Frag : Fragment> fill(fragment: Frag, data: Data): Frag {

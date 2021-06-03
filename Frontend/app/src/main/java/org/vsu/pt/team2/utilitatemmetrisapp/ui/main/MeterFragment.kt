@@ -170,7 +170,7 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
                 bundle
             },
             { bundle ->
-                bundle.getString("Ident", "")
+                bundle.getString("Ident", null)
             }
         )
 
