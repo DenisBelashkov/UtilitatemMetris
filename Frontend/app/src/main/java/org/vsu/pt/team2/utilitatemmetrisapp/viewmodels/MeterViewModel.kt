@@ -1,5 +1,6 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.viewmodels
 
+import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 
 class MeterViewModel(
@@ -9,7 +10,6 @@ class MeterViewModel(
     var prevMonthData: Double,
     var curMonthData: Double,
     var backlog: Double,
-    var isSaved: Boolean,
 ) {
 
     fun toMeterItemVM(): MeterItemViewModel {
@@ -25,8 +25,7 @@ class MeterViewModel(
             mivm: MeterItemViewModel,
             tariff: Double,
             prevMonthData: Double,
-            curMonthData: Double,
-            isSaved: Boolean
+            curMonthData: Double
         ): MeterViewModel {
             return MeterViewModel(
                 mivm.identifier,
@@ -34,8 +33,20 @@ class MeterViewModel(
                 tariff,
                 prevMonthData,
                 curMonthData,
-                mivm.backlog,
-                isSaved
+                mivm.backlog
+            )
+        }
+
+        fun fromMeter(
+            meter: Meter
+        ): MeterViewModel {
+            return MeterViewModel(
+                meter.identifier,
+                meter.type,
+                meter.tariff,
+                meter.prevMonthData,
+                meter.curMonthData,
+                -meter.balance
             )
         }
     }

@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.launch
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentAccountBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.BundleManager.AccountViewModelBundlePackager
-import org.vsu.pt.team2.utilitatemmetrisapp.managers.BundleManager.MeterViewModelBundlePackager
+import org.vsu.pt.team2.utilitatemmetrisapp.managers.MeterManager
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.metersList.MetersWithCheckboxListAdapter
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.DisabledDrawerFragment
@@ -17,20 +19,26 @@ import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.GeneralButtonViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterItemViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
+import javax.inject.Inject
 
 class AccountFragment : DisabledDrawerFragment() {
 
-    private val adapter = MetersWithCheckboxListAdapter {
-        //todo Получить всю инфу о счётчике из meterRepository например
-        val vm = MeterViewModel.fromMeterItemVM(
-            it,
-            4.86,
-            3098.92,
-            3124.12,
-            false
-        )
-        val f = MeterFragment.createWithVM(vm)
-        replaceFragment(f)
+    private lateinit var binding: FragmentAccountBinding
+
+    @Inject
+    lateinit var meterManager: MeterManager
+
+    private val adapter = MetersWithCheckboxListAdapter().apply {
+        callbackOnItemLongClick = {
+            lifecycleScope.launch {
+                val f = MeterFragment.createWithMeterIdentifier(it.identifier)
+                replaceFragment(f)
+            }
+        }
+        callbackOnCheckedItemsChanged = { checked->
+            val sum = checked.sumOf { it.backlog }
+            binding.sumForPay = sum
+        }
     }
 
     override fun onCreateView(
@@ -38,7 +46,7 @@ class AccountFragment : DisabledDrawerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentAccountBinding.inflate(inflater, container, false)
+        binding = FragmentAccountBinding.inflate(inflater, container, false)
         initFields(binding)
         arguments?.let {
             AccountViewModelBundlePackager.getFrom(it)?.let {
@@ -52,7 +60,7 @@ class AccountFragment : DisabledDrawerFragment() {
     }
 
     fun initFields(binding: FragmentAccountBinding) {
-        binding.sumForPay = 1
+        binding.sumForPay = 0.0
         binding.payChosenMetersButton.viewmodel =
             GeneralButtonViewModel(getString(R.string.pay_for_chosen)) {
                 //todo action when pay for all
@@ -65,6 +73,7 @@ class AccountFragment : DisabledDrawerFragment() {
     }
 
     fun updateAdapter() {
+        //todo убрать захардкоженые данные
         val list = mutableListOf<MeterItemViewModel>()
         list.add(
             MeterItemViewModel(

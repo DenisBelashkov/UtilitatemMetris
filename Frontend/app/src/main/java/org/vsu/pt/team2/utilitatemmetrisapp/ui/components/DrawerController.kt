@@ -27,8 +27,8 @@ import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
 class DrawerController(
     private val activity: AppCompatActivity,
     private val materialDrawerSliderView: MaterialDrawerSliderView,
-    private val appbarContentBinding: AppbarContentBinding
-
+    private val appbarContentBinding: AppbarContentBinding,
+    private val sessionManager: SessionManager,
 ) {
     private var mDrawerLayout: DrawerLayout? = null
 
@@ -61,7 +61,7 @@ class DrawerController(
     fun initAnonimous(): DrawerItemsEasyCreator {
         return DrawerItemsEasyCreator().apply {
             addItem(
-                simpleMenuItem("Оплатить"),
+                simpleMenuItem("Найти счётчик"),
                 { view, pos, drItem ->
                     activity.replaceFragment(AddMeterFragment())
                 }
@@ -80,7 +80,7 @@ class DrawerController(
                 { view, pos, drItem ->
                     activity.openActivity(
                         LoginActivity::class.java,
-                        true,
+                        false,
                         IntentExtrasManager.continueRegister::putInto
                     )
                 }
@@ -91,7 +91,7 @@ class DrawerController(
     fun initDefalut(): DrawerItemsEasyCreator {
         return DrawerItemsEasyCreator().apply {
             addItem(
-                simpleMenuItem("Оплатить"),
+                simpleMenuItem("Найти счётчик"),
                 { view, pos, drItem ->
                     activity.replaceFragment(AddMeterFragment())
                 }
@@ -106,12 +106,6 @@ class DrawerController(
                 DividerDrawerItem()
             )
             addItem(
-                simpleMenuItem("Добавить счёт"),
-                { view, pos, drItem ->
-                    activity.replaceFragment(AddAccountFragment())
-                }
-            )
-            addItem(
                 simpleMenuItem("Мои счета"),
                 { view, pos, drItem ->
                     activity.replaceFragment(MyAccountsFragment())
@@ -123,14 +117,14 @@ class DrawerController(
             addItem(
                 simpleMenuItem("История выплат"),
                 { view, pos, drItem ->
-                    //todo
+                    activity.replaceFragment(HistoryFragment())
                 }
             )
         }
     }
 
     private fun createDrawer() {
-        val drawerItemsEasyCreator = if (SessionManager.isDemo) initAnonimous() else initDefalut()
+        val drawerItemsEasyCreator = if (sessionManager.isDemo) initAnonimous() else initDefalut()
         for (item in drawerItemsEasyCreator.items()) {
             materialDrawerSliderView.addItems(item)
         }
@@ -151,8 +145,8 @@ class DrawerController(
 
     private fun createHeader() {
         val profileItem = ProfileDrawerItem().apply {
-            nameText = SessionManager.email
-            descriptionText = if (SessionManager.isDemo) "Анонимный аккаунт" else ""
+            nameText = sessionManager.user.email
+            descriptionText = if (sessionManager.isDemo) "Анонимный аккаунт" else ""
         }
         AccountHeaderView(activity).apply {
             attachToSliderView(materialDrawerSliderView)

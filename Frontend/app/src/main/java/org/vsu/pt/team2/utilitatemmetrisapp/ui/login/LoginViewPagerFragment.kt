@@ -30,7 +30,9 @@ class LoginViewPagerFragment : Fragment() {
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = getTabTitle(position)
-        }.attach()
+        }.apply {
+            attach()
+        }
         activity?.intent?.let {
             if (IntentExtrasManager.continueRegister.getFrom(it))
                 viewPager.currentItem = LOGIN_PAGE_INDEX

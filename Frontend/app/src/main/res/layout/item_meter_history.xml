@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="should_show_labels"
+            type="Boolean" />
+
+        <variable
+            name="sum"
+            type="Double" />
+
+        <variable
+            name="meter_identifier"
+            type="String" />
+
+        <variable
+            name="meter_type"
+            type="String" />
+
+        <variable
+            name="address"
+            type="String" />
+
+        <variable
+            name="date"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ripple_meter_history_item"
+        android:clickable="true"
+        android:focusable="true"
+        android:minHeight="70dp"
+        android:paddingStart="12dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="6dp"
+        android:paddingEnd="12dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/top_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/mid_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/meter_identifier_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/meter_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/meter_text"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/text_small_12"
+                    android:visibility="@{should_show_labels?View.VISIBLE:View.GONE}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/meter_identifier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{meter_identifier}"
+                    android:textColor="@color/dark_text"
+                    android:textSize="@dimen/text_default_16"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/meter_text" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/meter_type_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="@+id/meter_identifier_container"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/meter_type_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/meter_type_text"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/text_small_12"
+                    android:visibility="@{should_show_labels?View.VISIBLE:View.GONE}"
+                    app:layout_constraintBottom_toTopOf="@+id/meter_type_value"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/meter_type_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{meter_type}"
+                    android:textColor="@color/dark_text"
+                    android:textSize="@dimen/text_default_16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mid_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:paddingTop="4dp"
+            app:layout_constraintTop_toBottomOf="@id/top_content">
+
+            <TextView
+                android:id="@+id/meter_sum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{sum.toString()}"
+                android:textColor="@color/blue_primary"
+                android:textSize="@dimen/text_big_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:text="р."
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_small_12"
+                app:layout_constraintBottom_toBottomOf="@+id/meter_sum"
+                app:layout_constraintStart_toEndOf="@+id/meter_sum" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bot_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/mid_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{date}"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/text_small_12"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{address}"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/text_small_12"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/dark_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

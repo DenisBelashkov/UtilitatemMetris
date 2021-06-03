@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.orhanobut.logger.Logger
+import org.vsu.pt.team2.utilitatemmetrisapp.MyApplication
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
 
@@ -110,3 +111,10 @@ fun Context.hideKeyboard(view: View) {
 fun AppCompatActivity.setTitleIfMain(title: String) {
     (this as? MainActivity)?.titleTV?.text = title
 }
+
+fun AppCompatActivity.myApplication(): MyApplication? = application as? MyApplication
+
+fun AppCompatActivity.requireMyApplication(): MyApplication = application as? MyApplication
+    ?: throw RuntimeException("cant get my application, but its required")
+
+fun Fragment.myApplication(): MyApplication? = appCompatActivity()?.myApplication()

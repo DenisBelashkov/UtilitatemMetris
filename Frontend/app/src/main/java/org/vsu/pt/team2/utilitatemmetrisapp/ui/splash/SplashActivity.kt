@@ -13,8 +13,8 @@ import org.vsu.pt.team2.utilitatemmetrisapp.databinding.ActivitySplashBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.LoadingAnimationController
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.login.LoginActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.myApplication
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceActivity
 
 
 class SplashActivity : AppCompatActivity() {
@@ -40,7 +40,10 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun userAlreadyLoggedIn(): Boolean {
-        //todo check for cached user
+        myApplication()?.appComponent?.getSessionManager()?.let {
+            it.loadPreviousSessionOrUnauth()
+            return it.isAuthorized()
+        }
         return false
     }
 
