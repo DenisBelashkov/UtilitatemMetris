@@ -4,14 +4,14 @@ data class InformationAboutPayment(
     /**
      * here date-time
      */
-    val dataWith: String,
+    val dataWith: String = "",
     /**
      * here date-time
      */
-    val dataTo: String,
+    val dataTo: String = "",
 
     /**
      * one of [electic,heating,coldwater,hotwater,gas]
      */
-    val typeMetric: String,
+    val typeMetric: String = "",
 )

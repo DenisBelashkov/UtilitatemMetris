@@ -35,8 +35,10 @@ fun <T : AppCompatActivity> AppCompatActivity.openActivity(
         this.finish()
 }
 
-fun <T : AppCompatActivity> AppCompatActivity.replaceActivity(activity: Class<T>) =
-    openActivity(activity, false)
+fun <T : AppCompatActivity> AppCompatActivity.replaceActivity(
+    activity: Class<T>,
+    applyIntent: (Intent) -> Unit = {}
+) = openActivity(activity, true, applyIntent)
 
 fun Fragment.showToast(message: String, isShort: Boolean = true) {
     Toast.makeText(this.context, message, if (isShort) Toast.LENGTH_SHORT else Toast.LENGTH_LONG)
