@@ -1,5 +1,6 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.di
 
+import android.util.Log
 import com.fasterxml.jackson.databind.ObjectMapper
 import dagger.Module
 import dagger.Provides
@@ -25,9 +26,9 @@ class NetworkModule {
         authInterceptor: AuthInterceptor,
     ): OkHttpClient {
         return OkHttpClient().newBuilder()
+            .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
             .addInterceptor(CommonDataInterceptor())
-            .addInterceptor(loggingInterceptor)
             .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
@@ -37,10 +38,16 @@ class NetworkModule {
     @Singleton
     @Provides
     fun loggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
-        level = if (BuildConfig.DEBUG)
+        level = if (BuildConfig.DEBUG) {
+            Log.d("BuildConfig","Debug")
+            Log.d("Http","Logging level : body")
             HttpLoggingInterceptor.Level.BODY
-        else
+        }
+        else {
+            Log.d("BuildConfig","Not Debug")
+            Log.d("Http","Logging level : none")
             HttpLoggingInterceptor.Level.NONE
+        }
     }
 
     @Singleton

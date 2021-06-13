@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.yandex.metrica.YandexMetrica
 import kotlinx.coroutines.*
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentLoginBinding
@@ -23,6 +24,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.hideKeyboard
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.myApplication
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.LoginViewModel
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText
 import studio.carbonylgroup.textfieldboxes.TextFieldBoxes
@@ -95,8 +97,6 @@ class LoginFragment : Fragment() {
         job = lifecycleScope.launch {
             validateFieldsThenDo { email, password ->
                 button.setStateLoading()
-                println(email)
-                println(password)
 
                 when (authManager.authUser(email, password)) {
                     is ApiResult.NetworkError -> {
@@ -106,9 +106,8 @@ class LoginFragment : Fragment() {
                         //todo show error
                     }
                     is ApiResult.Success -> {
-                        (activity as? AppCompatActivity)?.openActivity(
-                            MainActivity::class.java,
-                            true
+                        (activity as? AppCompatActivity)?.replaceActivity(
+                            MainActivity::class.java
                         )
                     }
                 }

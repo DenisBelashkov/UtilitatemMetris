@@ -64,7 +64,11 @@ class AccountFragment : DisabledDrawerFragment() {
         binding.payChosenMetersButton.viewmodel =
             GeneralButtonViewModel(getString(R.string.pay_for_chosen)) {
                 //todo action when pay for all
-                appCompatActivity()?.replaceFragment(PaymentFragment())
+                appCompatActivity()?.replaceFragment(
+                    PaymentFragment.createWithMetersIdentifier(
+                        adapter.getChecked().map { it.identifier }
+                    )
+                )
             }
         binding.metersOnAccountRecyclerView.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
@@ -85,7 +89,6 @@ class AccountFragment : DisabledDrawerFragment() {
                 "6633pqff445", MeterType.Elect, 1209.1
             )
         )
-
 
         adapter.submitList(list)
     }
