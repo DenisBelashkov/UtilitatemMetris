@@ -2,9 +2,11 @@ package org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.metersList
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.ItemMeterWithCheckboxBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.setFromVM
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterItemViewModel
@@ -63,8 +65,18 @@ class MetersWithCheckboxListAdapter :
 
             setOnClickListener {
                 binding.checkbox.let {
-                    it.isChecked = !it.isChecked
-                    onMeterClickCallback.invoke(item, it.isChecked)
+                    if (item.backlog > 0.0) {
+                        it.isChecked = !it.isChecked
+                        onMeterClickCallback.invoke(item, it.isChecked)
+                    } else {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.meter_dont_has_backlog),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        it.isChecked = false
+                        onMeterClickCallback.invoke(item, it.isChecked)
+                    }
                 }
             }
 

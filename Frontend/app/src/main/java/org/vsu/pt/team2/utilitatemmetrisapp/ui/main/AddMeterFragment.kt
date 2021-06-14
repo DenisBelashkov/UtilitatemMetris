@@ -17,6 +17,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import org.vsu.pt.team2.utilitatemmetrisapp.repository.MeterRepo
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.setFromVM
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.internetConnectionLostToast
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.requireAppCompatActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.requireMyApplication
@@ -52,15 +53,17 @@ class AddMeterFragment : BaseTitledFragment(R.string.fragment_title_add_meter) {
 
     fun loadMeters(correctMeterIdentifier: String) {
         lifecycleScope.launch {
-            val meter: Meter?
+            var meter: Meter? = null
             val res = meterManager.getMeterByIdentifier(correctMeterIdentifier)
             when (res) {
                 is ApiResult.Success ->
                     meter = res.value.first
-                is ApiResult.GenericError, ApiResult.NetworkError ->
-                    meter = meterRepo.meterOrNull(correctMeterIdentifier)?.also {
-                        //todo показать Toast с надписью "загружено из локального репозитория"
-                    }
+                is ApiResult.GenericError->{
+                    //todo showtoast
+                }
+                ApiResult.NetworkError -> {
+                    internetConnectionLostToast()
+                }
             }
             meter?.let {
                 binding.meterFound = true

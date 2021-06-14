@@ -45,11 +45,19 @@ fun Fragment.showToast(message: String, isShort: Boolean = true) {
         .show()
 }
 
+fun Fragment.internetConnectionLostToast() {
+    showToast(getString(R.string.lost_internet_connection))
+}
+
 fun AppCompatActivity.showToast(message: String, isShort: Boolean = true) {
     if (Looper.myLooper() == null)
         Looper.prepare()
     Toast.makeText(this, message, if (isShort) Toast.LENGTH_SHORT else Toast.LENGTH_LONG)
         .show()
+}
+
+fun AppCompatActivity.internetConnectionLostToast() {
+    showToast(getString(R.string.lost_internet_connection))
 }
 
 fun Fragment.appCompatActivity(): AppCompatActivity? {

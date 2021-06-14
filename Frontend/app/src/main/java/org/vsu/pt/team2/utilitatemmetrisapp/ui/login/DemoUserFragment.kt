@@ -18,10 +18,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BigGeneralButton
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.ImeActionListener
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.EmailValidator
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.hideKeyboard
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.myApplication
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.*
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText
 import studio.carbonylgroup.textfieldboxes.TextFieldBoxes
 import javax.inject.Inject
@@ -69,7 +66,7 @@ class DemoUserFragment : Fragment() {
 
                 when (authManager.authUser(email)) {
                     is ApiResult.NetworkError -> {
-                        //todo show error
+                        internetConnectionLostToast()
                     }
                     is ApiResult.GenericError -> {
                         //todo show error

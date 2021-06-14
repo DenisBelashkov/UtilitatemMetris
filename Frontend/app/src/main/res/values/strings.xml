@@ -64,6 +64,13 @@
     <string name="pay_backlog">Погасить задолженность</string>
     <string name="heating">Отопление</string>
     <string name="fragment_history_title">История</string>
+    <string name="do_payment">Оплатить</string>
+    <string name="rubles_postfix">р.</string>
+    <string name="fragment_dialog_pay_title">Оплата</string>
+    <string name="meter_dont_has_backlog">На данном счётчике нету задолженности</string>
+    <string name="for_finish_registration_visit_email">Для того чтобы завершить регистрацию, пройдите по ссылке, отправленной вам на почту.</string>
+    <string name="finish_registration_title">Подтверждение регистрации</string>
+    <string name="lost_internet_connection">Нет связи с интернетом</string>
 
 
 </resources>

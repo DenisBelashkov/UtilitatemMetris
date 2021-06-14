@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.EditorInfo
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -21,10 +22,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.ImeActionListener
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.EmailValidator
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.PasswordValidator
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.hideKeyboard
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.myApplication
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.*
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.LoginViewModel
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText
 import studio.carbonylgroup.textfieldboxes.TextFieldBoxes
@@ -53,9 +51,12 @@ class LoginFragment : Fragment() {
         emailTextFieldBoxes = binding.loginEmailTextfieldboxes
         passwordTextFieldBoxes = binding.loginPasswordTextfieldboxes
         emailEditText = binding.loginEmailExtendededittext
+        loginViewModel.inLoginMode.postValue(true)
         activity?.intent?.let {
-            if (IntentExtrasManager.continueRegister.getFrom(it))
+            if (IntentExtrasManager.continueRegister.getFrom(it)) {
                 emailEditText.setText(sessionManager.user.email)
+                loginViewModel.inLoginMode.postValue(false)
+            }
         }
         passwordEditText = binding.loginPasswordExtendededittext.also {
             it.setOnEditorActionListener(
@@ -72,7 +73,6 @@ class LoginFragment : Fragment() {
             }
             button.invalidate()
         })
-        loginViewModel.inLoginMode.postValue(true)
     }
 
     override fun onCreateView(
@@ -98,19 +98,41 @@ class LoginFragment : Fragment() {
             validateFieldsThenDo { email, password ->
                 button.setStateLoading()
 
-                when (authManager.authUser(email, password)) {
-                    is ApiResult.NetworkError -> {
-                        //todo show error
+                if(loginViewModel.inLoginMode.value==true){
+                    when (authManager.authUser(email, password)) {
+                        is ApiResult.NetworkError -> {
+                            internetConnectionLostToast()
+                        }
+                        is ApiResult.GenericError -> {
+                            //todo show error
+                        }
+                        is ApiResult.Success -> {
+                            (activity as? AppCompatActivity)?.replaceActivity(
+                                MainActivity::class.java
+                            )
+                        }
                     }
-                    is ApiResult.GenericError -> {
-                        //todo show error
-                    }
-                    is ApiResult.Success -> {
-                        (activity as? AppCompatActivity)?.replaceActivity(
-                            MainActivity::class.java
-                        )
+                }else{
+                    when (authManager.registerUser(email, password)) {
+                        is ApiResult.NetworkError -> {
+                             internetConnectionLostToast()
+                        }
+                        is ApiResult.GenericError -> {
+                            //todo show error
+                        }
+                        is ApiResult.Success -> {
+                            AlertDialog.Builder(requireContext())
+                                .setMessage(getString(R.string.for_finish_registration_visit_email))
+                                .setTitle(getString(R.string.finish_registration_title))
+                                .create()
+                                .show()
+                            passwordEditText.text.clear()
+                            loginViewModel.inLoginMode.postValue(true)
+                        }
                     }
                 }
+
+
 
                 button.setStateDefault()
             }

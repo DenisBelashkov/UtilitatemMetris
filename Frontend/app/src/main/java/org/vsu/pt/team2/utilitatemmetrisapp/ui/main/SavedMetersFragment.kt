@@ -17,6 +17,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.metersList.MetersWithCheckboxListAdapter
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.appCompatActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.internetConnectionLostToast
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.myApplication
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.GeneralButtonViewModel
@@ -87,8 +88,7 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
             val apiRes = meterManager.getMetersSavedByUser()
             when (apiRes) {
                 is ApiResult.NetworkError -> {
-                    //todo show toast
-                    view?.let { Snackbar.make(it, "Net connection err", Snackbar.LENGTH_SHORT) }
+                    internetConnectionLostToast()
                 }
                 is ApiResult.GenericError -> {
                     //todo show toast
