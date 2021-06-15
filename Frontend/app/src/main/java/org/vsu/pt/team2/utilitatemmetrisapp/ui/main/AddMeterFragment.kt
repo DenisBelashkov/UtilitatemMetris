@@ -14,13 +14,9 @@ import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentAddMeterBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.MeterManager
 import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
-import org.vsu.pt.team2.utilitatemmetrisapp.repository.MeterRepo
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.setFromVM
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.internetConnectionLostToast
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.requireAppCompatActivity
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.requireMyApplication
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.*
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterItemViewModel
 import javax.inject.Inject
 
@@ -30,8 +26,6 @@ class AddMeterFragment : BaseTitledFragment(R.string.fragment_title_add_meter) {
     @Inject
     lateinit var meterManager: MeterManager
 
-    @Inject
-    lateinit var meterRepo: MeterRepo
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,15 +48,14 @@ class AddMeterFragment : BaseTitledFragment(R.string.fragment_title_add_meter) {
     fun loadMeters(correctMeterIdentifier: String) {
         lifecycleScope.launch {
             var meter: Meter? = null
-            val res = meterManager.getMeterByIdentifier(correctMeterIdentifier)
-            when (res) {
+            when (val res = meterManager.getMeterByIdentifier(correctMeterIdentifier)) {
                 is ApiResult.Success ->
                     meter = res.value.first
                 is ApiResult.GenericError->{
-                    //todo showtoast
+                    genericErrorToast(res)
                 }
                 ApiResult.NetworkError -> {
-                    internetConnectionLostToast()
+                    networkConnectionErrorToast()
                 }
             }
             meter?.let {

@@ -19,7 +19,8 @@ import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.DisabledDrawerFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.CreationFragmentArgs
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.internetConnectionLostToast
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.genericErrorToast
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.networkConnectionErrorToast
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.myApplication
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.GeneralButtonViewModel
 import javax.inject.Inject
@@ -104,16 +105,15 @@ class PaymentFragment : DisabledDrawerFragment(R.string.fragment_title_payment) 
     }
 
     private suspend fun requestOnDoPaymentClick() {
-        val paymentResult = paymentManager.doPayment(metersIdentifiers, sum, metersIdentifiers[0])
-        when(paymentResult){
+        when(val paymentResult = paymentManager.doPayment(metersIdentifiers, sum, metersIdentifiers[0])){
             is ApiResult.Success->{
                 onSuccessPay()
             }
             is ApiResult.GenericError->{
-                //todo showtoast
+                genericErrorToast(paymentResult)
             }
             is ApiResult.NetworkError->{
-                internetConnectionLostToast()
+                networkConnectionErrorToast()
             }
         }
     }
@@ -130,7 +130,7 @@ class PaymentFragment : DisabledDrawerFragment(R.string.fragment_title_payment) 
 
     }
 
-    class PaymentDialog(
+    private inner class PaymentDialog(
         private val sumForPay: Double
     ) : DialogFragment() {
 
@@ -157,7 +157,7 @@ class PaymentFragment : DisabledDrawerFragment(R.string.fragment_title_payment) 
             super.onViewCreated(view, savedInstanceState)
             binding.fragmentDialogPaySumTv.text = sumForPay.toString()
             binding.fragmentDialogPayBtnPay.setOnClickListener {
-                //todo
+                //todo dialog pay button
             }
         }
 
@@ -170,6 +170,7 @@ class PaymentFragment : DisabledDrawerFragment(R.string.fragment_title_payment) 
 
         override fun onCancel(dialog: DialogInterface) {
             super.onCancel(dialog)
+            onCancelPay()
         }
 
         override fun onDismiss(dialog: DialogInterface) {

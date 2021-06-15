@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
@@ -19,15 +21,14 @@
             type="Double" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         style="@style/RootElementStyle"
         >
 
        <androidx.constraintlayout.widget.ConstraintLayout
+           android:id="@+id/fragment_meter_info_container"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            app:layout_constraintStart_toStartOf="parent"
@@ -203,8 +204,29 @@
 
                    />
            </androidx.constraintlayout.widget.ConstraintLayout>
-
        </androidx.constraintlayout.widget.ConstraintLayout>
+        <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+            android:id="@+id/fragment_meter_newdata_textfieldboxes"
+            style="@style/TextFieldBoxesStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            app:labelText="@string/current_month_data"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_meter_info_container"
+            app:endIcon="@drawable/ic_baseline_check_24"
+            >
+
+            <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                android:id="@+id/fragment_meter_newdata_extendededittext"
+                style="@style/TextFieldBoxesExtendedEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="number">
+
+            </studio.carbonylgroup.textfieldboxes.ExtendedEditText>
+        </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
         <include
             android:id="@+id/meter_show_history"
@@ -212,10 +234,10 @@
             layout="@layout/general_button_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@+id/meter_pay_backlog"
 
-            />
+            tools:layout_editor_absoluteX="24dp" />
 
         <include
             android:id="@+id/meter_pay_backlog"

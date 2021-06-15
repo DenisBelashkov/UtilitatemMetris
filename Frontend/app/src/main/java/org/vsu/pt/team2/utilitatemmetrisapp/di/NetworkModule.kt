@@ -45,8 +45,8 @@ class NetworkModule {
         }
         else {
             Log.d("BuildConfig","Not Debug")
-            Log.d("Http","Logging level : none")
-            HttpLoggingInterceptor.Level.NONE
+            Log.d("Http","Logging level : basic")
+            HttpLoggingInterceptor.Level.BASIC
         }
     }
 

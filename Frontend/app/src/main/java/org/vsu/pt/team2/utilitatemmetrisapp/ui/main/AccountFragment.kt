@@ -63,7 +63,6 @@ class AccountFragment : DisabledDrawerFragment() {
         binding.sumForPay = 0.0
         binding.payChosenMetersButton.viewmodel =
             GeneralButtonViewModel(getString(R.string.pay_for_chosen)) {
-                //todo action when pay for all
                 appCompatActivity()?.replaceFragment(
                     PaymentFragment.createWithMetersIdentifier(
                         adapter.getChecked().map { it.identifier }

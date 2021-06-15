@@ -3,18 +3,20 @@ package org.vsu.pt.team2.utilitatemmetrisapp.ui.main
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 import org.vsu.pt.team2.utilitatemmetrisapp.R
+import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentDialogAcceptChangesBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentMeterBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.MeterManager
 import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.DisabledDrawerFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.setFromVM
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.CreationFragmentArgs
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.requireAppCompatActivity
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.requireMyApplication
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.*
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.GeneralButtonViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
 import javax.inject.Inject
@@ -102,14 +104,42 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
             return when (res) {
                 is ApiResult.Success ->
                     true
-                else ->
+                is ApiResult.GenericError->{
+                    genericErrorToast(res)
                     false
+                }
+                is ApiResult.NetworkError->{
+                    networkConnectionErrorToast()
+                    false
+                }
             }
         }
         return false
     }
 
     fun initFields(binding: FragmentMeterBinding) {
+        binding.fragmentMeterNewdataTextfieldboxes.endIconImageButton.setOnClickListener {
+            val newData = binding.fragmentMeterNewdataExtendededittext
+                .text
+                .toString()
+                .toDoubleOrNull()
+            if (newData == null)
+                Logger.e("Cant convert new data value to double")
+            else {
+                Logger.d(
+                    "apply new data clicked, new data: " +
+                            binding.fragmentMeterNewdataExtendededittext.text.toString()
+                )
+                meter?.let { m ->
+                    AcceptChangesDialog(m.curMonthData, newData) { nv -> acceptChangesClicked(nv) }
+                        .show(parentFragmentManager, "AcceptChangesDialogFragment")
+                }
+            }
+            //dialog показать с вопросом "Сменить значения на [новые]?"
+            //если юзер во временном аккаунте, отправлять на почту письмо для подтверждения
+            //или отправлять раз в 4 раза
+            //или спросить у сервера, "надо ли подтверждать действие?"
+        }
 //        arguments?.let { bundle ->
 //            BundleManager.MeterViewModelBundlePackager.getFrom(bundle)
 //                ?.let {
@@ -120,8 +150,12 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
             try {
                 val res = meterManager.getMeterByIdentifier(meterIdentifier)
                 when (res) {
-                    is ApiResult.NetworkError, is ApiResult.GenericError -> {
-                        //show toast
+                    is ApiResult.NetworkError -> {
+                        networkConnectionErrorToast()
+                        parentFragmentManager.popBackStack()
+                    }
+                    is ApiResult.GenericError -> {
+                        genericErrorToast(res)
                         parentFragmentManager.popBackStack()
                     }
                     is ApiResult.Success -> {
@@ -134,7 +168,13 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
                         menu?.findItem(R.id.meter_menu_fav)?.let {
                             setMenuItemState(isSaved, it)
                         }
-
+                        meter?.let { m ->
+                            if (!m.curMonthData.toString().isNullOrBlank()) {
+                                binding.fragmentMeterNewdataExtendededittext.setText(m.curMonthData.toString())
+                            } else {
+                                binding.fragmentMeterNewdataExtendededittext.setText(m.prevMonthData.toString())
+                            }
+                        }
                     }
                 }
             } catch (npe: NullPointerException) {
@@ -161,6 +201,77 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
         super.onAttach(context)
         requireAppCompatActivity().requireMyApplication().appComponent?.meterComponent()
             ?.injectMeterFragment(this)
+    }
+
+    private suspend fun acceptChangesRequest(newValue: Double) {
+        val updateResult = meterManager.updateMeterData(meterIdentifier, newValue)
+        when (updateResult) {
+            is ApiResult.NetworkError ->
+                networkConnectionErrorToast()
+            is ApiResult.GenericError -> {
+                genericErrorToast(updateResult)
+            }
+            is ApiResult.Success -> {
+                meter?.curMonthData = newValue
+            }
+        }
+    }
+
+    private fun acceptChangesClicked(newValue: Double) {
+        lifecycleScope.launch {
+            acceptChangesRequest(newValue)
+        }
+    }
+
+    class AcceptChangesDialog(
+        private val oldValue: Double,
+        private val newValue: Double,
+        private val onAcceptClick: (Double) -> Unit
+    ) : DialogFragment() {
+
+        lateinit var binding: FragmentDialogAcceptChangesBinding
+
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View {
+            if (oldValue >= newValue) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.new_value_lower_than_previous),
+                    Toast.LENGTH_LONG
+                ).show()
+                dismiss()
+            }
+            dialog!!.window?.setBackgroundDrawableResource(R.drawable.round_corner)
+            binding = FragmentDialogAcceptChangesBinding.inflate(
+                inflater,
+                container,
+                false
+            )
+
+            return binding.root
+        }
+
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
+            binding.fragmentDialogAcceptChangesCurFromData.text = oldValue.toString()
+            binding.fragmentDialogAcceptChangesCurToData.text = newValue.toString()
+            binding.fragmentDialogAcceptChangesBtnAccept.setOnClickListener {
+                onAcceptClick.invoke(newValue)
+            }
+            binding.fragmentDialogAcceptChangesBtnCancel.setOnClickListener {
+                dismiss()
+            }
+        }
+
+        override fun onStart() {
+            super.onStart()
+            val width = (resources.displayMetrics.widthPixels * 0.85).toInt()
+            val height = (resources.displayMetrics.heightPixels * 0.40).toInt()
+            dialog!!.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+        }
     }
 
     companion object {

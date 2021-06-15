@@ -9,7 +9,6 @@ import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.yandex.metrica.YandexMetrica
 import kotlinx.coroutines.*
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentDemoUserBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.AuthManager
@@ -64,12 +63,13 @@ class DemoUserFragment : Fragment() {
                 button.setStateLoading()
                 println(email)
 
-                when (authManager.authUser(email)) {
+                val authRes = authManager.authUser(email)
+                when (authRes) {
                     is ApiResult.NetworkError -> {
-                        internetConnectionLostToast()
+                        networkConnectionErrorToast()
                     }
                     is ApiResult.GenericError -> {
-                        //todo show error
+                        genericErrorToast(authRes)
                     }
                     is ApiResult.Success -> {
                         (activity as? AppCompatActivity)?.replaceActivity(

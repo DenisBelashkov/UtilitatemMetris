@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.yandex.metrica.YandexMetrica
 import kotlinx.coroutines.*
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentLoginBinding
@@ -99,12 +98,12 @@ class LoginFragment : Fragment() {
                 button.setStateLoading()
 
                 if(loginViewModel.inLoginMode.value==true){
-                    when (authManager.authUser(email, password)) {
+                    when (val authRes = authManager.authUser(email, password)) {
                         is ApiResult.NetworkError -> {
-                            internetConnectionLostToast()
+                            networkConnectionErrorToast()
                         }
                         is ApiResult.GenericError -> {
-                            //todo show error
+                            genericErrorToast(authRes)
                         }
                         is ApiResult.Success -> {
                             (activity as? AppCompatActivity)?.replaceActivity(
@@ -113,12 +112,12 @@ class LoginFragment : Fragment() {
                         }
                     }
                 }else{
-                    when (authManager.registerUser(email, password)) {
+                    when (val authRes = authManager.registerUser(email, password)) {
                         is ApiResult.NetworkError -> {
-                             internetConnectionLostToast()
+                             networkConnectionErrorToast()
                         }
                         is ApiResult.GenericError -> {
-                            //todo show error
+                            genericErrorToast(authRes)
                         }
                         is ApiResult.Success -> {
                             AlertDialog.Builder(requireContext())

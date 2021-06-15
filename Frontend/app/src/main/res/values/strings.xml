@@ -71,6 +71,12 @@
     <string name="for_finish_registration_visit_email">Для того чтобы завершить регистрацию, пройдите по ссылке, отправленной вам на почту.</string>
     <string name="finish_registration_title">Подтверждение регистрации</string>
     <string name="lost_internet_connection">Нет связи с интернетом</string>
+    <string name="current_month_data">Данные на текущий месяц</string>
+    <string name="cancel">Отмена</string>
+    <string name="accept_changes">Подтвердить изменения</string>
+    <string name="new_value_lower_than_previous">Новое значение должно быть больше предыдущего</string>
+    <string name="generic_error_default_message">Произошла ошибка</string>
+    <string name="select_at_least_1_meter_to_pay">Выберите хотя бы один счётчик для оплаты</string>
 
 
 </resources>
