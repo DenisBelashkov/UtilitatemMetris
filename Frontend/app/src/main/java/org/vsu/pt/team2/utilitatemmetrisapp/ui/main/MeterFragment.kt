@@ -104,11 +104,11 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
             return when (res) {
                 is ApiResult.Success ->
                     true
-                is ApiResult.GenericError->{
+                is ApiResult.GenericError -> {
                     genericErrorToast(res)
                     false
                 }
-                is ApiResult.NetworkError->{
+                is ApiResult.NetworkError -> {
                     networkConnectionErrorToast()
                     false
                 }
@@ -131,7 +131,11 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
                             binding.fragmentMeterNewdataExtendededittext.text.toString()
                 )
                 meter?.let { m ->
-                    AcceptChangesDialog(m.curMonthData, newData) { nv -> acceptChangesClicked(nv) }
+                    AcceptChangesDialog(
+                        m.curMonthData,
+                        newData,
+                        { nv, onSuccess -> acceptChangesClicked(nv, onSuccess) }
+                    )
                         .show(parentFragmentManager, "AcceptChangesDialogFragment")
                 }
             }
@@ -203,9 +207,8 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
             ?.injectMeterFragment(this)
     }
 
-    private suspend fun acceptChangesRequest(newValue: Double) {
-        val updateResult = meterManager.updateMeterData(meterIdentifier, newValue)
-        when (updateResult) {
+    private suspend fun acceptChangesRequest(newValue: Double, onSuccess: () -> Unit) {
+        when (val updateResult = meterManager.updateMeterData(meterIdentifier, newValue)) {
             is ApiResult.NetworkError ->
                 networkConnectionErrorToast()
             is ApiResult.GenericError -> {
@@ -213,20 +216,22 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
             }
             is ApiResult.Success -> {
                 meter?.curMonthData = newValue
+                binding.fragmentMeterNewdataExtendededittext.setText(newValue.toString())
+                onSuccess.invoke()
             }
         }
     }
 
-    private fun acceptChangesClicked(newValue: Double) {
+    private fun acceptChangesClicked(newValue: Double, onSuccess: () -> Unit) {
         lifecycleScope.launch {
-            acceptChangesRequest(newValue)
+            acceptChangesRequest(newValue, onSuccess)
         }
     }
 
     class AcceptChangesDialog(
         private val oldValue: Double,
         private val newValue: Double,
-        private val onAcceptClick: (Double) -> Unit
+        private val onAcceptClick: (newValue: Double, onSuccess: () -> Unit) -> Unit
     ) : DialogFragment() {
 
         lateinit var binding: FragmentDialogAcceptChangesBinding
@@ -259,7 +264,7 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
             binding.fragmentDialogAcceptChangesCurFromData.text = oldValue.toString()
             binding.fragmentDialogAcceptChangesCurToData.text = newValue.toString()
             binding.fragmentDialogAcceptChangesBtnAccept.setOnClickListener {
-                onAcceptClick.invoke(newValue)
+                onAcceptClick.invoke(newValue,{dismiss()})
             }
             binding.fragmentDialogAcceptChangesBtnCancel.setOnClickListener {
                 dismiss()
