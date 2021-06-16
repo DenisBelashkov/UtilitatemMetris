@@ -1,3 +1,5 @@
+import os
+
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.automap import automap_base
 
@@ -20,4 +22,5 @@ class Controller:
 			m.setOptions(app, self.db, Base)
 
 	def run(self):
-		self.app.run(host='0.0.0.0',debug=True)
+		port = int(os.environ.get('PORT', 5005))
+		self.app.run(port=port,host='0.0.0.0', debug=True)
