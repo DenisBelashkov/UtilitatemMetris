@@ -59,6 +59,17 @@ class RepositoryModule {
                     "Проспект Ленинский, д.12"
                 ), true
             )
+            addMeter(
+                Meter(
+                    "30053hh3vrc1",
+                    MeterType.Gas,
+                    1.2,
+                    823.0,
+                    823.0,
+                    0.0,
+                    "Проспект Ленинский, д.12"
+                ), true
+            )
         }
     }
 

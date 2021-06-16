@@ -31,6 +31,8 @@ class PaymentFragment : DisabledDrawerFragment(R.string.fragment_title_payment) 
     private val metersIdentifiers: List<String> by PaymentFragment.creationFragmentArgs.asProperty()
     private var meters: List<Meter>? = null
     private var sum: Double = 0.0
+    private var paymentDialog: PaymentDialog? = null
+    private var paymentId: Int? = null
 
     @Inject
     lateinit var meterManager: MeterManager
@@ -95,41 +97,51 @@ class PaymentFragment : DisabledDrawerFragment(R.string.fragment_title_payment) 
         binding.paymentSentToEmail.viewmodel = GeneralButtonViewModel(
             getString(R.string.sent_to_email), {
                 //todo sent to email
+                // отправить на сервер id платёжки, там из jwt получаем email
+                // и отправляем платёжку на почту
+                paymentId
             }
         )
         binding.paymentPay.viewmodel = GeneralButtonViewModel(
             getString(R.string.to_pay), {
-                PaymentDialog(sum).show(parentFragmentManager, "PaymentDialogFragment")
+                paymentDialog?.dismiss()
+                paymentDialog = PaymentDialog(
+                    sum,
+                    ::doPaymentClick,
+                    ::onCancelPay
+                ).also {
+                    it.show(parentFragmentManager, "PaymentDialogFragment")
+                }
             }
         )
     }
 
-    private fun doPaymentClick(){
+    private fun doPaymentClick() {
         lifecycleScope.launch {
-            CoroutineScope(Dispatchers.IO).launch {
-                requestOnDoPaymentClick()
-            }
+            requestOnDoPaymentClick()
         }
     }
 
     private suspend fun requestOnDoPaymentClick() {
-        when(val paymentResult = paymentManager.doPayment(metersIdentifiers, sum)){
-            is ApiResult.Success->{
+        when (val paymentResult = paymentManager.doPayment(metersIdentifiers, sum)) {
+            is ApiResult.Success -> {
                 meters?.forEach {
                     it.balance = 0.0
                 }
+                paymentId = paymentResult.value.id
                 onSuccessPay()
             }
-            is ApiResult.GenericError->{
+            is ApiResult.GenericError -> {
                 genericErrorToast(paymentResult)
             }
-            is ApiResult.NetworkError->{
+            is ApiResult.NetworkError -> {
                 networkConnectionErrorToast()
             }
         }
     }
 
     private fun onSuccessPay() {
+        paymentDialog?.dismiss()
         binding.paymentSentToEmail.generalButton.isEnabled = true
         binding.paymentSentToEmail.generalButton.visibility = View.VISIBLE
 
@@ -141,8 +153,10 @@ class PaymentFragment : DisabledDrawerFragment(R.string.fragment_title_payment) 
 
     }
 
-    private inner class PaymentDialog(
-        private val sumForPay: Double
+    class PaymentDialog(
+        private val sumForPay: Double,
+        private val doPaymentClick: () -> Unit = {},
+        private val cancelPayment: () -> Unit = {},
     ) : DialogFragment() {
 
         private lateinit var binding: FragmentDialogPayBinding
@@ -168,7 +182,7 @@ class PaymentFragment : DisabledDrawerFragment(R.string.fragment_title_payment) 
             super.onViewCreated(view, savedInstanceState)
             binding.fragmentDialogPaySumTv.text = sumForPay.toString()
             binding.fragmentDialogPayBtnPay.setOnClickListener {
-                doPaymentClick()
+                doPaymentClick.invoke()
             }
         }
 
@@ -181,7 +195,7 @@ class PaymentFragment : DisabledDrawerFragment(R.string.fragment_title_payment) 
 
         override fun onCancel(dialog: DialogInterface) {
             super.onCancel(dialog)
-            onCancelPay()
+            cancelPayment.invoke()
         }
 
         override fun onDismiss(dialog: DialogInterface) {

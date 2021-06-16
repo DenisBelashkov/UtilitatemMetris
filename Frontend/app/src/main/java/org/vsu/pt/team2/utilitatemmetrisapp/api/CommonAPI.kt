@@ -60,7 +60,7 @@ interface CommonAPI {
     @POST("/payment/metrics")
     suspend fun payment(
         @Body payment: Payment
-    ): List<ItemPaymentHistory>
+    ): ItemPaymentHistory
 
 
     @GET("/payment/history")

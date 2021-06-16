@@ -13,6 +13,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentDialogAcceptChan
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentMeterBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.MeterManager
 import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
+import org.vsu.pt.team2.utilitatemmetrisapp.models.PaymentsFilter
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.DisabledDrawerFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.setFromVM
@@ -144,16 +145,9 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
             //или отправлять раз в 4 раза
             //или спросить у сервера, "надо ли подтверждать действие?"
         }
-//        arguments?.let { bundle ->
-//            BundleManager.MeterViewModelBundlePackager.getFrom(bundle)
-//                ?.let {
-//                    binding.setFromVM(it, requireContext())
-//                } ?: parentFragmentManager.popBackStack()
-//        }
         lifecycleScope.launchWhenCreated {
             try {
-                val res = meterManager.getMeterByIdentifier(meterIdentifier)
-                when (res) {
+                when (val res = meterManager.getMeterByIdentifier(meterIdentifier)) {
                     is ApiResult.NetworkError -> {
                         networkConnectionErrorToast()
                         parentFragmentManager.popBackStack()
@@ -163,54 +157,60 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
                         parentFragmentManager.popBackStack()
                     }
                     is ApiResult.Success -> {
-                        meter = res.value.first
-                        binding.setFromVM(
-                            MeterViewModel.fromMeter(res.value.first),
-                            requireContext()
-                        )
+                        meter = res.value.first.also {
+                            onMeterLoaded(it)
+                        }
                         isSaved = res.value.second
                         menu?.findItem(R.id.meter_menu_fav)?.let {
                             setMenuItemState(isSaved, it)
-                        }
-                        meter?.let { m ->
-                            if (!m.curMonthData.toString().isNullOrBlank()) {
-                                binding.fragmentMeterNewdataExtendededittext.setText(m.curMonthData.toString())
-                            } else {
-                                binding.fragmentMeterNewdataExtendededittext.setText(m.prevMonthData.toString())
-                            }
                         }
                     }
                 }
             } catch (npe: NullPointerException) {
                 parentFragmentManager.popBackStack()
             }
-
         }
 
         binding.meterShowHistory.viewmodel = GeneralButtonViewModel(
             getString(R.string.show_payment_history),
             {
-                //todo переход на экран "истории платежей"
+                appCompatActivity()?.replaceFragment(
+                    HistoryFragment.createWithFilter(
+                        PaymentsFilter(identifierMetric = meterIdentifier)
+                    )
+                )
             }
         )
         binding.meterPayBacklog.viewmodel = GeneralButtonViewModel(
             getString(R.string.pay_backlog),
             {
-                PaymentFragment.createWithMetersIdentifier(
-                    listOf(
-                        meterIdentifier
+                appCompatActivity()?.replaceFragment(
+                    PaymentFragment.createWithMetersIdentifier(
+                        listOf(meterIdentifier)
                     )
-                ).also {
-                    appCompatActivity()?.replaceFragment(it)
-                }
+                )
             }
         )
     }
 
+    private fun onMeterLoaded(meter: Meter) {
+        binding.setFromVM(
+            MeterViewModel.fromMeter(meter),
+            requireContext()
+        )
+        if (!meter.curMonthData.toString().isNullOrBlank()) {
+            binding.fragmentMeterNewdataExtendededittext.setText(meter.curMonthData.toString())
+        } else {
+            binding.fragmentMeterNewdataExtendededittext.setText(meter.prevMonthData.toString())
+        }
+        binding.meterPayBacklog.generalButton.visibility =
+            if (meter.balance < 0) View.VISIBLE else View.GONE
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        requireAppCompatActivity().requireMyApplication().appComponent?.meterComponent()
-            ?.injectMeterFragment(this)
+        appCompatActivity()?.requireMyApplication()?.appComponent?.meterComponent()
+            ?.injectMeterFragment(this) ?: parentFragmentManager.popBackStack()
     }
 
     private suspend fun acceptChangesRequest(newValue: Double, onSuccess: () -> Unit) {
@@ -270,7 +270,7 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
             binding.fragmentDialogAcceptChangesCurFromData.text = oldValue.toString()
             binding.fragmentDialogAcceptChangesCurToData.text = newValue.toString()
             binding.fragmentDialogAcceptChangesBtnAccept.setOnClickListener {
-                onAcceptClick.invoke(newValue,{dismiss()})
+                onAcceptClick.invoke(newValue, { dismiss() })
             }
             binding.fragmentDialogAcceptChangesBtnCancel.setOnClickListener {
                 dismiss()

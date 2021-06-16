@@ -134,7 +134,7 @@ class HistoryFragment : BaseTitledFragment(R.string.fragment_history_title) {
                     bundle.putString("f_dateTo", DateFormatter.toString(it))
                 }
                 filter.meterType?.let {
-                    bundle.putString("f_typeMetric", it.toValue())
+                    bundle.putString("f_meterType", it.toValue())
                 }
                 bundle
             },
@@ -152,7 +152,7 @@ class HistoryFragment : BaseTitledFragment(R.string.fragment_history_title) {
                     if (it.isNotBlank())
                         filter.dateTo = DateFormatter.fromString(it)
                 }
-                it.getString("f_identifier", "")?.let {
+                it.getString("f_meterType", "")?.let {
                     if (it.isNotBlank())
                         filter.meterType = MeterType.forValue(it)
                 }

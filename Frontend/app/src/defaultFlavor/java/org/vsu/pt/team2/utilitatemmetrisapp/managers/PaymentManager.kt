@@ -15,7 +15,7 @@ class PaymentManager @Inject constructor(
     suspend fun doPayment(
         meterIdentifiers: List<String>,
         cost: Double
-    ): ApiResult<List<PaymentData>> {
+    ): ApiResult<PaymentData> {
         val res =
             generalWorker.doPayment(Payment(meterIdentifiers, cost))
         return when (res) {
@@ -26,9 +26,9 @@ class PaymentManager @Inject constructor(
                 res
             }
             is ApiResult.Success -> {
-                val paymentDatas = res.value.map { PaymentData(it) }
-                paymentRepo.addPayments(paymentDatas)
-                return ApiResult.Success(paymentDatas)
+                val paymentData = PaymentData(res.value)
+                paymentRepo.addPayment(paymentData)
+                return ApiResult.Success(paymentData)
             }
         }
     }

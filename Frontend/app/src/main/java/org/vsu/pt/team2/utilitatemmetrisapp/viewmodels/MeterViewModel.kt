@@ -2,6 +2,7 @@ package org.vsu.pt.team2.utilitatemmetrisapp.viewmodels
 
 import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
+import kotlin.math.abs
 
 class MeterViewModel(
     var identifier: String,
@@ -46,7 +47,7 @@ class MeterViewModel(
                 meter.tariff,
                 meter.prevMonthData,
                 meter.curMonthData,
-                -meter.balance
+                abs(-meter.balance)
             )
         }
     }
