@@ -16,18 +16,18 @@ class PaymentModule(Module):
 		Users = base.classes.Users
 
 		@app.route('/payment/history', methods=["GET"])
-		@wrapper_for_token
+		#@wrapper_for_token
 		def payment_history():
 			try:
 				r_json = request.json
-				decode_token = jwt.decode(request.headers["token"], "secret", algorithms=["HS256"])
-				#decode_token = {"id": 2, "email": "milo2", "type": "user"}
+				#decode_token = jwt.decode(request.headers["token"], "secret", algorithms=["HS256"])
+				decode_token = {"id": 2, "email": "milo2", "type": "user"}
 				if decode_token["type"] == "demo":
 					return " ", 403
 				id_user = decode_token["id"]
 				res_list = []
-				date_1 = datetime.strptime(r_json["dateWith"], '%d-%m-%Y').date()
-				date_2 = datetime.strptime(r_json["dateTo"], '%d-%m-%Y').date()
+				date_1 = datetime.strptime(r_json["dateWith"], '%d-%m-%Y %H:%M:%S').date()
+				date_2 = datetime.strptime(r_json["dateTo"], '%d-%m-%Y %H:%M:%S').date()
 				payments = db.session.query(Payment, Metrics.identifier, Users).join(Metrics, Metrics.id_metrics == Payment.id_metrics)\
 					.join(Flat, and_(Flat.id_personal_account == Metrics.id_personal_account, Flat.id_owner_user == id_user))\
 					.join(Type_metric, and_(Type_metric.id_type == Metrics.id_type, Type_metric.name == r_json["typeMetric"]))\
