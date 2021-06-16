@@ -196,7 +196,13 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
         binding.meterPayBacklog.viewmodel = GeneralButtonViewModel(
             getString(R.string.pay_backlog),
             {
-                //todo переход на экран "погасить задолженность"
+                PaymentFragment.createWithMetersIdentifier(
+                    listOf(
+                        meterIdentifier
+                    )
+                ).also {
+                    appCompatActivity()?.replaceFragment(it)
+                }
             }
         )
     }

@@ -1,9 +1,8 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.managers
 
-import org.vsu.pt.team2.utilitatemmetrisapp.api.model.InformationAboutPayment
 import org.vsu.pt.team2.utilitatemmetrisapp.api.model.Payment
-import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 import org.vsu.pt.team2.utilitatemmetrisapp.models.PaymentData
+import org.vsu.pt.team2.utilitatemmetrisapp.models.PaymentsFilter
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import org.vsu.pt.team2.utilitatemmetrisapp.network.GeneralWorker
 import org.vsu.pt.team2.utilitatemmetrisapp.repository.PaymentRepo
@@ -15,11 +14,10 @@ class PaymentManager @Inject constructor(
 ) {
     suspend fun doPayment(
         meterIdentifiers: List<String>,
-        cost: Double,
-        meterIdentifierForRemainCost: String
+        cost: Double
     ): ApiResult<List<PaymentData>> {
         val res =
-            generalWorker.doPayment(Payment(meterIdentifiers, cost, meterIdentifierForRemainCost))
+            generalWorker.doPayment(Payment(meterIdentifiers, cost))
         return when (res) {
             is ApiResult.NetworkError -> {
                 res
@@ -36,18 +34,11 @@ class PaymentManager @Inject constructor(
     }
 
     suspend fun paymentHistory(
-        //todo date
-        dateWith: String,
-        dateTo: String,
-        type: MeterType
+        filter: PaymentsFilter
     ): ApiResult<List<PaymentData>> {
         val res =
             generalWorker.paymentHistory(
-                InformationAboutPayment(
-                    dateWith,
-                    dateTo,
-                    type.toValue()
-                )
+                filter.toNetworkModel()
             )
         return when (res) {
             is ApiResult.NetworkError -> {

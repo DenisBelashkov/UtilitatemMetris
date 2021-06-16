@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.orhanobut.logger.Logger
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentDialogPayBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentPaymentBinding
@@ -20,8 +20,8 @@ import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.DisabledDrawerFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.CreationFragmentArgs
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.genericErrorToast
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.networkConnectionErrorToast
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.myApplication
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.networkConnectionErrorToast
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.GeneralButtonViewModel
 import javax.inject.Inject
 
@@ -104,9 +104,20 @@ class PaymentFragment : DisabledDrawerFragment(R.string.fragment_title_payment) 
         )
     }
 
+    private fun doPaymentClick(){
+        lifecycleScope.launch {
+            CoroutineScope(Dispatchers.IO).launch {
+                requestOnDoPaymentClick()
+            }
+        }
+    }
+
     private suspend fun requestOnDoPaymentClick() {
-        when(val paymentResult = paymentManager.doPayment(metersIdentifiers, sum, metersIdentifiers[0])){
+        when(val paymentResult = paymentManager.doPayment(metersIdentifiers, sum)){
             is ApiResult.Success->{
+                meters?.forEach {
+                    it.balance = 0.0
+                }
                 onSuccessPay()
             }
             is ApiResult.GenericError->{
@@ -157,7 +168,7 @@ class PaymentFragment : DisabledDrawerFragment(R.string.fragment_title_payment) 
             super.onViewCreated(view, savedInstanceState)
             binding.fragmentDialogPaySumTv.text = sumForPay.toString()
             binding.fragmentDialogPayBtnPay.setOnClickListener {
-                //todo dialog pay button
+                doPaymentClick()
             }
         }
 

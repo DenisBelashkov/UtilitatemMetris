@@ -1,23 +1,34 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.models
 
+import org.vsu.pt.team2.utilitatemmetrisapp.api.model.ItemMeterPaymentHistory
 import org.vsu.pt.team2.utilitatemmetrisapp.api.model.ItemPaymentHistory
+import org.vsu.pt.team2.utilitatemmetrisapp.dateutils.DateFormatter
 
 data class PaymentData(
     val id: Int,
-    val identifier: String,
+    val metricDatas: List<PaymentMetricData>,
     val date: String,
-    val email: String,
-    val cost: Number,
-    val prevValue: Int,
-    val curValue: Int
+    val email: String
 ) {
     constructor(netModel: ItemPaymentHistory) : this(
         netModel.id,
-        netModel.identifier,
-        netModel.date,
-        netModel.email,
-        netModel.cost,
-        netModel.prevValue,
-        netModel.curValue
+        netModel.metrics.map { PaymentMetricData(it) },
+        DateFormatter.fromNetworkStringToString(netModel.date),
+        netModel.email
     )
+}
+
+data class PaymentMetricData(
+    var meter: Meter,
+    var prevValue: Double,
+    var curValue: Double,
+    val cost: Double
+) {
+    constructor(itemMeterPaymentHistory: ItemMeterPaymentHistory) :
+            this(
+                Meter(itemMeterPaymentHistory.metric),
+                itemMeterPaymentHistory.prevValue,
+                itemMeterPaymentHistory.curValue,
+                itemMeterPaymentHistory.cost
+            )
 }

@@ -30,7 +30,7 @@ class CreationFragmentArgs<Data>(
                     }
                 }
 
-                return value ?: throw NullPointerException("Property is null. $this")
+                return value ?: throw NullPointerException("Property ${property.name} is null. $this ")
             }
         }
     }
