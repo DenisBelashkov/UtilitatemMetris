@@ -58,15 +58,18 @@ class MetricModule(Module):
 		@wrapper_for_token
 		def update_metric():
 			try:
-				token = request.headers["token"]
-				token_decode = jwt.decode(token, "secret", algorithms=["HS256"])
+				#token = request.headers["token"]
+				#token_decode = jwt.decode(token, "secret", algorithms=["HS256"])
 				r_json = request.json
-				metric = db.session.query(Metrics).join(Flat,
-														Flat.id_personal_account == Metrics.id_personal_account).filter(
-					Flat.id_owner_user == token_decode["id"]).filter(Metrics.identifier == r_json['identifier']).one_or_none()
+				metric = db.session.query(Metrics).filter(Metrics.identifier == r_json['identifier']).one_or_none()
+				# .join(Flat,
+				# 			Flat.id_personal_account == Metrics.id_personal_account).filter(
+				# 			Flat.id_owner_user == token_decode["id"])
+				#
+				#
 				if not metric:
 					return "", 404
-				if metric.curr_value > r_json['currentValue']:
+				if metric.prev_value > r_json['currentValue']:
 					return "", 400
 				metric.curr_value = r_json['currentValue']
 				db.session.commit()

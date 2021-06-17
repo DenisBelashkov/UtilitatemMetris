@@ -16,6 +16,7 @@ if __name__ == '__main__':
 	c = Controller(app, 'mysql+pymysql://tntrol:password@localhost:3306/mytp', list_m)
 	#mysql+pymysql://tntrol:password@localhost:3306/mytp
 
+
 	#encoded_jwt = jwt.encode({"some": "payload"}, "secret", algorithm="HS256")
 	#print(encoded_jwt)
 	#print(jwt.decode(encoded_jwt, "secret", algorithms=["HS256"]))

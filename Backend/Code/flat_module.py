@@ -1,5 +1,7 @@
+import jwt
+
 from module import Module
-from flask import jsonify
+from flask import jsonify, request
 from decoration import wrapper_for_token
 
 class FlatModule(Module):
@@ -16,20 +18,21 @@ class FlatModule(Module):
 		Address = base.classes.Address
 
 
-		@app.route('/flat/<user_id>', methods=["GET"])
+		@app.route('/flat', methods=["GET"])
 		@wrapper_for_token
-		def get_flats_by_id_user(user_id):
+		def get_flats_by_id_user():
 			try:
-				id = int(user_id)
+				decode_token = jwt.decode(request.headers["token"], "secret", algorithms=["HS256"])
+				id = decode_token["id"]
 				flats = db.session.query(Flat.id_personal_account, Address).join(Address,
-																				 Address.id_adress == Flat.id_adress).filter(
+																				 Address.id_address == Flat.id_address).filter(
 					Flat.id_owner_user == id).all()
 				if len(flats) > 0:
 					out = []
 					for f in flats:
 						out.append({"id": f.id_personal_account, "address": self.toString(f.Address)})
 					return jsonify(out)
-				return " ", 404
+				return jsonify([])
 			except Exception as e:
 				print(e)
-			return " ", 400
+				return " ", 500
