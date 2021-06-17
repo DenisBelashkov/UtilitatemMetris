@@ -17,8 +17,6 @@ class AuthManager @Inject constructor(
         delay(300L)
         val result : ApiResult<SuccessfulLoginUser> = ApiResult.Success<SuccessfulLoginUser>(
             SuccessfulLoginUser(
-                "email_offline_demo",
-                1,
                 "jwt_offline_demo"
             )
         )
@@ -31,7 +29,7 @@ class AuthManager @Inject constructor(
             }
             is ApiResult.Success -> {
                 result.value.apply {
-                    sessionManager.setSession(User(this.id, this.email, this.token), false)
+                    sessionManager.setSession(User(email, this.token), false)
                 }
 
             }
@@ -44,8 +42,6 @@ class AuthManager @Inject constructor(
         delay(300L)
         val result : ApiResult<SuccessfulLoginUser> = ApiResult.Success<SuccessfulLoginUser>(
             SuccessfulLoginUser(
-                "email_offline_demo",
-                1,
                 "jwt_offline_demo"
             )
         )
@@ -58,7 +54,7 @@ class AuthManager @Inject constructor(
             }
             is ApiResult.Success -> {
                 result.value.apply {
-                    sessionManager.setSession(User(this.id, this.email, this.token), true)
+                    sessionManager.setSession(User(email, this.token), true)
                 }
 
             }
