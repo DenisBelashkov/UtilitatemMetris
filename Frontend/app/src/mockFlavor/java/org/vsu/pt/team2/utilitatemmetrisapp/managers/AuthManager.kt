@@ -2,7 +2,6 @@ package org.vsu.pt.team2.utilitatemmetrisapp.managers
 
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.delay
-import okhttp3.internal.wait
 import org.vsu.pt.team2.utilitatemmetrisapp.api.model.SuccessfulLoginUser
 import org.vsu.pt.team2.utilitatemmetrisapp.models.User
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
@@ -31,7 +30,6 @@ class AuthManager @Inject constructor(
                 result.value.apply {
                     sessionManager.setSession(User(email, this.token), false)
                 }
-
             }
         }
         return result

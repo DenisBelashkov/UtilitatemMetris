@@ -1,5 +1,6 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.metersList
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -57,27 +58,33 @@ class MetersWithCheckboxListAdapter :
         private val checkedItems: List<MeterItemViewModel>,
     ) : RecyclerView.ViewHolder(binding.root) {
 
+        fun onClick(item: MeterItemViewModel, context: Context) {
+            binding.checkbox.let {
+                if (item.backlog > 0.0) {
+                    it.isChecked = !it.isChecked
+                    onMeterClickCallback.invoke(item, it.isChecked)
+                } else {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.meter_dont_has_backlog),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    it.isChecked = false
+                    onMeterClickCallback.invoke(item, it.isChecked)
+                }
+            }
+        }
+
         fun bind(item: MeterItemViewModel) = with(itemView) {
             binding.apply {
                 setFromVM(item, context)
                 checkbox.isChecked = checkedItems.contains(item)
             }
 
+            binding.checkbox.isClickable = false
+
             setOnClickListener {
-                binding.checkbox.let {
-                    if (item.backlog > 0.0) {
-                        it.isChecked = !it.isChecked
-                        onMeterClickCallback.invoke(item, it.isChecked)
-                    } else {
-                        Toast.makeText(
-                            context,
-                            context.getString(R.string.meter_dont_has_backlog),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        it.isChecked = false
-                        onMeterClickCallback.invoke(item, it.isChecked)
-                    }
-                }
+                onClick(item, context)
             }
 
             setOnLongClickListener {
