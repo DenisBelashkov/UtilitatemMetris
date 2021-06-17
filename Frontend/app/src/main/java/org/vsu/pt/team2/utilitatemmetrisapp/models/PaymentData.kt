@@ -28,7 +28,7 @@ data class PaymentMetricData(
             this(
                 Meter(itemMeterPaymentHistory.metric),
                 itemMeterPaymentHistory.prevValue,
-                itemMeterPaymentHistory.curValue,
+                itemMeterPaymentHistory.currValue,
                 itemMeterPaymentHistory.cost
             )
 }

@@ -17,7 +17,7 @@ class PaymentManager @Inject constructor(
         cost: Double
     ): ApiResult<PaymentData> {
         val res =
-            generalWorker.doPayment(Payment(meterIdentifiers, cost))
+            generalWorker.doPayment(Payment(cost, meterIdentifiers))
         return when (res) {
             is ApiResult.NetworkError -> {
                 res

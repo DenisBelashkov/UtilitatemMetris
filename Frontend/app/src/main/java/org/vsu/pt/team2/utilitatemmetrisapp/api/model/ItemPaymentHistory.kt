@@ -10,6 +10,6 @@ data class ItemPaymentHistory(
 data class ItemMeterPaymentHistory(
     val metric: Metric = Metric(),
     val prevValue: Double = 0.0,
-    val curValue: Double = 0.0,
+    val currValue: Double = 0.0,
     val cost: Double = 0.0
 )
