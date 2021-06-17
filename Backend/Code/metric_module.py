@@ -37,7 +37,7 @@ class MetricModule(Module):
 		res_list = []
 		str_address = address_to_string(address)
 		for m in metrics:
-			res_list.append({"id": m.id,
+			res_list.append({"identifier": m.identifier,
 							 "balance": float(m.balance),
 							 "typeMetric": m.typeMetric,
 							 "prevValue": float(m.prev_value),

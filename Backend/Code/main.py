@@ -13,8 +13,9 @@ app = Flask(__name__)
 
 if __name__ == '__main__':
 	list_m = [MetricModule(), FlatModule(), PaymentModule(), LoginModule(), RegistrationModule()]
-	c = Controller(app, 'mysql+pymysql://tntrol:password@localhost:3306/mytp', list_m)
+	c = Controller(app, 'mysql+pymysql://tntrol:password@localhost:3306/mytp2', list_m)
 	#mysql+pymysql://tntrol:password@localhost:3306/mytp
+	# 	#
 
 
 	#encoded_jwt = jwt.encode({"some": "payload"}, "secret", algorithm="HS256")

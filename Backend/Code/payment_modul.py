@@ -5,6 +5,14 @@ from decoration import wrapper_for_token
 from sqlalchemy import and_
 import jwt
 
+def address_to_string(a):
+	str1 = ""
+	while True:
+		str1 += a.type_address.name + ": " + str(a.name) + ", "
+		if not a.id_include:
+			return str1
+		a = a.address
+
 class PaymentModule(Module):
 
 	def setOptions(self, app, db, base):
@@ -14,6 +22,7 @@ class PaymentModule(Module):
 		Tariff = base.classes.Tariff
 		Type_metric = base.classes.Type_metrics
 		Users = base.classes.Users
+		Address = base.classes.Address
 
 		@app.route('/payment/history', methods=["GET"])
 		@wrapper_for_token
@@ -98,33 +107,52 @@ class PaymentModule(Module):
 			payment.curr_value = curr_value
 			payment.date = date.today()
 			payment.cost = cost
+			payment.id_session = 30
 			return payment
+
+		def metric_to_dict(metric):
+			return {"identifier": metric.Metrics.identifier,
+					"balance": float(metric.Metrics.balance),
+					"prevValue": float(metric.Metrics.prev_value),
+					"currValue": float(metric.Metrics.curr_value),
+					"tariff": float(metric.price),
+					"typeMetric": metric.name,
+					"address": address_to_string(metric.Address)}
 
 		def serializable_payment(payments, email):
 			res_list = []
+			date = None
+			id_session = -1
 			for payment in payments:
+				if not date :
+					date = payment[0].date
+					id_session = payment[0].id_payment_history
+				payment[0].id_session = id_session
 				res_list.append({"date": payment[0].date,
 							"cost": float(payment[0].cost),
 							"prevVaule": float(payment[0].prev_value),
 							"currValue": float(payment[0].curr_value),
-							"userName": email,
-							"identifier": payment[1],
-							"id": payment[0].id_payment_history})
-			return res_list
+							"metric": metric_to_dict(payment[2])})
+			db.session.commit()
+			return {"id": id_session, "date": date, "metrics": res_list, "email": email}
 
 		@app.route('/payment/metrics', methods=["POST"])
 		#@wrapper_for_token
 		def post_payment_metrics():
 			try:
-				decode_token = jwt.decode(request.headers["token"], "secret", algorithms=["HS256"])
-				#decode_token = {"id": 3, "email" :"milo"}
+				#decode_token = jwt.decode(request.headers["token"], "secret", algorithms=["HS256"])
+				decode_token = {"id": 3, "email" :"milo"}
 				r_json = request.json
 				cost = float(r_json["cost"])
 				res_list = []
+				id_session = -1
 				for j_metric in r_json["metrics"]:
-					metric = db.session.query(Metrics, Tariff.price)\
-						.join(Tariff, Tariff.id_tariff == Metrics.id_tariff)\
-						.filter(Metrics.identifier == j_metric["identifier"]).first()
+					metric = db.session.query(Metrics, Tariff.price, Address, Type_metric.name)\
+						.join(Tariff, Tariff.id_tariff == Metrics.id_tariff) \
+						.join(Type_metric, Type_metric.id_type == Metrics.id_type)\
+						.filter(Metrics.identifier == j_metric["identifier"]).join(Flat, Flat.id_personal_account == Metrics.id_personal_account)\
+						.join(Address, Address.id_address == Flat.id_address)\
+						.first()
 					need_cost = float((metric.Metrics.curr_value - metric.Metrics.prev_value) * metric.price)
 					if cost > 0:
 						payment: Payment = None
@@ -163,7 +191,8 @@ class PaymentModule(Module):
 								metric.Metrics.balance = cost - need_cost
 								cost = 0
 						if payment:
-							res_list.append((payment, j_metric["identifier"]))
+							res_list.append((payment, j_metric["identifier"], metric))
+							payment.id_session = 1
 							db.session.add(payment)
 					else:
 						metric.Metrics.balance = float(metric.Metrics.balance) - need_cost
