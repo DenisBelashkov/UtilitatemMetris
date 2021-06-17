@@ -133,6 +133,7 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
                 )
                 meter?.let { m ->
                     AcceptChangesDialog(
+                        m.prevMonthData,
                         m.curMonthData,
                         newData,
                         { nv, onSuccess -> acceptChangesClicked(nv, onSuccess) }
@@ -235,8 +236,9 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
     }
 
     class AcceptChangesDialog(
-        private val oldValue: Double,
-        private val newValue: Double,
+        private val prevValue: Double,
+        private val oldCurValue: Double,
+        private val newCurValue: Double,
         private val onAcceptClick: (newValue: Double, onSuccess: () -> Unit) -> Unit
     ) : DialogFragment() {
 
@@ -247,7 +249,7 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
             container: ViewGroup?,
             savedInstanceState: Bundle?
         ): View {
-            if (oldValue >= newValue) {
+            if ( prevValue >= newCurValue ) {
                 Toast.makeText(
                     requireContext(),
                     getString(R.string.new_value_lower_than_previous),
@@ -267,10 +269,10 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
-            binding.fragmentDialogAcceptChangesCurFromData.text = oldValue.toString()
-            binding.fragmentDialogAcceptChangesCurToData.text = newValue.toString()
+            binding.fragmentDialogAcceptChangesCurFromData.text = oldCurValue.toString()
+            binding.fragmentDialogAcceptChangesCurToData.text = newCurValue.toString()
             binding.fragmentDialogAcceptChangesBtnAccept.setOnClickListener {
-                onAcceptClick.invoke(newValue, { dismiss() })
+                onAcceptClick.invoke(newCurValue, { dismiss() })
             }
             binding.fragmentDialogAcceptChangesBtnCancel.setOnClickListener {
                 dismiss()

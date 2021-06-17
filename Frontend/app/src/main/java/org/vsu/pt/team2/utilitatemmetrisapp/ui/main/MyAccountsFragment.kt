@@ -15,8 +15,8 @@ import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.AccountsListAdapter
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.genericErrorToast
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.networkConnectionErrorToast
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.myApplication
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.networkConnectionErrorToast
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.AccountViewModel
 import javax.inject.Inject
@@ -58,21 +58,50 @@ class MyAccountsFragment : BaseTitledFragment(R.string.fragment_title_my_account
         binding.metersListRecyclerView.adapter = adapter
     }
 
+    fun statusLoading() {
+        binding.fragmentMyAccountStatusTv.text = "Загрузка..."
+        binding.fragmentMyAccountStatusTv.visibility = View.VISIBLE
+    }
+
+    fun statusLoaded() {
+        binding.fragmentMyAccountStatusTv.text = ""
+        binding.fragmentMyAccountStatusTv.visibility = View.GONE
+    }
+
+    fun statusLoadedEmptyList() {
+        binding.fragmentMyAccountStatusTv.text = "У вас пока нету ни одного счёта"
+        binding.fragmentMyAccountStatusTv.visibility = View.VISIBLE
+    }
+
+    fun statusNone() {
+        binding.fragmentMyAccountStatusTv.text = ""
+        binding.fragmentMyAccountStatusTv.visibility = View.GONE
+    }
+
     fun updateAccounts() {
+        statusLoading()
         lifecycleScope.launchWhenCreated {
             when (val res = accountManager.accounts()) {
                 is ApiResult.GenericError -> {
                     genericErrorToast(res)
+                    statusNone()
                 }
-                is ApiResult.NetworkError ->
+                is ApiResult.NetworkError -> {
                     networkConnectionErrorToast()
+                    statusNone()
+                }
                 is ApiResult.Success -> {
-                    adapter.submitList(res.value.map {
+                    val accounts = res.value.map {
                         AccountViewModel(
                             it.identifier,
                             it.address
                         )
-                    })
+                    }
+                    adapter.submitList(accounts)
+                    if (accounts.isEmpty())
+                        statusLoadedEmptyList()
+                    else
+                        statusLoaded()
                 }
             }
         }

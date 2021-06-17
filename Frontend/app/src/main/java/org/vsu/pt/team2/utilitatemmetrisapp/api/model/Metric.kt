@@ -3,7 +3,7 @@ package org.vsu.pt.team2.utilitatemmetrisapp.api.model
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 
 data class Metric(
-        val identifier: String = "",
+        val id: String = "",
         val balance: Double = 0.0,
         val prevValue: Double = 0.0,
         val currValue: Double = 0.0,

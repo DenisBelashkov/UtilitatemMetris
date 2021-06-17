@@ -41,41 +41,69 @@ class AddMeterFragment : BaseTitledFragment(R.string.fragment_title_add_meter) {
     }
 
     private fun initFields(binding: FragmentAddMeterBinding) {
-        binding.meterFound = false
+        statusEmpty()
         binding.meterIdentifierExtendededittext.addTextChangedListener(identifierTextChangedListener)
     }
 
+    fun statusLoading() {
+        binding.meterFound = false
+        binding.fragmentAddMeterStatusTv.text = "Поиск..."
+    }
+
+    fun statusLoaded() {
+        binding.fragmentAddMeterStatusTv.text = "Счётчик найден"
+        binding.meterFound = true
+    }
+
+    fun statusCantFind() {
+        binding.meterFound = false
+        binding.fragmentAddMeterStatusTv.text = "Не найдено"
+    }
+
+    fun statusEmpty() {
+        binding.meterFound = false
+        binding.fragmentAddMeterStatusTv.text = ""
+    }
+
+    fun onMeterLoaded(meter: Meter) {
+        binding.meterFound = true
+        binding.meterContent.setFromVM(
+            MeterItemViewModel(
+                meter.identifier,
+                meter.type,
+                meter.balance
+            ),
+            requireContext()
+        )
+        binding.meterContent.root.setOnClickListener {
+            val meterFragment = MeterFragment.createWithMeterIdentifier(meter.identifier)
+            replaceFragment(meterFragment)
+        }
+        statusLoaded()
+    }
+
     fun loadMeters(correctMeterIdentifier: String) {
+        statusLoading()
         lifecycleScope.launch {
-            var meter: Meter? = null
             when (val res = meterManager.getMeterByIdentifier(correctMeterIdentifier)) {
-                is ApiResult.Success ->
-                    meter = res.value.first
-                is ApiResult.GenericError->{
-                    genericErrorToast(res)
+                is ApiResult.Success -> {
+                    onMeterLoaded(res.value.first)
+                }
+                is ApiResult.GenericError -> {
+                    when (res.code) {
+                        404 ->
+                            statusCantFind()
+                        else -> {
+                            genericErrorToast(res)
+                            statusEmpty()
+                        }
+                    }
                 }
                 ApiResult.NetworkError -> {
+                    statusEmpty()
                     networkConnectionErrorToast()
                 }
             }
-            meter?.let {
-                binding.meterFound = true
-                binding.meterContent.setFromVM(
-                    MeterItemViewModel(
-                        it.identifier,
-                        it.type,
-                        it.balance
-                    ),
-                    requireContext()
-                )
-                binding.meterContent.root.setOnClickListener {
-                    val meterFragment = MeterFragment.createWithMeterIdentifier(meter.identifier)
-                    replaceFragment(meterFragment)
-                }
-            } ?: run {
-                binding.meterFound = false
-            }
-
         }
     }
 

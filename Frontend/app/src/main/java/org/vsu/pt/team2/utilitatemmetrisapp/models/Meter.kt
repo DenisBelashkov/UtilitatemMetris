@@ -12,7 +12,7 @@ data class Meter(
     var address: String
 ) {
     constructor(metric: Metric) : this(
-        metric.identifier,
+        metric.id,
         metric.typeMetric,
         metric.tariff,
         metric.prevValue,

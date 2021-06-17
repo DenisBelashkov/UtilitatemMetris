@@ -21,8 +21,7 @@ class AuthManager @Inject constructor(
         YandexMetrica.reportEvent(
             "Полная авторизация, запрос",
             mapOf(
-                "email" to email,
-                "password" to "*".repeat(pass.length)
+                "email" to email
             )
         )
         val result = authWorker.login(LoginUser(email, pass))
@@ -56,9 +55,7 @@ class AuthManager @Inject constructor(
                         "email" to email
                     )
                 )
-                result.value.apply {
-                    sessionManager.setSession(User(this.id, this.email, this.token), false)
-                }
+                sessionManager.setSession(User(email, result.value.token), false)
             }
         }
         return result
@@ -98,17 +95,13 @@ class AuthManager @Inject constructor(
                     "Быстрая авторизация, успех",
                     mapOf("email" to email)
                 )
-                result.value.apply {
-                    sessionManager.setSession(User(this.id, this.email, this.token), true)
-                }
-
+                sessionManager.setSession(User(email, result.value.token), true)
             }
         }
         return result
     }
 
     suspend fun registerUser(email: String, pass: String): ApiResult<*> {
-        Logger.d("Register user. Got email $email, pass $pass")
         YandexMetrica.reportEvent(
             "Регистрация, запрос",
             mapOf("email" to email)

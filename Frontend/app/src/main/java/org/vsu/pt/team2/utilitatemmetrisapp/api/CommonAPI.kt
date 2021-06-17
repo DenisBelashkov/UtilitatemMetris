@@ -44,12 +44,12 @@ interface CommonAPI {
         @Body currentMetric: CurrentMetric
     )
 
-    @POST("/metric/{identifier}")
+    @POST("/metrics/{identifier}")
     suspend fun saveMetric(
         @Path("identifier") identifier: String
     )
 
-    @DELETE("/metric/{identifier}")
+    @DELETE("/metrics/{identifier}")
     suspend fun deleteMetric(
         @Path("identifier") identifier: String
     )
@@ -63,7 +63,7 @@ interface CommonAPI {
     ): ItemPaymentHistory
 
 
-    @GET("/payment/history")
+    @POST("/payment/history")
     suspend fun paymentHistory(
         @Body informationAboutPayment: InformationAboutPayment
     ): List<ItemPaymentHistory>

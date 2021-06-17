@@ -75,6 +75,8 @@ class AccountFragment : DisabledDrawerFragment() {
         binding.metersOnAccountRecyclerView.adapter = adapter
     }
 
+
+
     fun updateAdapter() {
         //todo убрать захардкоженые данные
         val list = mutableListOf<MeterItemViewModel>()

@@ -8,7 +8,7 @@ class SessionManager @Inject constructor(
     private val storage: Storage
 ) {
 
-    private final val EmptyUser = User(0, "", "")
+    private final val EmptyUser = User("", "")
 
     var user: User = this.EmptyUser
         get

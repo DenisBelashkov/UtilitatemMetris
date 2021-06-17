@@ -38,6 +38,26 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
         }
     }
 
+    fun statusLoading() {
+        binding.fragmentSavedMetersStatusTv.visibility = View.VISIBLE
+        binding.fragmentSavedMetersStatusTv.text = "Загрузка..."
+    }
+
+    fun statusLoaded() {
+        binding.fragmentSavedMetersStatusTv.visibility = View.GONE
+        binding.fragmentSavedMetersStatusTv.text = ""
+    }
+
+    fun statusLoadedEmptyList() {
+        binding.fragmentSavedMetersStatusTv.visibility = View.VISIBLE
+        binding.fragmentSavedMetersStatusTv.text = "У вас нету ни одного счётчика"
+    }
+
+    fun statusNone() {
+        binding.fragmentSavedMetersStatusTv.visibility = View.GONE
+        binding.fragmentSavedMetersStatusTv.text = ""
+    }
+
     override fun onAttach(context: Context) {
         myApplication()?.appComponent
             ?.meterComponent()
@@ -61,7 +81,7 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
                         appCompatActivity()?.replaceFragment(
                             PaymentFragment.createWithMetersIdentifier(meterIdentifiersForPay)
                         )
-                    }else{
+                    } else {
                         showToast(getString(R.string.select_at_least_1_meter_to_pay))
                     }
                 }
@@ -72,28 +92,35 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
         )
         binding.metersListRecyclerView.adapter = adapter
 
-        updateAdapter()
+        loadMeters()
 
         return binding.root
     }
 
-    fun updateAdapter() {
+    fun loadMeters() {
+        statusLoading()
         lifecycleScope.launch {
             when (val apiRes = meterManager.getMetersSavedByUser()) {
                 is ApiResult.NetworkError -> {
+                    statusNone()
                     networkConnectionErrorToast()
                 }
                 is ApiResult.GenericError -> {
+                    statusNone()
                     genericErrorToast(apiRes)
-                    apiRes.code
                 }
                 is ApiResult.Success -> {
-                    val list : List<MeterItemViewModel> =
+                    val list: List<MeterItemViewModel> =
                         apiRes.value.map { MeterItemViewModel(it.identifier, it.type, it.balance) }
                     adapter.submitList(list)
 
                     val sum = adapter.getChecked().sumOf { it.backlog }
                     binding.sumForPay = sum
+
+                    if (list.isEmpty())
+                        statusLoadedEmptyList()
+                    else
+                        statusLoaded()
                 }
             }
         }

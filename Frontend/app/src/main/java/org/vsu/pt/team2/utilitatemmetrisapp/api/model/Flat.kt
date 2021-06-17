@@ -1,6 +1,6 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.api.model
 
 data class Flat(
-        val identifier: String = "",
+        val id: String = "",
         val address: String = ""
 )
