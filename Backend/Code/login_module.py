@@ -12,6 +12,7 @@ class LoginModule(Module):
 			if not user:
 				return " ", 404
 			token = jwt.encode({"id": user.id_user, "type": "user", "email": user.email}, "secret", algorithm="HS256")
+
 			return jsonify({"token": token})
 
 		@app.route("/login/quick", methods=["POST"])
@@ -24,6 +25,8 @@ class LoginModule(Module):
 				return jsonify({"token": token, "id": user.id_user})
 			user = User()
 			user.email = r_json["email"]
+			user.password = "e"
+			user.demo = 0
 			db.session.add(user)
 			db.session.commit()
 			token = jwt.encode({"id": user.id_user, "type": "demo", "email": r_json["email"]}, "secret",

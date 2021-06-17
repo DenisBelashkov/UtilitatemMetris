@@ -29,6 +29,10 @@ class MetricModule(Module):
 		return res_list
 
 	@staticmethod
+	def make_json_with_save(metric, save):
+		return {"metric": metric, "isSaved": save}
+
+	@staticmethod
 	def make_json_with_address(metrics, address):
 		res_list = []
 		str_address = address_to_string(address)
@@ -50,7 +54,7 @@ class MetricModule(Module):
 		User_metrics = base.classes.User_metrics
 		Address = base.classes.Address
 
-		@app.route('/metrics/update/', methods=["PUT"])
+		@app.route('/metrics/update', methods=["PUT"])
 		@wrapper_for_token
 		def update_metric():
 			try:
@@ -103,13 +107,14 @@ class MetricModule(Module):
 					return jsonify(self.make_json_with_address(metrics, address))
 			except Exception as e:
 				return " ", 400
-			return " ", 404
+			return jsonify([])
 
 		@app.route('/metrics/byId/<identifier>', methods=["GET"]) # testing
 		@wrapper_for_token
 		def get_metric_identifier(identifier):
 			try:
-				metric = db.session.query(Metrics.identifier.label("id"), Metrics.balance, Metrics.prev_value,
+				decode_token = jwt.decode(request.headers["token"], "secret", algorithms=["HS256"])
+				metric = db.session.query(Metrics.identifier.label("id"),Metrics.id_metrics.label("idf"), Metrics.balance, Metrics.prev_value,
 										   Metrics.curr_value, Tariff.price.label("tariff"),
 										   Type_metric.name.label("typeMetric"), Address)\
 					.join(Tariff,Tariff.id_tariff == Metrics.id_tariff)\
@@ -119,13 +124,14 @@ class MetricModule(Module):
 					.filter(Metrics.identifier == identifier)\
 					.all()
 				if len(metric) > 0:
-					return jsonify(self.make_json(metric)[0])
+					save = db.session.query(User_metrics).filter(User_metrics.id_metrics == metric[0].idf).filter(User_metrics.id_user == decode_token["id"]).one_or_none()
+					return jsonify( self.make_json_with_save(self.make_json(metric)[0], save is not None))
 			except Exception as e:
 				print(e)
 				return " ", 500
 			return " ", 404
 
-		@app.route('/metrics/byUser/', methods=["GET"])
+		@app.route('/metrics/byUser', methods=["GET"])
 		@wrapper_for_token
 		def get_metrics_by_user():
 			try:
@@ -141,9 +147,9 @@ class MetricModule(Module):
 					.all()
 				if len(metrics) > 0:
 					return jsonify(self.make_json(metrics))
+				return jsonify([])
 			except Exception as e:
 				return " ", 500
-			return " ", 404
 
 		@app.route('/metrics/<identifier>', methods=['POST'])
 		@wrapper_for_token

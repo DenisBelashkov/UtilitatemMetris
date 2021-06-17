@@ -16,12 +16,12 @@ class PaymentModule(Module):
 		Users = base.classes.Users
 
 		@app.route('/payment/history', methods=["GET"])
-		#@wrapper_for_token
+		@wrapper_for_token
 		def payment_history():
 			try:
 				r_json = request.json
-				#decode_token = jwt.decode(request.headers["token"], "secret", algorithms=["HS256"])
-				decode_token = {"id": 2, "email": "milo2", "type": "user"}
+				decode_token = jwt.decode(request.headers["token"], "secret", algorithms=["HS256"])
+				#decode_token = {"id": 2, "email": "milo2", "type": "user"}
 				if decode_token["type"] == "demo":
 					return " ", 403
 				id_user = decode_token["id"]
@@ -34,7 +34,7 @@ class PaymentModule(Module):
 					.join(Users, Users.id_user == Payment.id_user)\
 					.filter(Payment.date > date_1).filter(Payment.date < date_2).all()
 				if len(payments) == 0:
-					return " ", 404
+					return jsonify([])
 				for payment in payments:
 					res_list.append(
 						{"date": payment.Payment_history.date,

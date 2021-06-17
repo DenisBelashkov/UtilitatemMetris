@@ -7,7 +7,7 @@ PyMySQL==1.0.2
 greenlet==1.1.0
 itsdangerous==2.0.1
 Jinja2==3.0.1
-jwt==1.2.0
+PyJWT==2.1.0
 MarkupSafe==2.0.1
 pycparser==2.20
 SQLAlchemy==1.4.18
