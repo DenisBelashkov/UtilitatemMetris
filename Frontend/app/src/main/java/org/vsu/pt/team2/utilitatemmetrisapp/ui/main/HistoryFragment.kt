@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.launch
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentHistoryBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.dateutils.DateFormatter
@@ -61,15 +62,46 @@ class HistoryFragment : BaseTitledFragment(R.string.fragment_history_title) {
         binding.historyMetersListRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.historyMetersListRecyclerView.adapter = adapter
+        binding.fragmentHistorySwipeRefreshLayout.setOnRefreshListener {
+            loadData()
+        }
+    }
+
+    private fun statusLoading(){
+//        binding.fragmentHistoryStatusTv.text = "Загрузка..."
+//        binding.fragmentHistoryStatusTv.visibility = View.GONE
+    }
+
+    private fun statusLoaded(){
+        binding.fragmentHistorySwipeRefreshLayout.isRefreshing = false
+        binding.fragmentHistoryStatusTv.text = ""
+        binding.fragmentHistoryStatusTv.visibility = View.GONE
+    }
+
+    private fun statusLoadedEmptyList(){
+        binding.fragmentHistorySwipeRefreshLayout.isRefreshing = false
+        binding.fragmentHistoryStatusTv.text = getString(R.string.dont_have_payments)
+        binding.fragmentHistoryStatusTv.visibility = View.VISIBLE
+    }
+
+    private fun statusNone(){
+        binding.fragmentHistorySwipeRefreshLayout.isRefreshing = false
+        binding.fragmentHistoryStatusTv.text = ""
+        binding.fragmentHistoryStatusTv.visibility = View.GONE
     }
 
     private fun loadData() {
-        lifecycleScope.launchWhenStarted {
+        statusLoading()
+        lifecycleScope.launch {
             when (val res = paymentManager.paymentHistory(paymentsFilter)) {
-                is ApiResult.NetworkError ->
+                is ApiResult.NetworkError -> {
+                    statusNone()
                     networkConnectionErrorToast()
-                is ApiResult.GenericError ->
+                }
+                is ApiResult.GenericError -> {
+                    statusNone()
                     genericErrorToast(res)
+                }
                 is ApiResult.Success -> {
                     val resultList: List<HistoryMeterItemViewModel> = res.value.flatMap { pData ->
                         val paymentItemList: List<HistoryMeterItemViewModel> =
@@ -85,6 +117,10 @@ class HistoryFragment : BaseTitledFragment(R.string.fragment_history_title) {
                         paymentItemList
                     }
                     adapter.submitList(resultList)
+                    if(resultList.isEmpty())
+                        statusLoadedEmptyList()
+                    else
+                        statusLoaded()
                 }
             }
         }

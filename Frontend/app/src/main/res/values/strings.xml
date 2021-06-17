@@ -78,6 +78,10 @@
     <string name="generic_error_default_message">Произошла ошибка</string>
     <string name="select_at_least_1_meter_to_pay">Выберите хотя бы один счётчик для оплаты</string>
     <string name="tmsg_meters_not_found">Счётчиков не найдено</string>
+    <string name="dont_have_accounts">У вас пока нету ни одного счёта</string>
+    <string name="dont_have_payments">Ещё не было произведено ни одной оплаты</string>
+    <string name="account">Счёт %s</string>
+    <string name="account_dont_has_meters">На счету нет ни одного счётчика</string>
 
 
 </resources>

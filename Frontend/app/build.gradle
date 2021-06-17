@@ -127,4 +127,7 @@ dependencies {
 
     // AppMetrica SDK.
     implementation 'com.yandex.android:mobmetricalib:3.21.0'
+
+    //swipe & refresh
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 }

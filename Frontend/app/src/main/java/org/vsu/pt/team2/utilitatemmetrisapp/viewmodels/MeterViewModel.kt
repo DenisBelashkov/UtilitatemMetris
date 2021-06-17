@@ -47,7 +47,7 @@ class MeterViewModel(
                 meter.tariff,
                 meter.prevMonthData,
                 meter.curMonthData,
-                abs(-meter.balance)
+                if (abs(meter.balance) < 0.0000001) 0.0 else -meter.balance
             )
         }
     }

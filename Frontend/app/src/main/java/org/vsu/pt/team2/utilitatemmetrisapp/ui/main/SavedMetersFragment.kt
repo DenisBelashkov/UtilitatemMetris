@@ -39,23 +39,26 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
     }
 
     fun statusLoading() {
-        binding.fragmentSavedMetersStatusTv.visibility = View.VISIBLE
-        binding.fragmentSavedMetersStatusTv.text = "Загрузка..."
+//        binding.fragmentSavedMetersStatusTv.visibility = View.VISIBLE
+//        binding.fragmentSavedMetersStatusTv.text = "Загрузка..."
     }
 
     fun statusLoaded() {
         binding.fragmentSavedMetersStatusTv.visibility = View.GONE
         binding.fragmentSavedMetersStatusTv.text = ""
+        binding.fragmentSavedMetersSwipeRefreshLayout.isRefreshing = false
     }
 
     fun statusLoadedEmptyList() {
         binding.fragmentSavedMetersStatusTv.visibility = View.VISIBLE
         binding.fragmentSavedMetersStatusTv.text = "У вас нету ни одного счётчика"
+        binding.fragmentSavedMetersSwipeRefreshLayout.isRefreshing = false
     }
 
     fun statusNone() {
         binding.fragmentSavedMetersStatusTv.visibility = View.GONE
         binding.fragmentSavedMetersStatusTv.text = ""
+        binding.fragmentSavedMetersSwipeRefreshLayout.isRefreshing = false
     }
 
     override fun onAttach(context: Context) {
@@ -71,6 +74,15 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSavedMetersBinding.inflate(inflater, container, false)
+
+        binding.savedMetersListRecyclerView.layoutManager = LinearLayoutManager(
+            requireContext(), LinearLayoutManager.VERTICAL, false
+        )
+        binding.savedMetersListRecyclerView.adapter = adapter
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.sumForPay = 0.0
         binding.payChosenMetersButton.viewmodel =
             GeneralButtonViewModel(getString(R.string.pay_for_chosen)) {
@@ -87,14 +99,12 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
                 }
 
             }
-        binding.metersListRecyclerView.layoutManager = LinearLayoutManager(
-            requireContext(), LinearLayoutManager.VERTICAL, false
-        )
-        binding.metersListRecyclerView.adapter = adapter
 
+        binding.fragmentSavedMetersSwipeRefreshLayout.setOnRefreshListener {
+            loadMeters()
+        }
         loadMeters()
-
-        return binding.root
+        super.onViewCreated(view, savedInstanceState)
     }
 
     fun loadMeters() {

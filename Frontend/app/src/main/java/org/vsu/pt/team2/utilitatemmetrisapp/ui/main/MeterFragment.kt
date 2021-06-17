@@ -146,32 +146,10 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
             //или отправлять раз в 4 раза
             //или спросить у сервера, "надо ли подтверждать действие?"
         }
-        lifecycleScope.launchWhenCreated {
-            try {
-                when (val res = meterManager.getMeterByIdentifier(meterIdentifier)) {
-                    is ApiResult.NetworkError -> {
-                        networkConnectionErrorToast()
-                        parentFragmentManager.popBackStack()
-                    }
-                    is ApiResult.GenericError -> {
-                        genericErrorToast(res)
-                        parentFragmentManager.popBackStack()
-                    }
-                    is ApiResult.Success -> {
-                        meter = res.value.first.also {
-                            onMeterLoaded(it)
-                        }
-                        isSaved = res.value.second
-                        menu?.findItem(R.id.meter_menu_fav)?.let {
-                            setMenuItemState(isSaved, it)
-                        }
-                    }
-                }
-            } catch (npe: NullPointerException) {
-                parentFragmentManager.popBackStack()
-            }
+        loadMeterData()
+        binding.fragmentMeterSwipeRefreshLayout.setOnRefreshListener {
+            loadMeterData()
         }
-
         binding.meterShowHistory.viewmodel = GeneralButtonViewModel(
             getString(R.string.show_payment_history),
             {
@@ -192,6 +170,37 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
                 )
             }
         )
+    }
+
+    private fun loadMeterData(){
+        lifecycleScope.launch {
+            try {
+                when (val res = meterManager.getMeterByIdentifier(meterIdentifier)) {
+                    is ApiResult.NetworkError -> {
+                        networkConnectionErrorToast()
+                        binding.fragmentMeterSwipeRefreshLayout.isRefreshing = false
+                        parentFragmentManager.popBackStack()
+                    }
+                    is ApiResult.GenericError -> {
+                        genericErrorToast(res)
+                        binding.fragmentMeterSwipeRefreshLayout.isRefreshing = false
+                        parentFragmentManager.popBackStack()
+                    }
+                    is ApiResult.Success -> {
+                        meter = res.value.first.also {
+                            onMeterLoaded(it)
+                        }
+                        isSaved = res.value.second
+                        menu?.findItem(R.id.meter_menu_fav)?.let {
+                            setMenuItemState(isSaved, it)
+                        }
+                        binding.fragmentMeterSwipeRefreshLayout.isRefreshing = false
+                    }
+                }
+            } catch (npe: NullPointerException) {
+                parentFragmentManager.popBackStack()
+            }
+        }
     }
 
     private fun onMeterLoaded(meter: Meter) {

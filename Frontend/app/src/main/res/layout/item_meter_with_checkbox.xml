@@ -7,6 +7,10 @@
         <import type="android.view.View" />
 
         <variable
+            name="has_backlog"
+            type="Boolean" />
+
+        <variable
             name="should_show_labels"
             type="Boolean" />
 
@@ -109,7 +113,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="@{backlogValue.equals(0)?View.GONE:View.VISIBLE}"
+                android:visibility="@{has_backlog?View.VISIBLE:View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -150,7 +154,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="@{backlogValue.equals(0)?View.VISIBLE:View.GONE}"
+                android:visibility="@{has_backlog?View.GONE:View.VISIBLE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
