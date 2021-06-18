@@ -19,6 +19,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.AppbarContentBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.IntentExtrasManager
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.SessionManager
+import org.vsu.pt.team2.utilitatemmetrisapp.models.PaymentsFilter
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.login.LoginActivity
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.*
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
@@ -117,7 +118,7 @@ class DrawerController(
             addItem(
                 simpleMenuItem("История выплат"),
                 { view, pos, drItem ->
-                    activity.replaceFragment(HistoryFragment())
+                    activity.replaceFragment(HistoryFragment.createWithFilter(PaymentsFilter()))
                 }
             )
         }

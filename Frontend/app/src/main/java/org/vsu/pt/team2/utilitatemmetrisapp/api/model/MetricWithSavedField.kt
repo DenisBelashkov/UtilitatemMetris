@@ -1,6 +1,14 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.api.model
 
-data class MetricWithSavedField(
-    val metric: Metric,
-    val isSaved: Boolean
-)
+class MetricWithSavedField(
+    var isSaved: Boolean = false,
+    var metric: Metric = Metric()
+) {
+    fun getIsSaved(): Boolean {
+        return isSaved
+    }
+
+    fun setIsSaved(isSaved: Boolean) {
+        this.isSaved = isSaved
+    }
+}

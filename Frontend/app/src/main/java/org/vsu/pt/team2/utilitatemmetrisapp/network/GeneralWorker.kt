@@ -41,7 +41,7 @@ class GeneralWorker @Inject constructor(
         return safeApiCall(dispatcher) { commonAPI.deleteMetric(identifier) }
     }
 
-    suspend fun doPayment(payment: Payment): ApiResult<List<ItemPaymentHistory>> {
+    suspend fun doPayment(payment: Payment): ApiResult<ItemPaymentHistory> {
         return safeApiCall(dispatcher) { commonAPI.payment(payment) }
     }
 

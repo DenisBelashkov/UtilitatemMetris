@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import org.vsu.pt.team2.utilitatemmetrisapp.api.AuthAPI
 import org.vsu.pt.team2.utilitatemmetrisapp.api.model.LoginUser
 import org.vsu.pt.team2.utilitatemmetrisapp.api.model.QuickLoginUser
+import org.vsu.pt.team2.utilitatemmetrisapp.api.model.RegisterUser
 import org.vsu.pt.team2.utilitatemmetrisapp.api.model.SuccessfulLoginUser
 import retrofit2.Retrofit
 import javax.inject.Inject
@@ -21,5 +22,9 @@ class AuthWorker @Inject constructor(
 
     suspend fun login(quickLoginUser: QuickLoginUser): ApiResult<SuccessfulLoginUser> {
         return safeApiCall(dispatcher) { authApi.login(quickLoginUser) }
+    }
+
+    suspend fun register(registerUser: RegisterUser): ApiResult<*> {
+        return safeApiCall(dispatcher) { authApi.register(registerUser) }
     }
 }

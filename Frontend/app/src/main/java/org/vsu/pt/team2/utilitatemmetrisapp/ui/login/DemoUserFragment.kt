@@ -17,9 +17,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.BigGeneralButton
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.ImeActionListener
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.fieldValidation.EmailValidator
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.hideKeyboard
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.myApplication
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.openActivity
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.*
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText
 import studio.carbonylgroup.textfieldboxes.TextFieldBoxes
 import javax.inject.Inject
@@ -65,17 +63,17 @@ class DemoUserFragment : Fragment() {
                 button.setStateLoading()
                 println(email)
 
-                when (authManager.authUser(email)) {
+                val authRes = authManager.authUser(email)
+                when (authRes) {
                     is ApiResult.NetworkError -> {
-                        //todo show error
+                        networkConnectionErrorToast()
                     }
                     is ApiResult.GenericError -> {
-                        //todo show error
+                        genericErrorToast(authRes)
                     }
                     is ApiResult.Success -> {
-                        (activity as? AppCompatActivity)?.openActivity(
-                            MainActivity::class.java,
-                            true
+                        (activity as? AppCompatActivity)?.replaceActivity(
+                            MainActivity::class.java
                         )
                     }
                 }
@@ -88,7 +86,7 @@ class DemoUserFragment : Fragment() {
     private suspend fun validateEmailThenDo(func: suspend ((String) -> Unit)) {
         var containsError = false
         val email = emailEditText.text.toString()
-        EmailValidator.validate(email).let { result ->
+        EmailValidator.validate(email, requireContext()).let { result ->
             if (result.isNotBlank()) {
                 emailTextFieldBoxes.setError(result, false)
                 containsError = true

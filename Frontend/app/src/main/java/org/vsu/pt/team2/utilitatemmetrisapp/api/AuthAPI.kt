@@ -17,5 +17,5 @@ interface AuthAPI {
     suspend fun login( @Body body: QuickLoginUser) : SuccessfulLoginUser
 
     @POST("/register/user")
-    suspend fun login( @Body body: RegisterUser)
+    suspend fun register( @Body body: RegisterUser)
 }

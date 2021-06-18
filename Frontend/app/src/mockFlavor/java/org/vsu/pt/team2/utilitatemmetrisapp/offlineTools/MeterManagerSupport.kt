@@ -7,25 +7,18 @@ import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import javax.inject.Inject
 import kotlin.math.pow
 import kotlin.math.roundToInt
-import kotlin.random.Random
 
-class MeterManagerSupport @Inject constructor() {
-    private val random = Random.Default
+class MeterManagerSupport @Inject constructor(
+    private val random: RandomTools
+) {
 
-    private fun randomIdentifier(): String = List(16) {
-        if (it <= 5 || it > 10)
-            (('a'..'z') + ('A'..'Z')).random()
-        else
-            ('0'..'9').random()
-    }.joinToString("")
-
-    private fun randomMetric(identifier: String? = null): Metric {
+    fun randomMetric(identifier: String? = null): Metric {
         fun Double.roundTo(numFractionDigits: Int): Double {
             val factor = 10.0.pow(numFractionDigits.toDouble())
             return (this * factor).roundToInt() / factor
         }
 
-        val ident = identifier ?: randomIdentifier()
+        val ident = identifier ?: random.randomMeterIdentifier()
         val prev = random.nextDouble(200.0, 4000.0)
         val balance =
             if (random.nextInt(3) == 0)
@@ -51,7 +44,7 @@ class MeterManagerSupport @Inject constructor() {
         }
     }
 
-    fun meterByIdentifier(identifier: String): ApiResult<Pair<Metric, Boolean>> {
+    fun randomMeterByIdentifierWithRandomSavedOrNot(identifier: String): ApiResult<Pair<Metric, Boolean>> {
         return ApiResult.Success<Pair<Metric, Boolean>>(
             Pair(
                 randomMetric(identifier),

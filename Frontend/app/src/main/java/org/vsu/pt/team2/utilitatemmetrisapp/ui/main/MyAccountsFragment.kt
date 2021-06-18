@@ -11,10 +11,13 @@ import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentMyAccountsBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.AccountManager
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.BundleManager.AccountViewModelBundlePackager
+import org.vsu.pt.team2.utilitatemmetrisapp.models.Account
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.AccountsListAdapter
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.genericErrorToast
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.myApplication
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.networkConnectionErrorToast
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.AccountViewModel
 import javax.inject.Inject
@@ -26,10 +29,9 @@ class MyAccountsFragment : BaseTitledFragment(R.string.fragment_title_my_account
     lateinit var accountManager: AccountManager
 
     private val adapter = AccountsListAdapter { accountViewModel ->
-        val b = Bundle()
-        AccountViewModelBundlePackager.putInto(b, accountViewModel)
-        val f = AccountFragment()
-        f.arguments = b
+        val f = AccountFragment.createWithAccount(
+            Account(accountViewModel.identifier, accountViewModel.address)
+        )
         replaceFragment(f)
     }
 
@@ -50,26 +52,62 @@ class MyAccountsFragment : BaseTitledFragment(R.string.fragment_title_my_account
     }
 
     fun initFields(binding: FragmentMyAccountsBinding) {
-        binding.metersListRecyclerView.layoutManager = LinearLayoutManager(
+        binding.accountsListRecyclerView.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
         )
-        binding.metersListRecyclerView.adapter = adapter
+        binding.accountsListRecyclerView.adapter = adapter
+        binding.fragmentMyAccountsSwipeRefreshLayout.setOnRefreshListener {
+            updateAccounts()
+        }
+    }
+
+    fun statusLoading() {
+//        binding.fragmentMyAccountStatusTv.text = "Загрузка..."
+//        binding.fragmentMyAccountStatusTv.visibility = View.VISIBLE
+    }
+
+    fun statusLoaded() {
+        binding.fragmentMyAccountsSwipeRefreshLayout.isRefreshing = false
+        binding.fragmentMyAccountStatusTv.text = ""
+        binding.fragmentMyAccountStatusTv.visibility = View.GONE
+    }
+
+    fun statusLoadedEmptyList() {
+        binding.fragmentMyAccountsSwipeRefreshLayout.isRefreshing = false
+        binding.fragmentMyAccountStatusTv.text = getString(R.string.dont_have_accounts)
+        binding.fragmentMyAccountStatusTv.visibility = View.VISIBLE
+    }
+
+    fun statusNone() {
+        binding.fragmentMyAccountsSwipeRefreshLayout.isRefreshing = false
+        binding.fragmentMyAccountStatusTv.text = ""
+        binding.fragmentMyAccountStatusTv.visibility = View.GONE
     }
 
     fun updateAccounts() {
+        statusLoading()
         lifecycleScope.launchWhenCreated {
-            val res = accountManager.accounts()
-            when (res) {
-                is ApiResult.GenericError, is ApiResult.NetworkError -> {
-
+            when (val res = accountManager.accounts()) {
+                is ApiResult.GenericError -> {
+                    genericErrorToast(res)
+                    statusNone()
+                }
+                is ApiResult.NetworkError -> {
+                    networkConnectionErrorToast()
+                    statusNone()
                 }
                 is ApiResult.Success -> {
-                    adapter.submitList(res.value.map {
+                    val accounts = res.value.map {
                         AccountViewModel(
                             it.identifier,
                             it.address
                         )
-                    })
+                    }
+                    adapter.submitList(accounts)
+                    if (accounts.isEmpty())
+                        statusLoadedEmptyList()
+                    else
+                        statusLoaded()
                 }
             }
         }

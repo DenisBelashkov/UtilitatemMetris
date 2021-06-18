@@ -14,12 +14,9 @@ import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentAddMeterBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.MeterManager
 import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
-import org.vsu.pt.team2.utilitatemmetrisapp.repository.MeterRepo
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.setFromVM
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.requireAppCompatActivity
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.requireMyApplication
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.*
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterItemViewModel
 import javax.inject.Inject
 
@@ -29,8 +26,6 @@ class AddMeterFragment : BaseTitledFragment(R.string.fragment_title_add_meter) {
     @Inject
     lateinit var meterManager: MeterManager
 
-    @Inject
-    lateinit var meterRepo: MeterRepo
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,40 +41,69 @@ class AddMeterFragment : BaseTitledFragment(R.string.fragment_title_add_meter) {
     }
 
     private fun initFields(binding: FragmentAddMeterBinding) {
-        binding.meterFound = false
+        statusEmpty()
         binding.meterIdentifierExtendededittext.addTextChangedListener(identifierTextChangedListener)
     }
 
-    fun loadMeters(correctMeterIdentifier: String) {
-        lifecycleScope.launch {
-            val meter: Meter?
-            val res = meterManager.getMeterByIdentifier(correctMeterIdentifier)
-            when (res) {
-                is ApiResult.Success ->
-                    meter = res.value.first
-                is ApiResult.GenericError, ApiResult.NetworkError ->
-                    meter = meterRepo.meterOrNull(correctMeterIdentifier)?.also {
-                        //todo показать Toast с надписью "загружено из локального репозитория"
-                    }
-            }
-            meter?.let {
-                binding.meterFound = true
-                binding.meterContent.setFromVM(
-                    MeterItemViewModel(
-                        it.identifier,
-                        it.type,
-                        it.balance
-                    ),
-                    requireContext()
-                )
-                binding.meterContent.root.setOnClickListener {
-                    val meterFragment = MeterFragment.createWithMeterIdentifier(meter.identifier)
-                    replaceFragment(meterFragment)
-                }
-            } ?: run {
-                binding.meterFound = false
-            }
+    fun statusLoading() {
+        binding.meterFound = false
+        binding.fragmentAddMeterStatusTv.text = "Поиск..."
+    }
 
+    fun statusLoaded() {
+        binding.fragmentAddMeterStatusTv.text = "Счётчик найден"
+        binding.meterFound = true
+    }
+
+    fun statusCantFind() {
+        binding.meterFound = false
+        binding.fragmentAddMeterStatusTv.text = "Не найдено"
+    }
+
+    fun statusEmpty() {
+        binding.meterFound = false
+        binding.fragmentAddMeterStatusTv.text = ""
+    }
+
+    fun onMeterLoaded(meter: Meter) {
+        binding.meterFound = true
+        binding.meterContent.setFromVM(
+            MeterItemViewModel(
+                meter.identifier,
+                meter.type,
+                meter.balance
+            ),
+            requireContext()
+        )
+        binding.meterContent.root.setOnClickListener {
+            val meterFragment = MeterFragment.createWithMeterIdentifier(meter.identifier)
+            replaceFragment(meterFragment)
+        }
+        statusLoaded()
+    }
+
+    fun loadMeters(correctMeterIdentifier: String) {
+        statusLoading()
+        lifecycleScope.launch {
+            when (val res = meterManager.getMeterByIdentifier(correctMeterIdentifier)) {
+                is ApiResult.Success -> {
+                    onMeterLoaded(res.value.first)
+                }
+                is ApiResult.GenericError -> {
+                    when (res.code) {
+                        404 ->
+                            statusCantFind()
+                        else -> {
+                            genericErrorToast(res)
+                            statusEmpty()
+                        }
+                    }
+                }
+                ApiResult.NetworkError -> {
+                    statusEmpty()
+                    networkConnectionErrorToast()
+                }
+            }
         }
     }
 
