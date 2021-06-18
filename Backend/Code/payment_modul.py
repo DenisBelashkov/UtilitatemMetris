@@ -20,8 +20,8 @@ class PaymentModule(Module):
 		def payment_history():
 			try:
 				r_json = request.json
-				#decode_token = jwt.decode(request.headers["token"], "secret", algorithms=["HS256"])
-				decode_token = {"id": 2, "email": "milo2", "type": "user"}
+				decode_token = jwt.decode(request.headers["token"], "secret", algorithms=["HS256"])
+				#decode_token = {"id": 2, "email": "milo2", "type": "user"}
 				if decode_token["type"] == "demo":
 					return " ", 403
 				id_user = decode_token["id"]
