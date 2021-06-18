@@ -18,17 +18,17 @@ class LoginModule(Module):
 		@app.route("/login/quick", methods=["POST"])
 		def login_quick():
 			r_json = request.json
-			user = db.session.query(User).filter(r_json["email"] == User.email).filter(User.demo == 0).first()
+			user = db.session.query(User).filter(r_json["email"] == User.email).filter(User.demo == 0).one_or_none()
 			if user:
 				token = jwt.encode({"id": user.id_user, "type": "demo", "email": user.email}, "secret",
 								   algorithm="HS256")
-				return jsonify({"token": token, "id": user.id_user})
+				return jsonify({"token": token})
 			user = User()
 			user.email = r_json["email"]
 			user.password = "e"
 			user.demo = 0
 			db.session.add(user)
 			db.session.commit()
-			token = jwt.encode({"id": user.id_user, "type": "demo", "email": r_json["email"]}, "secret",
+			token = jwt.encode({"type": "demo", "email": r_json["email"], "id": user.id_user}, "secret",
 							   algorithm="HS256")
 			return jsonify({"token": token})

@@ -5,6 +5,7 @@ from payment_modul import PaymentModule
 from controller import Controller
 from registration_module import RegistrationModule
 from login_module import LoginModule
+#from admin_module import AdminModule
 
 import jwt
 import smtplib

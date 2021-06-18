@@ -25,6 +25,7 @@ class PaymentModule(Module):
 		Type_metric = base.classes.Type_metrics
 		Users = base.classes.Users
 		Address = base.classes.Address
+		User_metrics = base.classes.User_metrics
 
 		def metric_to_dict2(metric):
 			return {"identifier": metric.Metrics.identifier,
@@ -62,18 +63,24 @@ class PaymentModule(Module):
 				if decode_token["type"] == "demo":
 					return " ", 403
 				id_user = decode_token["id"]
-				payments = db.session.query(Payment, Metrics, Users).join(Metrics, Metrics.id_metrics == Payment.id_metrics).join(Users, Users.id_user == Payment.id_user)
 				if r_json["identifierMetric"] is not None:
-					payments = payments.filter(Metrics.identifier == r_json["identifierMetric"])
+					payments = db.session.query(Payment, Metrics, Users)\
+						.join(Metrics, Metrics.id_metrics == Payment.id_metrics) \
+						.join(Users, Users.id_user == Payment.id_user)\
+						.filter(Metrics.identifier == r_json["identifierMetric"])
+				else:
+					payments = db.session.query(Payment, Metrics, Users) \
+						.join(Metrics, Metrics.id_metrics == Payment.id_metrics) \
+						.join(Users, and_(Users.id_user == Payment.id_user, Users.id_user == id_user))
 				if r_json["typeMetric"] is not None:
 					payments = payments.join(Type_metric, and_(Type_metric.id_type == Metrics.id_type, Type_metric.name == r_json["typeMetric"]))
 				if r_json["dateWith"] is not None:
-					date_1 = datetime.strptime(r_json["dateWith"], '%d-%m-%Y %H:%M:%S').date()
+					date_1 = datetime.strptime(r_json["dateWith"], '%Y-%m-%dT%H:%M:%S.%f')
 					payments = payments.filter(Payment.date > date_1)
 				if r_json["dateTo"] is not None:
-					date_2 = datetime.strptime(r_json["dateTo"], '%d-%m-%Y %H:%M:%S').date()
+					date_2 = datetime.strptime(r_json["dateTo"], '%Y-%m-%dT%H:%M:%S.%f')
 					payments = payments.filter(Payment.date < date_2)
-				payments = payments.all()
+				payments = payments.group_by(Payment.id_session).all()
 				res_list = []
 				for payment in payments:
 					all_payment = db.session.query(Payment, Metrics, Type_metric.name, Tariff.price, Address)\
@@ -84,7 +91,7 @@ class PaymentModule(Module):
 						.join(Type_metric, Type_metric.id_type == Metrics.id_type)\
 						.filter(Payment.id_session == payment.Payment_history.id_session).all()
 					res_list.append(all_payment_to_string(all_payment, payment.Users.email, payment.Payment_history.date, payment.Payment_history.id_session))
-				if len(payments) == 0:
+				if len(res_list) == 0:
 					return jsonify([])
 				return jsonify(res_list)
 			except Exception as e:
