@@ -17,4 +17,4 @@
 * [Отчет по ролям.docx](https://github.com/DenisBelashkov/UtilitatemMetris/blob/main/%D0%94%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/%D0%9E%D1%82%D1%87%D0%B5%D1%82%20%D0%BF%D0%BE%20%D1%80%D0%BE%D0%BB%D1%8F%D0%BC.docx)
 * [Отчет по ролям.pdf](https://github.com/DenisBelashkov/UtilitatemMetris/blob/main/%D0%94%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/%D0%9E%D1%82%D1%87%D0%B5%D1%82%20%D0%BF%D0%BE%20%D1%80%D0%BE%D0%BB%D1%8F%D0%BC.pdf)
 * [Демоверсия](https://disk.yandex.ru/d/rjexRGooJhxD9Q/release_v2.mp4)
-* [Swagger] (https://app.swaggerhub.com/apis/sinhro200/UtilitatemMetris/1.0.0#/LoginUser)
+* [Swagger](https://app.swaggerhub.com/apis/sinhro200/UtilitatemMetris/1.0.0#/LoginUser)
