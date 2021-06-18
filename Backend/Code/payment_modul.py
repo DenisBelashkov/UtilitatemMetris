@@ -80,7 +80,7 @@ class PaymentModule(Module):
 				if r_json["dateTo"] is not None:
 					date_2 = datetime.strptime(r_json["dateTo"], '%Y-%m-%dT%H:%M:%S.%f')
 					payments = payments.filter(Payment.date < date_2)
-				payments = payments.group_by(Payment.id_session).all()
+				payments = payments.group_by(Payment.id_session).order_by(Payment.date.desc()).all()
 				res_list = []
 				for payment in payments:
 					all_payment = db.session.query(Payment, Metrics, Type_metric.name, Tariff.price, Address)\
@@ -98,47 +98,6 @@ class PaymentModule(Module):
 				logging.warning(e)
 				return "", 500
 
-		# @app.route('/payment/metrics', methods=["POST"])
-		# @wrapper_for_token
-		# def payment_metrics():
-		# 	try:
-		# 		print(request.json)
-		# 		res_list = []
-		# 		json_request = request.json
-		# 		for item in json_request:
-		# 			metric = db.session.query(Metrics, Tariff.price)\
-		# 				.join(Tariff,Tariff.id_tariff == Metrics.id_tariff) \
-		# 				.filter(Metrics.id_metrics == item['idMetric']).one_or_none()
-		# 			if not metric:
-		# 				continue
-		# 			cost = item["cost"] + metric.Metrics.balance
-		# 			payment = Payment()
-		# 			payment.id_metrics = metric.Metrics.id_metrics
-		# 			payment.id_user = item["idUser"]
-		# 			payment.prev_value = metric.Metrics.prev_value
-		# 			payment.date = date.today()
-		# 			payment.cost = item["cost"]
-		# 			if cost <= 0:
-		# 				metric.Metrics.balance = cost
-		# 				payment.curr_value = metric.Metrics.prev_value
-		# 			else:
-		# 				need_cost = (metric.Metrics.curr_value - metric.Metrics.prev_value) * metric.price
-		# 				metric.Metrics.balance = cost - need_cost
-		# 				payment.curr_value = metric.Metrics.curr_value
-		# 				metric.Metrics.prev_value = metric.Metrics.curr_value
-		# 			db.session.add(payment)
-		# 			db.session.commit()
-		# 			res_list.append(
-		# 				{"id": payment.id_payment_history,
-		# 				 "date": payment.date,
-		# 				 "cost": float(payment.cost),
-		# 				 "prevValue": float(payment.prev_value),
-		# 				 "currValue": float(payment.curr_value),
-		# 				 "userName": " "})
-		# 		return jsonify(res_list)
-		# 	except Exception as e:
-		# 		db.session.rollback()
-		# 	return "", 400
 		def make_payment(id_user, id_metric, cost, prev_value, curr_value)->Payment:
 			payment = Payment()
 			payment.id_metrics = id_metric
@@ -181,7 +140,6 @@ class PaymentModule(Module):
 		def post_payment_metrics():
 			try:
 				decode_token = jwt.decode(request.headers["token"], "secret", algorithms=["HS256"])
-				#decode_token = {"id": 3, "email" :"milo"}
 				r_json = request.json
 				cost = float(r_json["cost"])
 				res_list = []

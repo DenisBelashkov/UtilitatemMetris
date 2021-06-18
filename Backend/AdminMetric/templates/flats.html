@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a class="btn btn btn-primary text-light"
+				   href="/admin/create_flat/city">Добавить</a>
+<div id="editor">
+	<form class="form-inline" method="post" action="/admin/edit_flat">
+		<div class="form-group mx-sm-3 mb-2">
+			<input name="flat" type="hidden" value="{{ flat }}" id="flat"/>
+			<label for="new_flat" class="sr-only" >Лицевой счет</label>
+			<input type="text" class="form-control" id="new_flat" name = "new_flat" placeholder="Счет">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2" >Изменить</button>
+        <label class="sr-only"  id = "status"></label>
+	</form>
+</div>
+
+    <table class="table mt-3" id="table">
+        <thead>
+        <tr>
+			<th scope="col">Лицевой счет квартры</th>
+            <th scope="col">Почта хозяина квартиры</th>
+            <th scope="col">Адрес</th>
+            <th scope="col">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for flat in flats %}
+            <tr>
+				<td>
+					<p> {{ flat.Personal_account.id_personal_account }}</p>
+                </td>
+                <td>
+					<p> {{ flat.email }}</p>
+                </td>
+                <td>
+					<p> квартира {{ flat.Address.name }}, дом {{ flat.Address.address.name}}, улица {{ flat.Address.address.address.name}}, город {{ flat.Address.address.address.address.name}}</p>
+                </td>
+                <td>
+
+                <p><a class="btn btn btn-primary text-light"
+                                      href="/admin/edit_owner?flat={{ flat.Personal_account.id_personal_account}}&id_user={{flat.Personal_account.id_owner_user}}">Изменить хозяина</a></p>
+				<a class="btn btn btn-primary text-light"
+                                      href="{{ url_for('admin_show_metric', flat_id = flat.Personal_account.id_personal_account)}}">Просмотр счетчиков</a></p>
+					<button type="button" class="btn btn btn-primary text-light" data-toggle="modal" value="@item.Id" data-target="#addingModal" onclick="toggle( this, '{{ flat.Personal_account.id_personal_account }}')">
+                        Редактировать счетчик
+                    </button></p>
+            	</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+<script>
+document.getElementById('editor').style.display = "none";
+var index = -1;
+var _id = -1;
+var flat = '{{ flat }}';
+
+function toggle(but, id) {
+	    _id = id;
+	    n = $(but).closest("tr").index();
+    if (index === n){
+            document.getElementById('editor').style.display = "none";
+            index = -1;
+            return;
+        }
+    index = n;
+    console.log(index)
+    document.getElementById('editor').style.display = "";
+    identifier  = document.getElementById("table").rows[n + 1].cells[0].innerHTML.replace(/ +/g, ' ').trim();
+    console.log(id)
+    $("#flat").val(id);
+     $("#new_flat").val(id);
+}
+
+</script>
+{% endblock %}

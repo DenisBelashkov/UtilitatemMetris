@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div id="editor">
+	<form class="form-inline" method="post" action="/admin/edit_user">
+	<div class="form-group mx-sm-3 mb-2">
+		<input name="id" type="hidden" value="" id="id_user"/>
+            <label for="new_name" class="sr-only" >Почта</label>
+            <input type="text" class="form-control" id="new_name" name = "name" placeholder="Почта">
+		<label for="new_pass" class="sr-only" >Пароль</label>
+            <input type="text" class="form-control" id="new_pass" name = "password" placeholder="Пароль">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2" >Изменить</button>
+        <label class="sr-only"  id = "status"></label>
+	</form>
+</div>
+
+    <table class="table mt-3" id="table">
+        <thead>
+        <tr>
+            <th scope="col">Почта пользователя</th>
+            <th scope="col">Пароль</th>
+            <th scope="col">Тип аккаунта</th>
+            <th scope="col">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for user in users %}
+            <tr>
+                <td>
+					 {{ user.email }}
+                </td>
+                <td>
+
+					{% if user.demo == 1 %}
+					 {{ user.password }}
+					{% else %}
+					{% endif %}
+                </td>
+				<td>
+					{% if user.demo == 1 %}
+					 Полный аккаунт
+					{% else %}
+					Аккаунт быстрой регистрации
+					{% endif %}
+				</td>
+                <td>
+                    <button type="button" class="fill-modal btn btn-outline-primary" data-toggle="modal" value="@item.Id" data-target="#addingModal" onclick="toggle( this, {{ user.id_user }})">
+                        Редактировать пользователя
+                    </button>
+            	<td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+<script>
+document.getElementById('editor').style.display = "none";
+var index = -1;
+var _id = -1;
+
+function toggle(but, id) {
+	    _id = id;
+	    n = $(but).closest("tr").index();
+    if (index === n){
+            document.getElementById('editor').style.display = "none";
+            index = -1;
+            return;
+        }
+    index = n;
+    console.log(index)
+    document.getElementById('editor').style.display = "";
+    name = document.getElementById("table").rows[n + 1].cells[0].innerHTML.replace(/ +/g, ' ').trim();
+    password = document.getElementById("table").rows[n + 1].cells[1].innerHTML.replace(/ +/g, ' ').trim();
+    $("#new_name").val(name);
+    $("#new_pass").val(password);
+    $("#id_user").val(id);
+}
+
+</script>
+{% endblock %}
+

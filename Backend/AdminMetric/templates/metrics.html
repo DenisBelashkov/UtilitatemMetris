@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <table class="table mt-3" id="table">
+        <thead>
+        <tr>
+			<th scope="col">Лицевой счет счетчика</th>
+            <th scope="col">Тип счетчика</th>
+            <th scope="col">Показания за прошлый месяц</th>
+            <th scope="col">Показания за текущий месяц</th>
+            <th scope="col">Тариф</th>
+            <th scope="col">Цена за тарриф</th>
+            <th scope="col">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for metric in metrics %}
+            <tr>
+				<td>
+					<p> {{ metric.Metrics.identifier }}</p>
+                </td>
+                <td>
+					<p> {{ metric.name }}</p>
+                </td>
+                <td>
+					<p>{{metric.Metrics.prev_value}}</p>
+                </td>
+                <td>
+					<p>{{metric.Metrics.curr_value}}</p>
+                </td>
+				<td>
+					<p>{{metric.tariff}}</p>
+                </td>
+				<td>
+					<p>{{metric.price}}</p>
+                </td>
+                <td>
+					<div class="form-inline">
+                <p><a class="btn btn btn-primary text-light"
+                                      href="">Изменить счетчик</a></p>
+				<a class="btn btn btn-primary text-light"
+                                      href="">Удалить</a></p>
+					</div>
+            	</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -50,10 +50,16 @@ class RegistrationModule(Module):
 				user = db.session.query(Users).filter(Users.email == token_decode["email"]).filter(Users.demo == 1).one_or_none()
 				if user:
 					return " ", 403
-				user = Users()
-				user.email = token_decode["email"]
-				user.password = token_decode["password"]
-				db.session.add(user)
+				user = db.session.query(Users).filter(Users.email == token_decode["email"]).filter(Users.demo == 0).one_or_none()
+				if user is None:
+					user = Users()
+					user.email = token_decode["email"]
+					user.password = token_decode["password"]
+					user.demo = 1
+					db.session.add(user)
+				else:
+					user.password = token_decode["password"]
+					user.demo = 1
 				db.session.commit()
 				return "Successfully registration!"
 			except Exception as e:
@@ -64,7 +70,7 @@ class RegistrationModule(Module):
 		@wrapper_for_token
 		def registration_continue():
 			token_decode = jwt.decode(request.headers["token"], "secret", algorithms=["HS256"])
-			user = db.session.query(Users).filter(Users.email == token_decode["email"]).filter(Users.demo == 1).first()
+			user = db.session.query(Users).filter(Users.email == token_decode["email"]).filter(Users.demo == 1).one_or_none()
 			if user:
 				return " ", 409
 			user = db.session.query(Users).filter(Users.email == token_decode["email"]).first()
