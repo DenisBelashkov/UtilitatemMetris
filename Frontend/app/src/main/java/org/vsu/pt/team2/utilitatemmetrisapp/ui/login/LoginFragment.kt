@@ -142,14 +142,14 @@ class LoginFragment : Fragment() {
     private suspend fun validateFieldsThenDo(func: suspend ((String, String) -> Unit)) {
         var containsError = false
         val email = emailEditText.text.toString()
-        EmailValidator.validate(email).let { result ->
+        EmailValidator.validate(email, requireContext()).let { result ->
             if (result.isNotBlank()) {
                 emailTextFieldBoxes.setError(result, false)
                 containsError = true
             }
         }
         val pass = passwordEditText.text.toString()
-        PasswordValidator.validate(pass).let { result ->
+        PasswordValidator.validate(pass, requireContext()).let { result ->
             if (result.isNotBlank()) {
                 passwordTextFieldBoxes.setError(result, false)
                 containsError = true

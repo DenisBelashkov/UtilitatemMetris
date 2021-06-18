@@ -82,6 +82,8 @@
     <string name="dont_have_payments">Ещё не было произведено ни одной оплаты</string>
     <string name="account">Счёт %s</string>
     <string name="account_dont_has_meters">На счету нет ни одного счётчика</string>
+    <string name="incorrect_email">Некорректный email</string>
+    <string name="empty_field">Пустое значение</string>
 
 
 </resources>
