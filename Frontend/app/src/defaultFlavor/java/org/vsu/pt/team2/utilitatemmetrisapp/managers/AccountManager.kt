@@ -14,8 +14,7 @@ class AccountManager @Inject constructor(
 
     suspend fun accounts(): ApiResult<List<Account>> {
         Logger.d("Загрузка счетов юзера")
-        val res = generalWorker.flats()
-        return when (res) {
+        return when (val res = generalWorker.flats()) {
             is ApiResult.NetworkError -> {
                 Logger.d("Загрузка счетов юзера, ошибка")
                 res

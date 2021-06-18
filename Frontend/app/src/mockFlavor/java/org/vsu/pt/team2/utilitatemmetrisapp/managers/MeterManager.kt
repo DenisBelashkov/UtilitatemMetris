@@ -22,8 +22,7 @@ class MeterManager @Inject constructor(
                 )
             )
         }
-        val res = meterManagerOfflineSupport.meterByIdentifier(identifier)
-        return when (res) {
+        return when (val res = meterManagerOfflineSupport.randomMeterByIdentifierWithRandomSavedOrNot(identifier)) {
             is ApiResult.NetworkError -> {
                 res
             }

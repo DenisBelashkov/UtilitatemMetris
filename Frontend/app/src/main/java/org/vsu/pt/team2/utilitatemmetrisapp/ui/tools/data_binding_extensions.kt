@@ -6,6 +6,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.AccountViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.HistoryMeterItemViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterItemViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
+import kotlin.math.abs
 
 
 fun ItemMeterBinding.setFromVM(mvm: MeterItemViewModel, context: Context) {
@@ -18,6 +19,7 @@ fun ItemMeterBinding.setFromVM(mvm: MeterItemViewModel, context: Context) {
 
 fun ItemMeterWithCheckboxBinding.setFromVM(mvm: MeterItemViewModel, context: Context) {
     setBacklogValue(mvm.backlog)
+    hasBacklog = mvm.backlog > 0.0000001
     setMeterIdentifier(mvm.identifier)
     meterType = mvm.type.toLanguagedString(context)
 

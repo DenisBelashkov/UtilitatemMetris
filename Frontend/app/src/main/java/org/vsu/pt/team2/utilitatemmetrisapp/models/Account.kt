@@ -8,7 +8,7 @@ class Account(
 ) {
     constructor(
         flat: Flat
-    ) : this(flat.identifier, flat.address)
+    ) : this(flat.id, flat.address)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

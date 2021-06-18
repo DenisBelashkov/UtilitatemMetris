@@ -41,7 +41,7 @@ class MeterManager @Inject constructor(
         }
     }
 
-    suspend fun getMeterByAccountIdentifier(accountIdentifier: String): ApiResult<List<Meter>> {
+    suspend fun getMetersByAccountIdentifier(accountIdentifier: String): ApiResult<List<Meter>> {
         val res = generalWorker.metricsByFlat(accountIdentifier)
         return when (res) {
             is ApiResult.NetworkError -> {

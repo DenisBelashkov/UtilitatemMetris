@@ -1,8 +1,11 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.managers
 
+import com.orhanobut.logger.Logger
 import com.yandex.metrica.YandexMetrica
+import kotlinx.coroutines.delay
 import org.vsu.pt.team2.utilitatemmetrisapp.api.model.LoginUser
 import org.vsu.pt.team2.utilitatemmetrisapp.api.model.QuickLoginUser
+import org.vsu.pt.team2.utilitatemmetrisapp.api.model.RegisterUser
 import org.vsu.pt.team2.utilitatemmetrisapp.api.model.SuccessfulLoginUser
 import org.vsu.pt.team2.utilitatemmetrisapp.models.User
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
@@ -18,8 +21,7 @@ class AuthManager @Inject constructor(
         YandexMetrica.reportEvent(
             "Полная авторизация, запрос",
             mapOf(
-                "email" to email,
-                "password" to "*".repeat(pass.length)
+                "email" to email
             )
         )
         val result = authWorker.login(LoginUser(email, pass))
@@ -29,7 +31,6 @@ class AuthManager @Inject constructor(
                     "Полная авторизация, ошибка",
                     mapOf(
                         "email" to email,
-                        "password" to "*".repeat(pass.length),
                         "error" to "Network error"
                     )
                 );
@@ -40,7 +41,6 @@ class AuthManager @Inject constructor(
                     "Полная авторизация, ошибка",
                     mapOf(
                         "email" to email,
-                        "password" to "*".repeat(pass.length),
                         "error" to "Generic error",
                         "code" to result.code,
                         "GenericError" to result.error,
@@ -52,13 +52,10 @@ class AuthManager @Inject constructor(
                 YandexMetrica.reportEvent(
                     "Полная авторизация, успех",
                     mapOf(
-                        "email" to email,
-                        "password" to "*".repeat(pass.length)
+                        "email" to email
                     )
                 )
-                result.value.apply {
-                    sessionManager.setSession(User(this.id, this.email, this.token), false)
-                }
+                sessionManager.setSession(User(email, result.value.token), false)
             }
         }
         return result
@@ -98,10 +95,45 @@ class AuthManager @Inject constructor(
                     "Быстрая авторизация, успех",
                     mapOf("email" to email)
                 )
-                result.value.apply {
-                    sessionManager.setSession(User(this.id, this.email, this.token), true)
-                }
+                sessionManager.setSession(User(email, result.value.token), true)
+            }
+        }
+        return result
+    }
 
+    suspend fun registerUser(email: String, pass: String): ApiResult<*> {
+        YandexMetrica.reportEvent(
+            "Регистрация, запрос",
+            mapOf("email" to email)
+        )
+        val result = authWorker.register(RegisterUser(email, pass))
+        when (result) {
+            is ApiResult.NetworkError -> {
+                /*showtoast internet lost*/
+                YandexMetrica.reportEvent(
+                    "Регистрация, ошибка",
+                    mapOf(
+                        "email" to email,
+                        "error" to "Network error"
+                    )
+                )
+            }
+            is ApiResult.GenericError -> {
+                YandexMetrica.reportEvent(
+                    "Регистрация, ошибка",
+                    mapOf(
+                        "email" to email,
+                        "error" to "Generic error",
+                        "code" to result.code,
+                        "GenericError" to result.error,
+                    )
+                )
+            }
+            is ApiResult.Success -> {
+                YandexMetrica.reportEvent(
+                    "Регистрация, успех",
+                    mapOf("email" to email)
+                )
             }
         }
         return result

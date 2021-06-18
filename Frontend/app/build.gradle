@@ -16,10 +16,14 @@ android {
         versionCode 1
         versionName "1.0"
 
+        archivesBaseName = "$applicationId"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
+        debug {
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -123,4 +127,7 @@ dependencies {
 
     // AppMetrica SDK.
     implementation 'com.yandex.android:mobmetricalib:3.21.0'
+
+    //swipe & refresh
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 }

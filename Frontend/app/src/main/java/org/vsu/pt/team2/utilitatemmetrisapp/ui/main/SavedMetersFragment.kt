@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
-import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentSavedMetersBinding
@@ -16,12 +14,9 @@ import org.vsu.pt.team2.utilitatemmetrisapp.managers.MeterManager
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.metersList.MetersWithCheckboxListAdapter
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.BaseTitledFragment
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.appCompatActivity
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.myApplication
-import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.replaceFragment
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.*
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.GeneralButtonViewModel
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterItemViewModel
-import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.MeterViewModel
 import javax.inject.Inject
 
 class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_meters) {
@@ -43,6 +38,29 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
         }
     }
 
+    fun statusLoading() {
+//        binding.fragmentSavedMetersStatusTv.visibility = View.VISIBLE
+//        binding.fragmentSavedMetersStatusTv.text = "Загрузка..."
+    }
+
+    fun statusLoaded() {
+        binding.fragmentSavedMetersStatusTv.visibility = View.GONE
+        binding.fragmentSavedMetersStatusTv.text = ""
+        binding.fragmentSavedMetersSwipeRefreshLayout.isRefreshing = false
+    }
+
+    fun statusLoadedEmptyList() {
+        binding.fragmentSavedMetersStatusTv.visibility = View.VISIBLE
+        binding.fragmentSavedMetersStatusTv.text = "У вас нету ни одного счётчика"
+        binding.fragmentSavedMetersSwipeRefreshLayout.isRefreshing = false
+    }
+
+    fun statusNone() {
+        binding.fragmentSavedMetersStatusTv.visibility = View.GONE
+        binding.fragmentSavedMetersStatusTv.text = ""
+        binding.fragmentSavedMetersSwipeRefreshLayout.isRefreshing = false
+    }
+
     override fun onAttach(context: Context) {
         myApplication()?.appComponent
             ?.meterComponent()
@@ -56,6 +74,15 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSavedMetersBinding.inflate(inflater, container, false)
+
+        binding.savedMetersListRecyclerView.layoutManager = LinearLayoutManager(
+            requireContext(), LinearLayoutManager.VERTICAL, false
+        )
+        binding.savedMetersListRecyclerView.adapter = adapter
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.sumForPay = 0.0
         binding.payChosenMetersButton.viewmodel =
             GeneralButtonViewModel(getString(R.string.pay_for_chosen)) {
@@ -66,41 +93,44 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
                         appCompatActivity()?.replaceFragment(
                             PaymentFragment.createWithMetersIdentifier(meterIdentifiersForPay)
                         )
-                    }else{
-                        //todo показать сообщение "не выбран ни один счётчик на оплтату"
+                    } else {
+                        showToast(getString(R.string.select_at_least_1_meter_to_pay))
                     }
                 }
 
             }
-        binding.metersListRecyclerView.layoutManager = LinearLayoutManager(
-            requireContext(), LinearLayoutManager.VERTICAL, false
-        )
-        binding.metersListRecyclerView.adapter = adapter
 
-        updateAdapter()
-
-        return binding.root
+        binding.fragmentSavedMetersSwipeRefreshLayout.setOnRefreshListener {
+            loadMeters()
+        }
+        loadMeters()
+        super.onViewCreated(view, savedInstanceState)
     }
 
-    fun updateAdapter() {
+    fun loadMeters() {
+        statusLoading()
         lifecycleScope.launch {
-            val apiRes = meterManager.getMetersSavedByUser()
-            when (apiRes) {
+            when (val apiRes = meterManager.getMetersSavedByUser()) {
                 is ApiResult.NetworkError -> {
-                    //todo show toast
-                    view?.let { Snackbar.make(it, "Net connection err", Snackbar.LENGTH_SHORT) }
+                    statusNone()
+                    networkConnectionErrorToast()
                 }
                 is ApiResult.GenericError -> {
-                    //todo show toast
-                    apiRes.code
+                    statusNone()
+                    genericErrorToast(apiRes)
                 }
                 is ApiResult.Success -> {
-                    val list : List<MeterItemViewModel> =
+                    val list: List<MeterItemViewModel> =
                         apiRes.value.map { MeterItemViewModel(it.identifier, it.type, it.balance) }
                     adapter.submitList(list)
 
                     val sum = adapter.getChecked().sumOf { it.backlog }
                     binding.sumForPay = sum
+
+                    if (list.isEmpty())
+                        statusLoadedEmptyList()
+                    else
+                        statusLoaded()
                 }
             }
         }

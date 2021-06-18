@@ -64,6 +64,24 @@
     <string name="pay_backlog">Погасить задолженность</string>
     <string name="heating">Отопление</string>
     <string name="fragment_history_title">История</string>
+    <string name="do_payment">Оплатить</string>
+    <string name="rubles_postfix">р.</string>
+    <string name="fragment_dialog_pay_title">Оплата</string>
+    <string name="meter_dont_has_backlog">На данном счётчике нету задолженности</string>
+    <string name="for_finish_registration_visit_email">Для того чтобы завершить регистрацию, пройдите по ссылке, отправленной вам на почту.</string>
+    <string name="finish_registration_title">Подтверждение регистрации</string>
+    <string name="lost_internet_connection">Нет связи с интернетом</string>
+    <string name="current_month_data">Данные на текущий месяц</string>
+    <string name="cancel">Отмена</string>
+    <string name="accept_changes">Подтвердить изменения</string>
+    <string name="new_value_lower_than_previous">Новое значение должно быть больше предыдущего</string>
+    <string name="generic_error_default_message">Произошла ошибка</string>
+    <string name="select_at_least_1_meter_to_pay">Выберите хотя бы один счётчик для оплаты</string>
+    <string name="tmsg_meters_not_found">Счётчиков не найдено</string>
+    <string name="dont_have_accounts">У вас пока нету ни одного счёта</string>
+    <string name="dont_have_payments">Ещё не было произведено ни одной оплаты</string>
+    <string name="account">Счёт %s</string>
+    <string name="account_dont_has_meters">На счету нет ни одного счётчика</string>
 
 
 </resources>

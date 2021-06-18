@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment
 import com.orhanobut.logger.Logger
 import org.vsu.pt.team2.utilitatemmetrisapp.MyApplication
 import org.vsu.pt.team2.utilitatemmetrisapp.R
+import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
+import org.vsu.pt.team2.utilitatemmetrisapp.network.ErrorResponse
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.main.MainActivity
 
 fun AppCompatActivity.hideKeyboard(view: View) {
@@ -45,11 +47,35 @@ fun Fragment.showToast(message: String, isShort: Boolean = true) {
         .show()
 }
 
+fun Fragment.networkConnectionErrorToast() {
+    showToast(getString(R.string.lost_internet_connection))
+}
+
+fun Fragment.genericErrorToast(code: Int? = null, genericError: ErrorResponse? = null) {
+    showToast(getString(R.string.generic_error_default_message))
+}
+
+fun Fragment.genericErrorToast(err: ApiResult.GenericError) {
+    genericErrorToast(err.code, err.error)
+}
+
 fun AppCompatActivity.showToast(message: String, isShort: Boolean = true) {
     if (Looper.myLooper() == null)
         Looper.prepare()
     Toast.makeText(this, message, if (isShort) Toast.LENGTH_SHORT else Toast.LENGTH_LONG)
         .show()
+}
+
+fun AppCompatActivity.networkConnectionErrorToast() {
+    showToast(getString(R.string.lost_internet_connection))
+}
+
+fun AppCompatActivity.genericErrorToast(code: Int? = null, genericError: ErrorResponse? = null) {
+    showToast(getString(R.string.generic_error_default_message))
+}
+
+fun AppCompatActivity.genericErrorToast(err: ApiResult.GenericError) {
+    genericErrorToast(err.code, err.error)
 }
 
 fun Fragment.appCompatActivity(): AppCompatActivity? {
