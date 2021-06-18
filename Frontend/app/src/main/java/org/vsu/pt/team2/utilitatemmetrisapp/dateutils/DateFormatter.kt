@@ -5,13 +5,19 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object DateFormatter {
-    val dateFormat = SimpleDateFormat("dd.mm.yyyy HH:mm:ss", Locale.ENGLISH)
+    val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.ENGLISH).apply {
+        timeZone = TimeZone.getTimeZone("UTC")
+    }
 
     //2021-05-27T14:04:15.988Z
     val networkDateFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.ENGLISH)
+        SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.ENGLISH).apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+        }
     } else {
-        SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+        SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH).apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+        }
     }
 
     fun toString(date: Date): String {

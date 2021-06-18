@@ -9,13 +9,13 @@ data class PaymentsFilter(
     var dateFrom: Date? = null,
     var dateTo: Date? = null,
     var meterType: MeterType? = null,
-){
+) {
     fun toNetworkModel(): InformationAboutPayment {
         return InformationAboutPayment(
-            identifierMetric?:"",
-            dateFrom?.let { DateFormatter.toNetworkString(it) }?:"",
-            dateTo?.let { DateFormatter.toNetworkString(it) }?:"",
-            meterType?.toValue() ?:""
+            identifierMetric,
+            dateFrom?.let { DateFormatter.toNetworkString(it) },
+            dateTo?.let { DateFormatter.toNetworkString(it) },
+            meterType
         )
     }
 }

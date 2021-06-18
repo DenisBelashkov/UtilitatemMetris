@@ -86,7 +86,7 @@ class DemoUserFragment : Fragment() {
     private suspend fun validateEmailThenDo(func: suspend ((String) -> Unit)) {
         var containsError = false
         val email = emailEditText.text.toString()
-        EmailValidator.validate(email).let { result ->
+        EmailValidator.validate(email, requireContext()).let { result ->
             if (result.isNotBlank()) {
                 emailTextFieldBoxes.setError(result, false)
                 containsError = true
