@@ -5,10 +5,10 @@ from flask import jsonify, request
 from decoration import wrapper_for_token
 
 class FlatModule(Module):
-	def toString(self, a):
+	def address_to_string(self, a):
 		str1 = ""
 		while True:
-			str1 += str(a.name)
+			str1 += a.type_address.name + ": " + str(a.name) + ", "
 			if not a.id_include:
 				return str1
 			a = a.address
@@ -30,7 +30,7 @@ class FlatModule(Module):
 				if len(flats) > 0:
 					out = []
 					for f in flats:
-						out.append({"id": f.id_personal_account, "address": self.toString(f.Address)})
+						out.append({"id": f.id_personal_account, "address": self.address_to_string(f.Address)})
 					return jsonify(out)
 				return jsonify([])
 			except Exception as e:
