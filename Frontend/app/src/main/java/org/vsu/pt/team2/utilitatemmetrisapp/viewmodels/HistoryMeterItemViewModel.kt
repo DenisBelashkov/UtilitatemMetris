@@ -3,11 +3,12 @@ package org.vsu.pt.team2.utilitatemmetrisapp.viewmodels
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 
 class HistoryMeterItemViewModel(
-        var identifier: String,
-        var type: MeterType,
-        var sum: Double,
-        var date: String,
-        var address: String,
+    var paymentId: Int,
+    var identifier: String,
+    var type: MeterType,
+    var sum: Double,
+    var date: String,
+    var address: String,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -15,6 +16,7 @@ class HistoryMeterItemViewModel(
 
         other as HistoryMeterItemViewModel
 
+        if (paymentId != other.paymentId) return false
         if (identifier != other.identifier) return false
         if (type != other.type) return false
         if (sum != other.sum) return false
@@ -25,7 +27,8 @@ class HistoryMeterItemViewModel(
     }
 
     override fun hashCode(): Int {
-        var result = identifier.hashCode()
+        var result = paymentId
+        result = 31 * result + identifier.hashCode()
         result = 31 * result + type.hashCode()
         result = 31 * result + sum.hashCode()
         result = 31 * result + date.hashCode()

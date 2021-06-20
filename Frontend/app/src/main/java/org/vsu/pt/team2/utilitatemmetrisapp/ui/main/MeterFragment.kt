@@ -119,6 +119,8 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
     }
 
     fun initFields(binding: FragmentMeterBinding) {
+        binding.meterPayBacklog.generalButton.visibility = View.GONE
+        binding.meterShowHistory.generalButton.visibility = View.GONE
         binding.fragmentMeterNewdataTextfieldboxes.endIconImageButton.setOnClickListener {
             val newData = binding.fragmentMeterNewdataExtendededittext
                 .text
@@ -204,6 +206,8 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
     }
 
     private fun onMeterLoaded(meter: Meter) {
+        binding.meterPayBacklog.generalButton.visibility = View.VISIBLE
+        binding.meterShowHistory.generalButton.visibility = View.VISIBLE
         binding.setFromVM(
             MeterViewModel.fromMeter(meter),
             requireContext()

@@ -48,38 +48,10 @@
             android:visibility="@{sum_for_pay.equals(0)?View.GONE:View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white_background"
-                android:padding="2dp"
-                android:paddingStart="6dp"
-                android:paddingBottom="4dp"
-                app:layout_constraintBottom_toTopOf="@+id/pay_for_chosen_button_container">
-
-                <TextView
-                    android:id="@+id/sum_for_pay_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
-                    android:text="@string/sum_for_pay"
-                    android:textColor="@color/gray"
-                    android:textSize="@dimen/text_small_12"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <TextView
-                    android:id="@+id/sum_for_pay_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{sum_for_pay.toString()}"
-                    android:textColor="@color/dark_text"
-                    android:textSize="@dimen/text_default_16"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/sum_for_pay_text" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            android:elevation="2dp"
+            >
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/pay_for_chosen_button_container"
@@ -97,7 +69,42 @@
 
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white_background"
+                android:padding="2dp"
+                android:paddingStart="6dp"
+                android:paddingBottom="4dp"
+                app:layout_constraintBottom_toTopOf="@+id/pay_for_chosen_button_container">
 
+                <TextView
+                    android:id="@+id/sum_for_pay_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/sum_for_pay"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/text_small_12"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/sum_for_pay_value"
+                    />
+
+                <TextView
+                    android:id="@+id/sum_for_pay_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="100dp"
+                    android:text="@{sum_for_pay.toString()}"
+                    android:textColor="@color/dark_text"
+                    android:textSize="@dimen/text_default_16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
