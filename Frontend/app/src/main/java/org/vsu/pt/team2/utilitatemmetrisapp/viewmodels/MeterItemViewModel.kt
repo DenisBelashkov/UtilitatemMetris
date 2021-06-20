@@ -2,10 +2,11 @@ package org.vsu.pt.team2.utilitatemmetrisapp.viewmodels
 
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 
-class MeterItemViewModel(
+class MeterItemViewModel constructor(
     var identifier: String,
     var type: MeterType,
     balance: Double,
+    var address: String
 ) {
     var backlog: Double = -balance
     override fun equals(other: Any?): Boolean {
