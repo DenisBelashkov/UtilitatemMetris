@@ -25,7 +25,11 @@
                 android:id="@+id/saved_meters_list_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:listitem="@layout/item_meter_with_checkbox" />
+                tools:listitem="@layout/item_meter_with_checkbox"
+
+                android:paddingBottom="100dp"
+                android:clipToPadding="false"
+                />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <TextView

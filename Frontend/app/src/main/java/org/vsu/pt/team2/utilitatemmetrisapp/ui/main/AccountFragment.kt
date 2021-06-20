@@ -114,7 +114,7 @@ class AccountFragment : DisabledDrawerFragment() {
                 }
                 is ApiResult.Success -> {
                     val metersList =
-                        res.value.map { MeterItemViewModel(it.identifier, it.type, it.balance) }
+                        res.value.map { MeterItemViewModel(it.identifier, it.type, it.balance,it.address) }
                     adapter.submitList(metersList)
                     if (metersList.isEmpty())
                         statusLoadedAccountsEmptyList()
