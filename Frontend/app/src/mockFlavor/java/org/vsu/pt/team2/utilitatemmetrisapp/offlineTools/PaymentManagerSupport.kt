@@ -29,7 +29,7 @@ class PaymentManagerSupport @Inject constructor(
                         meter,
                         meter.prevMonthData,
                         meter.curMonthData,
-                        (meter.curMonthData - meter.prevMonthData) * meter.tariff
+                        -meter.balance
                     )
                 )
             }

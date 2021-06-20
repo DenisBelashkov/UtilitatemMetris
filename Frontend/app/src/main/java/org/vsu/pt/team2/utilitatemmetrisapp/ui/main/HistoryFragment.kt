@@ -171,19 +171,19 @@ class HistoryFragment : BaseTitledFragment(R.string.fragment_history_title) {
 
     fun openFilterClicked() {
         FilterDialog(
+            paymentsFilter,
             { from, to, type ->
                 this.paymentsFilter.dateFrom = from?.time
                 this.paymentsFilter.dateFrom = to?.time
                 this.paymentsFilter.meterType = type
                 loadData()
-            },
-            paymentsFilter.identifierMetric
+            }
         ).show(parentFragmentManager, "FilterHistoryDialogFragment")
     }
 
     class FilterDialog(
-        val onFilterReady: (from: Calendar?, to: Calendar?, MeterType?) -> Unit,
-        val forceIdentifier: String? = null
+        val filter: PaymentsFilter,
+        val onFilterReady: (from: Calendar?, to: Calendar?, MeterType?) -> Unit
     ) : DialogFragment() {
         lateinit var binding: FragmentDialogFilterHistoryBinding
 
@@ -212,8 +212,8 @@ class HistoryFragment : BaseTitledFragment(R.string.fragment_history_title) {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
             context?.let { ctx ->
-                binding.shouldForceIdentifier = this.forceIdentifier != null
-                binding.forceIdentifier = this.forceIdentifier.toString()
+                binding.shouldForceIdentifier = this.filter.identifierMetric != null
+                binding.forceIdentifier = this.filter.identifierMetric.toString()
                 meterTypeValuesStr = MeterType.values().map { it.toLanguagedString(ctx) }
                     .plus(getString(R.string.Any))
                 binding.filterDialogMeterTypeSpinner.adapter =
@@ -243,16 +243,30 @@ class HistoryFragment : BaseTitledFragment(R.string.fragment_history_title) {
 
                     }
 
+                filter.dateFrom?.let {
+                    binding.filterDialogDateFromDatepickerBtn.text = DateFormatter.toString(it)
+                }
+
+                filter.dateTo?.let {
+                    binding.filterDialogDateToDatepickerBtn.text = DateFormatter.toString(it)
+                }
+
+                filter.meterType?.let {
+                    binding.filterDialogMeterTypeSpinner.setSelection(meterTypeValues.indexOf(it))
+                }
+
                 binding.filterDialogDateFromDatepickerBtn.setOnClickListener {
                     CustomDateTimePicker(ctx, {
                         this.dateFrom = it
-                        binding.filterDialogDateFromDatepickerBtn.text = DateFormatter.toString(it.time)
+                        binding.filterDialogDateFromDatepickerBtn.text =
+                            DateFormatter.toString(it.time)
                     }).show()
                 }
                 binding.filterDialogDateToDatepickerBtn.setOnClickListener {
                     CustomDateTimePicker(ctx, {
                         this.dateTo = it
-                        binding.filterDialogDateToDatepickerBtn.text = DateFormatter.toString(it.time)
+                        binding.filterDialogDateToDatepickerBtn.text =
+                            DateFormatter.toString(it.time)
                     }).show()
                 }
             }
