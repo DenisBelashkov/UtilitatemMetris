@@ -7,13 +7,15 @@ import java.util.*
 import kotlin.jvm.Throws
 
 object DateFormatter {
-    val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.ENGLISH).apply {
-        timeZone = TimeZone.getTimeZone("UTC")
-    }
+    val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.ENGLISH)
+//        .apply {
+//        timeZone = TimeZone.getTimeZone("UTC")
+//    }
 
-    val networkDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH).apply {
-        timeZone = TimeZone.getTimeZone("UTC")
-    }
+    val networkDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+//        .apply {
+//        timeZone = TimeZone.getTimeZone("UTC")
+//    }
 
     //2021-05-27T14:04:15.988Z
     /*val networkDateFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

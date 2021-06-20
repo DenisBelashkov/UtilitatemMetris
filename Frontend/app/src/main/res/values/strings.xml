@@ -89,6 +89,7 @@
     <string name="meter_type">Тип</string>
     <string name="fragment_title_payment_from_history">Квитанция</string>
     <string name="err_while_loading_payment">Ошибка загрузки оплаты</string>
+    <string name="address_">Адрес :</string>
 
 
 </resources>

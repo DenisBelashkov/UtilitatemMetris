@@ -22,6 +22,7 @@ fun ItemMeterWithCheckboxBinding.setFromVM(mvm: MeterItemViewModel, context: Con
     hasBacklog = mvm.backlog > 0.0000001
     setMeterIdentifier(mvm.identifier)
     meterType = mvm.type.toLanguagedString(context)
+    address = mvm.address.substringBefore("город")
 
     shouldShowLabels = true
 }

@@ -121,7 +121,7 @@ class SavedMetersFragment : BaseTitledFragment(R.string.fragment_title_saved_met
                 }
                 is ApiResult.Success -> {
                     val list: List<MeterItemViewModel> =
-                        apiRes.value.map { MeterItemViewModel(it.identifier, it.type, it.balance) }
+                        apiRes.value.map { MeterItemViewModel(it.identifier, it.type, it.balance, it.address) }
                     adapter.submitList(list)
 
                     val sum = adapter.getChecked().sumOf { it.backlog }

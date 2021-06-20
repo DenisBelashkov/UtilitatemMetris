@@ -71,7 +71,8 @@ class AddMeterFragment : BaseTitledFragment(R.string.fragment_title_add_meter) {
             MeterItemViewModel(
                 meter.identifier,
                 meter.type,
-                meter.balance
+                meter.balance,
+                meter.address
             ),
             requireContext()
         )

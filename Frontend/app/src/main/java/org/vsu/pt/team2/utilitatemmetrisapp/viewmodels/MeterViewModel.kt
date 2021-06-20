@@ -13,14 +13,6 @@ class MeterViewModel(
     var backlog: Double,
 ) {
 
-    fun toMeterItemVM(): MeterItemViewModel {
-        return MeterItemViewModel(
-            identifier,
-            type,
-            backlog
-        )
-    }
-
     companion object {
         fun fromMeterItemVM(
             mivm: MeterItemViewModel,

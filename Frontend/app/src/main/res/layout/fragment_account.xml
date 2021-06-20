@@ -28,30 +28,33 @@
             android:paddingEnd="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingTop="12dp"
+            >
 
             <TextView
                 android:id="@+id/account_address_title_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Адрес :"
+                android:text="@string/address_"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/text_small_12"
-                app:layout_constraintBottom_toBottomOf="parent"
+
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/account_address_value_text_view" />
 
             <TextView
                 android:id="@+id/account_address_value_text_view"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
                 android:text="@{accountAddress}"
                 android:textColor="@color/dark_text"
+                android:layout_marginEnd="30dp"
                 android:textSize="@dimen/text_default_16"
-                app:layout_constraintBottom_toBottomOf="@+id/account_address_title_text_view"
+                android:maxLines="4"
+                android:layout_marginStart="10dp"
                 app:layout_constraintStart_toEndOf="@+id/account_address_title_text_view"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -87,6 +90,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:listitem="@layout/item_meter_with_checkbox"
+
+                android:paddingBottom="100dp"
+                android:clipToPadding="false"
                 />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
