@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.*
 import org.vsu.pt.team2.utilitatemmetrisapp.R
@@ -17,16 +18,21 @@ import org.vsu.pt.team2.utilitatemmetrisapp.managers.MeterManager
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.PaymentManager
 import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
+import org.vsu.pt.team2.utilitatemmetrisapp.repository.PaymentRepo
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.adapters.metersList.MetersHistoryAdapter
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.DisabledDrawerFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.CreationFragmentArgs
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.genericErrorToast
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.myApplication
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.networkConnectionErrorToast
 import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.GeneralButtonViewModel
+import org.vsu.pt.team2.utilitatemmetrisapp.viewmodels.HistoryMeterItemViewModel
 import javax.inject.Inject
 
 class PaymentFragment : DisabledDrawerFragment(R.string.fragment_title_payment) {
     private lateinit var binding: FragmentPaymentBinding
+
+    private val adapter = MetersHistoryAdapter()
 
     private val metersIdentifiers: List<String> by PaymentFragment.creationFragmentArgs.asProperty()
     private var meters: List<Meter>? = null
@@ -39,6 +45,9 @@ class PaymentFragment : DisabledDrawerFragment(R.string.fragment_title_payment) 
 
     @Inject
     lateinit var paymentManager: PaymentManager
+
+    @Inject
+    lateinit var paymentRepo: PaymentRepo
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -92,6 +101,9 @@ class PaymentFragment : DisabledDrawerFragment(R.string.fragment_title_payment) 
 
 
     fun initFields(binding: FragmentPaymentBinding) {
+        binding.paymentMetersListRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.paymentMetersListRecyclerView.adapter = adapter
         binding.paymentSentToEmail.generalButton.isEnabled = false
         binding.paymentSentToEmail.generalButton.visibility = View.GONE
         binding.paymentSentToEmail.viewmodel = GeneralButtonViewModel(
@@ -129,7 +141,7 @@ class PaymentFragment : DisabledDrawerFragment(R.string.fragment_title_payment) 
                     it.balance = 0.0
                 }
                 paymentId = paymentResult.value.id
-                onSuccessPay()
+                onSuccessPay(paymentResult.value.id)
             }
             is ApiResult.GenericError -> {
                 genericErrorToast(paymentResult)
@@ -140,13 +152,37 @@ class PaymentFragment : DisabledDrawerFragment(R.string.fragment_title_payment) 
         }
     }
 
-    private fun onSuccessPay() {
+    private fun onSuccessPay(paymentId: Int) {
         paymentDialog?.dismiss()
         binding.paymentSentToEmail.generalButton.isEnabled = true
         binding.paymentSentToEmail.generalButton.visibility = View.VISIBLE
 
         binding.paymentPay.generalButton.isEnabled = false
         binding.paymentPay.generalButton.visibility = View.GONE
+//        binding.paymentFragmentPaymentStatusTv.text
+        loadPaymentFromPaymentRepo(paymentId)
+    }
+
+    private fun loadPaymentFromPaymentRepo(paymentId: Int){
+        lifecycleScope.launch {
+            val payment = paymentRepo.findPayment(paymentId)
+            payment?.let {
+                binding.paymentDone = true
+                val paymentItemList: List<HistoryMeterItemViewModel> =
+                    payment.metricDatas
+                        .map { pMeterData ->
+                            HistoryMeterItemViewModel(
+                                payment.id,
+                                pMeterData.meter.identifier,
+                                pMeterData.meter.type,
+                                pMeterData.cost,
+                                payment.date,
+                                pMeterData.meter.address
+                            )
+                        }
+                adapter.submitList(paymentItemList)
+            }
+        }
     }
 
     private fun onCancelPay() {

@@ -3,27 +3,38 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="payment_done"
+            type="Boolean" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         style="@style/RootElementStyle"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/payment_fragment_payment_status_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/payment_ready_for_pay"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="54dp"
+            android:text="@{payment_done?@string/payment_successfully_payed : @string/payment_ready_for_pay}"
             android:textSize="@dimen/text_default_16"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/payment_meters_list_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="@{payment_done?View.VISIBLE : View.GONE}"
+            app:layout_constraintTop_toBottomOf="@+id/payment_fragment_payment_status_tv"
+            tools:listitem="@layout/item_meter_history" />
 
         <include
             android:id="@+id/payment_sent_to_email"
@@ -32,8 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            app:layout_constraintBottom_toTopOf="@+id/payment_pay"
-            />
+            app:layout_constraintBottom_toTopOf="@+id/payment_pay" />
 
         <include
             android:id="@+id/payment_pay"

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+
+        <import type="android.view.View" />
+        <variable
+            name="should_force_identifier"
+            type="Boolean" />
+        <variable
+            name="force_identifier"
+            type="String" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:padding="20dp"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/filter_dialog_force_identifier_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="@{should_force_identifier? View.VISIBLE : View.GONE}"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/filter_dialog_meter_force_identifier_tv"
+                app:layout_constraintStart_toStartOf="@+id/filter_dialog_meter_force_identifier_tv"
+                android:textSize="@dimen/text_default_16"
+                android:textColor="@color/gray"
+                android:text="Идентификатор"
+                />
+
+            <TextView
+                android:id="@+id/filter_dialog_meter_force_identifier_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_big_20"
+                android:textColor="@color/dark_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="@{force_identifier}"
+                android:layout_margin="2dp"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/filter_dialog_meter_type_spinner_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/filter_dialog_force_identifier_container"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/filter_dialog_meter_type_spinner"
+                app:layout_constraintStart_toStartOf="@+id/filter_dialog_meter_type_spinner"
+                android:text="@string/meter_type"
+                android:textSize="@dimen/text_default_16"
+                android:textColor="@color/gray"
+                />
+            <Spinner
+                android:id="@+id/filter_dialog_meter_type_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_margin="2dp"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/filter_dialog_date_filters_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/filter_dialog_meter_type_spinner_container"
+            android:text="Фильтрация по дате"
+            android:layout_marginTop="20dp"
+            android:textSize="@dimen/text_big_20"
+            android:textColor="@color/dark_text"
+            />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/filter_dialog_date_from_container"
+            app:layout_constraintTop_toBottomOf="@+id/filter_dialog_date_filters_title_tv"
+            android:layout_width="match_parent"
+            android:layout_marginTop="6dp"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:id="@+id/filter_dialog_date_from_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/filter_dialog_date_from_datepicker_btn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_dialog_date_from_datepicker_btn"
+                android:text="От"
+                android:textSize="@dimen/text_default_16"
+                />
+            <Button
+                android:id="@+id/filter_dialog_date_from_datepicker_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Выбрать"
+                app:layout_constraintStart_toEndOf="@+id/filter_dialog_date_from_title_tv"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/filter_dialog_date_to_container"
+            app:layout_constraintTop_toBottomOf="@+id/filter_dialog_date_from_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            >
+
+            <TextView
+                android:id="@+id/filter_dialog_date_to_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/filter_dialog_date_to_datepicker_btn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/filter_dialog_date_to_datepicker_btn"
+                android:text="До"
+                android:textSize="@dimen/text_default_16"
+                />
+            <Button
+                android:id="@+id/filter_dialog_date_to_datepicker_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Выбрать"
+                app:layout_constraintStart_toEndOf="@+id/filter_dialog_date_to_title_tv"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

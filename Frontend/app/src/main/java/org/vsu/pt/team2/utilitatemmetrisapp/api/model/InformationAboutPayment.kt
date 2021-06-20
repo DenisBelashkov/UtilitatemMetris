@@ -9,12 +9,14 @@ data class InformationAboutPayment(
     val identifierMetric: String? = null,
     /**
      * here date-time
+     * like "2021-05-27T14:01:16.169Z"
      */
-    val dataWith: String? = null,
+    val dateWith: String? = null,
     /**
      * here date-time
+     * like "2021-05-27T14:01:16.169Z"
      */
-    val dataTo: String? = null,
+    val dateTo: String? = null,
 
     /**
      * one of [electic,heating,coldwater,hotwater,gas]
