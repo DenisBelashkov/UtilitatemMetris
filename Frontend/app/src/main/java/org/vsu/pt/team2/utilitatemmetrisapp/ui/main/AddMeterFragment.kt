@@ -124,7 +124,7 @@ class AddMeterFragment : BaseTitledFragment(R.string.fragment_title_add_meter) {
         override fun afterTextChanged(s: Editable?) {
             //todo Проверка на правильность идентификатора
             s?.let {
-                if (it.length >= 6) {
+                if (it.length >= 4) {
                     loadMeters(it.toString())
                 } else
                     binding.meterFound = false
