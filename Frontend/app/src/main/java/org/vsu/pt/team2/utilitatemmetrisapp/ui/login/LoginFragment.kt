@@ -97,7 +97,7 @@ class LoginFragment : Fragment() {
             validateFieldsThenDo { email, password ->
                 button.setStateLoading()
 
-                if(loginViewModel.inLoginMode.value==true){
+                if (loginViewModel.inLoginMode.value == true) {
                     when (val authRes = authManager.authUser(email, password)) {
                         is ApiResult.NetworkError -> {
                             networkConnectionErrorToast()
@@ -111,17 +111,17 @@ class LoginFragment : Fragment() {
                             )
                         }
                     }
-                }else{
+                } else {
                     when (val authRes = authManager.registerUser(email, password)) {
                         is ApiResult.NetworkError -> {
-                             networkConnectionErrorToast()
+                            networkConnectionErrorToast()
                         }
                         is ApiResult.GenericError -> {
-                            when(authRes.code){
-                                409->{
-                                    showToast("Пользователь с такой почтой уже зарегистрирован")
+                            when (authRes.code) {
+                                409 -> {
+                                    showToast(getString(R.string.user_with_same_email_already_registered))
                                 }
-                                else->
+                                else ->
                                     genericErrorToast(authRes)
                             }
 

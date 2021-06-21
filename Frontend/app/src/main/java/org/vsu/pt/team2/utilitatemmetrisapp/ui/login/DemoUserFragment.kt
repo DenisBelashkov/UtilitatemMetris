@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.*
+import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentDemoUserBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.AuthManager
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
@@ -69,7 +70,13 @@ class DemoUserFragment : Fragment() {
                         networkConnectionErrorToast()
                     }
                     is ApiResult.GenericError -> {
-                        genericErrorToast(authRes)
+                        when(authRes.code){
+                            409->{
+                                showToast(getString(R.string.user_with_same_email_already_registered))
+                            }
+                            else->
+                                genericErrorToast(authRes)
+                        }
                     }
                     is ApiResult.Success -> {
                         (activity as? AppCompatActivity)?.replaceActivity(
