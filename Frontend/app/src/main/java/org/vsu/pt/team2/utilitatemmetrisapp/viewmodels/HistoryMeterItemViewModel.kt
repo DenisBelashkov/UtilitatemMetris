@@ -9,6 +9,7 @@ class HistoryMeterItemViewModel(
     var sum: Double,
     var date: String,
     var address: String,
+    var email: String
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -22,6 +23,7 @@ class HistoryMeterItemViewModel(
         if (sum != other.sum) return false
         if (date != other.date) return false
         if (address != other.address) return false
+        if (email != other.email) return false
 
         return true
     }
@@ -33,6 +35,7 @@ class HistoryMeterItemViewModel(
         result = 31 * result + sum.hashCode()
         result = 31 * result + date.hashCode()
         result = 31 * result + address.hashCode()
+        result = 31 * result + email.hashCode()
         return result
     }
 }

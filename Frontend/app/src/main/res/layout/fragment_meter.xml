@@ -233,7 +233,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
-                    android:inputType="number">
+                    android:inputType="numberDecimal"
+
+                    >
 
                 </studio.carbonylgroup.textfieldboxes.ExtendedEditText>
             </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
