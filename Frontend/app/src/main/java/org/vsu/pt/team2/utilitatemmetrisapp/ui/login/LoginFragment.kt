@@ -117,7 +117,14 @@ class LoginFragment : Fragment() {
                              networkConnectionErrorToast()
                         }
                         is ApiResult.GenericError -> {
-                            genericErrorToast(authRes)
+                            when(authRes.code){
+                                409->{
+                                    showToast("Пользователь с такой почтой уже зарегистрирован")
+                                }
+                                else->
+                                    genericErrorToast(authRes)
+                            }
+
                         }
                         is ApiResult.Success -> {
                             AlertDialog.Builder(requireContext())

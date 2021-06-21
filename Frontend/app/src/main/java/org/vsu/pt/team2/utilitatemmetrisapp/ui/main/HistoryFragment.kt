@@ -15,6 +15,7 @@ import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentDialogFilterHist
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentHistoryBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.dateutils.DateFormatter
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.PaymentManager
+import org.vsu.pt.team2.utilitatemmetrisapp.managers.SessionManager
 import org.vsu.pt.team2.utilitatemmetrisapp.models.MeterType
 import org.vsu.pt.team2.utilitatemmetrisapp.models.PaymentData
 import org.vsu.pt.team2.utilitatemmetrisapp.models.PaymentMetricData
@@ -39,10 +40,8 @@ class HistoryFragment : BaseTitledFragment(R.string.fragment_history_title) {
     @Inject
     lateinit var paymentManager: PaymentManager
 
-//    private fun openPaymentHistoryFragmentForMeterItem(historyMeterItem: HistoryMeterItemViewModel) {
-//        //todo Найти квитанцию, в которой находится этот счётчик
-//        //открыть фрагмент с данной квитанцией
-//    }
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,6 +49,10 @@ class HistoryFragment : BaseTitledFragment(R.string.fragment_history_title) {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHistoryBinding.inflate(inflater, container, false)
+        if (sessionManager.isDemo) {
+            showToast(getString(R.string.available_only_on_full_account), true)
+            parentFragmentManager.popBackStack()
+        }
         return binding.root
     }
 

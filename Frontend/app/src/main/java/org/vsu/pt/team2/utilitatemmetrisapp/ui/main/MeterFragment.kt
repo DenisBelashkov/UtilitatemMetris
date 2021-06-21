@@ -12,9 +12,11 @@ import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentDialogAcceptChangesBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentMeterBinding
 import org.vsu.pt.team2.utilitatemmetrisapp.managers.MeterManager
+import org.vsu.pt.team2.utilitatemmetrisapp.managers.SessionManager
 import org.vsu.pt.team2.utilitatemmetrisapp.models.Meter
 import org.vsu.pt.team2.utilitatemmetrisapp.models.PaymentsFilter
 import org.vsu.pt.team2.utilitatemmetrisapp.network.ApiResult
+import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.AvailableOnFullAccountDialogFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.components.baseFragments.DisabledDrawerFragment
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.setFromVM
 import org.vsu.pt.team2.utilitatemmetrisapp.ui.tools.*
@@ -32,6 +34,9 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
 
     @Inject
     lateinit var meterManager: MeterManager
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -155,11 +160,17 @@ class MeterFragment : DisabledDrawerFragment(R.string.fragment_title_meter) {
         binding.meterShowHistory.viewmodel = GeneralButtonViewModel(
             getString(R.string.show_payment_history),
             {
-                appCompatActivity()?.replaceFragment(
-                    HistoryFragment.createWithFilter(
-                        PaymentsFilter(identifierMetric = meterIdentifier)
+                if(sessionManager.isDemo){
+                    AvailableOnFullAccountDialogFragment().show(
+                        childFragmentManager,"AvailableOnFullAccountDialogFragment"
                     )
-                )
+                }else {
+                    appCompatActivity()?.replaceFragment(
+                        HistoryFragment.createWithFilter(
+                            PaymentsFilter(identifierMetric = meterIdentifier)
+                        )
+                    )
+                }
             }
         )
         binding.meterPayBacklog.viewmodel = GeneralButtonViewModel(

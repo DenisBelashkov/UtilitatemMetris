@@ -1,8 +1,11 @@
 package org.vsu.pt.team2.utilitatemmetrisapp.ui.main
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import androidx.fragment.app.DialogFragment
 import com.orhanobut.logger.Logger
 import org.vsu.pt.team2.utilitatemmetrisapp.R
 import org.vsu.pt.team2.utilitatemmetrisapp.databinding.FragmentSettingsBinding
@@ -17,6 +20,9 @@ import javax.inject.Inject
 
 class SettingsFragment : DisabledDrawerFragment(R.string.fragment_title_settings) {
 
+    private val visibleChangePass = false
+    private val visibleChangeEmail = false
+
     @Inject
     lateinit var sessionManager: SessionManager
 
@@ -28,6 +34,17 @@ class SettingsFragment : DisabledDrawerFragment(R.string.fragment_title_settings
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initFields()
+    }
+
+    fun initFields() {
+        binding.visibleChangeEmail = visibleChangeEmail
+        binding.visibleChangePass = visibleChangePass
         binding.email = sessionManager.user.email
         binding.settingsGeneralButtonChangeEmail.viewmodel = GeneralButtonViewModel(
             getString(R.string.settings_button_text_change_email)
@@ -46,12 +63,10 @@ class SettingsFragment : DisabledDrawerFragment(R.string.fragment_title_settings
             //todo смена пароля
             Logger.i("Change pass clicked")
         }
-        return binding.root
-    }
 
-    override fun onStart() {
-        setHasOptionsMenu(true)
-        super.onStart()
+        binding.settingsGeneralButtonLeaveAccount.viewmodel = GeneralButtonViewModel(
+            "Выход из аккаунта", ::onLeaveClicked
+        )
     }
 
     override fun onAttach(context: Context) {
@@ -59,20 +74,34 @@ class SettingsFragment : DisabledDrawerFragment(R.string.fragment_title_settings
         super.onAttach(context)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        activity?.menuInflater?.inflate(R.menu.settings_action_menu, menu)
+    fun onLeaveClicked() {
+        LeaveConfirmationDialogFragment({
+            leave()
+        }).show(
+            childFragmentManager,"LeaveConfirmationDialogFragment"
+        )
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.settings_menu_exit -> {
-                sessionManager.clear()
-                appCompatActivity()?.openActivity(
-                    LoginActivity::class.java,
-                    true,
-                )
-            }
-        }
-        return true
+    fun leave(){
+        sessionManager.clear()
+        appCompatActivity()?.openActivity(
+            LoginActivity::class.java,
+            true,
+        )
+    }
+
+    class LeaveConfirmationDialogFragment(
+        val quitAction: () -> Unit
+    ) : DialogFragment() {
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
+            AlertDialog.Builder(requireContext())
+                .setMessage(getString(R.string.are_you_really_want_to_quit))
+                .setPositiveButton(getString(R.string.ok)) { _, _ ->
+                    quitAction.invoke()
+                }
+                .setNegativeButton(getString(R.string.cancel)) { _, _ ->
+                    this.dismiss()
+                }
+                .create()
     }
 }
