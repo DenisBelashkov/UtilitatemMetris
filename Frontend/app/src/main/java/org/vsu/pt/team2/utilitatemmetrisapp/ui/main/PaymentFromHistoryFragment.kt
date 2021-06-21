@@ -58,7 +58,8 @@ class PaymentFromHistoryFragment :
                         pMeterData.meter.type,
                         pMeterData.cost,
                         payment.date,
-                        pMeterData.meter.address
+                        pMeterData.meter.address,
+                        payment.email
                     )
                 }
         adapter.submitList(paymentItemList)

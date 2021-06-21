@@ -159,7 +159,8 @@ class HistoryFragment : BaseTitledFragment(R.string.fragment_history_title) {
                             pMeterData.meter.type,
                             pMeterData.cost,
                             pData.date,
-                            pMeterData.meter.address
+                            pMeterData.meter.address,
+                            pData.email
                         )
                     }
             paymentItemList

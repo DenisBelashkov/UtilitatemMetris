@@ -37,11 +37,9 @@ class SplashActivity : AppCompatActivity() {
         startAnimation()
         lifecycleScope.launch {
             if (userAlreadyLoggedIn()) {
-                YandexMetrica.reportEvent("Запуск главного экрана", null as String?);
                 replaceActivity(MainActivity::class.java)
             }
             else {
-                delay(1400L)
                 YandexMetrica.reportEvent("Запуск экрана авторизации", null as String?);
                 replaceActivity(LoginActivity::class.java)
             }
