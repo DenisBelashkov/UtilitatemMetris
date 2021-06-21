@@ -90,6 +90,12 @@
     <string name="fragment_title_payment_from_history">Квитанция</string>
     <string name="err_while_loading_payment">Ошибка загрузки оплаты</string>
     <string name="address_">Адрес :</string>
+    <string name="for_all_questions_contact_us_on">По всем вопросам обращаться на </string>
+    <string name="application_support_email">UtilitatemMetris@yandex.ru</string>
+    <string name="are_you_really_want_to_quit">Вы действительно хотите выйти?</string>
+    <string name="ok">Выход</string>
+    <string name="available_only_on_full_account">Доступно только после полной регистрации</string>
+    <string name="user_with_same_email_already_registered">Пользователь с такой почтой уже зарегистрирован</string>
 
 
 </resources>

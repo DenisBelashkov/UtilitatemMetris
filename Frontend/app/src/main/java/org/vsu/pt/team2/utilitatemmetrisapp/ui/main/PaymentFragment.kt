@@ -108,7 +108,7 @@ class PaymentFragment : DisabledDrawerFragment(R.string.fragment_title_payment) 
         binding.paymentSentToEmail.generalButton.visibility = View.GONE
         binding.paymentSentToEmail.viewmodel = GeneralButtonViewModel(
             getString(R.string.sent_to_email), {
-                //todo sent to email
+                //todo send to email
                 // отправить на сервер id платёжки, там из jwt получаем email
                 // и отправляем платёжку на почту
                 paymentId

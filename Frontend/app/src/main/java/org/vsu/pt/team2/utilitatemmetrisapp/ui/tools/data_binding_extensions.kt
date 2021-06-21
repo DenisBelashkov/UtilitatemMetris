@@ -11,6 +11,7 @@ import kotlin.math.abs
 
 fun ItemMeterBinding.setFromVM(mvm: MeterItemViewModel, context: Context) {
     setBacklogValue(mvm.backlog)
+    hasBacklog = mvm.backlog > 0.0000001
     setMeterIdentifier(mvm.identifier)
     meterType = mvm.type.toLanguagedString(context)
 
