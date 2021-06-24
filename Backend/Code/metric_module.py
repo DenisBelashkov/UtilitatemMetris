@@ -3,6 +3,7 @@ from flask import request, jsonify
 from sqlalchemy import and_
 import jwt
 from decoration import wrapper_for_token
+import logging
 
 def address_to_string(a):
 	str1 = ""
@@ -19,7 +20,7 @@ class MetricModule(Module):
 	def make_json(metrics):
 		res_list = []
 		for m in metrics:
-			res_list.append({"id": m.id,
+			res_list.append({"identifier": m.id,
 							 "balance": float(m.balance),
 							 "typeMetric": m.typeMetric,
 							 "prevValue": float(m.prev_value),
@@ -37,7 +38,7 @@ class MetricModule(Module):
 		res_list = []
 		str_address = address_to_string(address)
 		for m in metrics:
-			res_list.append({"id": m.id,
+			res_list.append({"identifier": m.id,
 							 "balance": float(m.balance),
 							 "typeMetric": m.typeMetric,
 							 "prevValue": float(m.prev_value),
@@ -99,7 +100,7 @@ class MetricModule(Module):
 		@wrapper_for_token
 		def get_metrics_by_id_flat(flat_id):
 			try:
-				metrics = db.session.query(Metrics.id_metrics.label("id"), Metrics.balance, Metrics.prev_value,
+				metrics = db.session.query(Metrics.identifier.label("id"), Metrics.balance, Metrics.prev_value,
 										   Metrics.curr_value, Tariff.price.label("tariff"),
 										   Type_metric.name.label("typeMetric"))\
 					.join(Tariff,Tariff.id_tariff == Metrics.id_tariff)\
@@ -109,6 +110,7 @@ class MetricModule(Module):
 					address = db.session.query(Address).join(Flat, and_(Flat.id_address == Address.id_address, Flat.id_personal_account == flat_id)).first()
 					return jsonify(self.make_json_with_address(metrics, address))
 			except Exception as e:
+				logging.warning(e)
 				return " ", 400
 			return jsonify([])
 
@@ -130,7 +132,7 @@ class MetricModule(Module):
 					save = db.session.query(User_metrics).filter(User_metrics.id_metrics == metric[0].idf).filter(User_metrics.id_user == decode_token["id"]).one_or_none()
 					return jsonify( self.make_json_with_save(self.make_json(metric)[0], save is not None))
 			except Exception as e:
-				print(e)
+				logging.warning(e)
 				return " ", 500
 			return " ", 404
 

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form class="form-inline" method="post" action="/admin/create_flat/street">
+    <select name="city" id="city">
+      {% for city in cities %}
+        {% if select_city and select_city == city.id_address  %}
+            <option value="{{city.id_address}}" selected> {{city.name}} </option>
+        {% else %}
+             <option value="{{city.id_address}}" > {{city.name}} </option>
+        {% endif %}
+      {% endfor %}
+
+    </select>
+      <button type="submit" class="btn btn-primary mb-2" >Выбрать</button>
+    </form>
+
+    {% if streets %}
+    <form class="form-inline" method="post" action="/admin/create_flat/house">
+        <input  type="hidden" value="{{select_city}}" id="city_old" name="city_old"/>
+      <select name="street" id="street">
+      {% for street in streets %}
+          {% if select_street and select_street == street.id_address %}
+            <option value="{{street.id_address}}" selected> {{street.name}} </option>
+          {% else %}
+            <option value="{{street.id_address}}"> {{street.name}} </option>
+          {% endif %}
+      {% endfor %}
+      </select>
+        <button type="submit" class="btn btn-primary mb-2" >Выбрать</button>
+    </form>
+
+    {% endif %}
+{% if select_city %}
+            <form class="form-inline" method="post" action="/admin/add_street">
+                <input name="s_city" type="hidden" value="{{ select_city }}" id="s_city"/>
+			    <label for="new_street" class="sr-only" >Название улицы</label>
+			    <input type="text" class="form-control" id="new_street" name = "new_street" placeholder="Улица">
+                <button type="submit" class="btn btn-primary mb-2" >Добавить</button>
+            </form>
+        {% endif %}
+
+    <div class="form-inline">
+    {% if houses %}
+         <form class="form-inline" method="post" action="/admin/create_flat/flat">
+             <input  type="hidden" value="{{select_city}}" id="city_house" name="city_house"/>
+             <input  type="hidden" value="{{select_street}}" id="street_house" name="street_house"/>
+        <select name="house" id="house">
+          {% for house in houses %}
+            <option value="{{house.id_address}}"> {{house.name}} </option>
+          {% endfor %}
+        </select>
+             <button type="submit" class="btn btn-primary mb-2" >Выбрать</button>
+         </form>
+    {% endif %}
+        {% if select_street %}
+            <form class="form-inline" method="post" action="/admin/add_house">
+                <input name="parent_street" type="hidden" value="{{ select_street }}" id="parent_street"/>
+			    <label for="new_house" class="sr-only" >Номер дома</label>
+			    <input type="text" class="form-control" id="new_house" name = "new_house" placeholder="Номер дома">
+                <button type="submit" class="btn btn-primary mb-2" >Добавить</button>
+            </form>
+        {% endif %}
+    </div>
+    {% if select_house %}
+            <form class="form-inline" method="post" action="/admin/choice_house">
+                <input name="select_street" type="hidden" value="{{ select_house }}" id="select_street"/>
+			    <label for="select_house" class="sr-only" >Номер квартиры</label>
+			    <input type="text" class="form-control" id="select_house" name = "select_house" placeholder="Квартира">
+                <button type="submit" class="btn btn-primary mb-2" >Добавить</button>
+            </form>
+    {% endif %}
+{% endblock %}

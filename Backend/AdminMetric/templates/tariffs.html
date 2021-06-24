@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+    <table class="table mt-3">
+        <thead>
+        <tr>
+            <th scope="col">Название тарифа</th>
+            <th scope="col">Тип счетчика</th>
+            <th scope="col">Цена</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for tariff in tariffs %}
+            <tr>
+                <td>
+					<p> {{ tariff.Tariff.name }} </p>
+                </td>
+                <td>
+					<p> {{ tariff.name }} </p>
+                </td>
+                <td>
+					<p> {{ tariff.Tariff.price }} </p>
+                </td>
+                <td>
+                <p><a class="btn btn btn-primary text-light"
+                                      href="">Изменить
+                                    </a></p>
+            	<td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
